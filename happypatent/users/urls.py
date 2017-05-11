@@ -5,8 +5,13 @@ from . import views
 urlpatterns = [
     url(
         regex=r'^$',
-        view=views.UserListView.as_view(),
-        name='list'
+        view=views.home,
+        name='home'
+    ),
+    url(
+        regex=r'^dashboard/$',
+        view=views.DashBoardView.as_view(),
+        name='dashboard'
     ),
     url(
         regex=r'^~redirect/$',
@@ -23,4 +28,5 @@ urlpatterns = [
         view=views.UserUpdateView.as_view(),
         name='update'
     ),
+
 ]

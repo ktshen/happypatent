@@ -8,6 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 import environ
+import os
+
 
 ROOT_DIR = environ.Path(__file__) - 3  # (happypatent/config/settings/base.py - 3 = happypatent/)
 APPS_DIR = ROOT_DIR.path('happypatent')
@@ -48,7 +50,7 @@ THIRD_PARTY_APPS = [
     'crispy_forms',  # Form layouts
     'allauth',  # registration
     'allauth.account',  # registration
-    'allauth.socialaccount',  # registration
+    'django_select2',
 ]
 
 # Apps specific for this project go here.
@@ -56,6 +58,7 @@ LOCAL_APPS = [
     # custom users app
     'happypatent.users.apps.UsersConfig',
     # Your stuff: custom apps go here
+    'proposals',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -251,6 +254,7 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_FORMS  = {"signup": "happypatent.users.forms.MySignupForm"}
 
 ACCOUNT_ALLOW_REGISTRATION = env.bool('DJANGO_ACCOUNT_ALLOW_REGISTRATION', True)
 ACCOUNT_ADAPTER = 'happypatent.users.adapters.AccountAdapter'
@@ -271,3 +275,4 @@ ADMIN_URL = r'^admin/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+

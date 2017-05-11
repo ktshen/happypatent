@@ -1,0 +1,18 @@
+{% load crispy_forms_tags %}
+<!-- Modal -->
+<div class="container">
+  <!-- Modal -->
+  <div class="modal" id={{ id }} role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Header</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          {% crispy form %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

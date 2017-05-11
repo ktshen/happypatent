@@ -71,4 +71,9 @@ Deployment
 The following details how to deploy this application.
 
 
+Note
+----------
+npm install --save-dev jquery react react-dom webpack webpack-bundle-tracker babel-loader babel-core babel-preset-es2015 babel-preset-react
+./node_modules/.bin/webpack --config webpack.config.js
+
 

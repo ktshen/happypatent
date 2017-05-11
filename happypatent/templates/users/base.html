@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <!-- Latest compiled and minified Bootstrap 4 Alpha 4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <!-- Your stuff: Third-party CSS libraries go here -->
+    <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/gentelella.css" %}" rel="stylesheet">
+    <!-- This file stores project-specific CSS -->
+{% endblock %}
+
+
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<body class="nav-md">
+    <!-- container -->
+    <div class="container body">
+      <div class="main_container">
+
+        {% include "users/nav.html" %}
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock content %}
+
+      </div>
+    </div>
+
+     <!-- javascript
+    ================================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"/>
+    <!-- Your stuff: Third-party javascript libraries go here -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.django-select2').on('select2:select',function(e){
+                if (e.params.data.id >= 0) return false;
+                var $target = $(e.target);
+                var $modal = $("#"+$target.attr("modelform_id"));
+                $target.children("option").last().remove();
+                $modal.modal();
+                $modal.find(".django-select2").djangoSelect2().on('select2:select', function(e){
+                    var newOption = new Option(e.params.data.text, e.params.data.id, false, true);
+                    $(e.target).append(newOption);
+                });
+                $modal.find("form").on("submit", function (e) {
+                    e.preventDefault();
+                    $(e.target).ajaxSubmit({
+                        url: $(this).attr("action"),
+                        method: "POST",
+                        dataType: 'json',
+                        success: function (data) {
+                            $('.close').click();
+                            var newOption = new Option(data.text, data.id, false, true);
+                            $target.append(newOption);
+                        },
+                        error: function (data) {
+                            alert("Something goes wrong. Check the form again");
+                            console.log(data);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+{% endblock %}
+

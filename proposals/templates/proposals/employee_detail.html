@@ -1,0 +1,16 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<div>
+    <p>{{object.chinese_name}}</p>
+    {% for name, value in object_fields_data %}
+        <h3>{{name}}</h3>
+        {% if name == "profile_pic" %}
+            <img src="{{MEDIA_URL}}{{value}}">
+        {% else %}
+            <p>{{value}}</p>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

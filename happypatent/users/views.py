@@ -1,16 +1,34 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import DetailView, ListView, RedirectView, UpdateView
-
+from django.views.generic import DetailView, ListView, RedirectView, UpdateView, TemplateView
+from django.shortcuts import redirect, render_to_response
+from django.http.response import HttpResponse, Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import User
 
 
+def home(request):
+    if request.user.is_authenticated:
+        return redirect("users:dashboard")
+    else:
+        return render_to_response("pages/home.html", context={})
+
+
+class DashBoardView(LoginRequiredMixin, TemplateView):
+    template_name = "users/dashboard.html"
+
+
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
-    # These next two lines tell the view to index lookups by username
     slug_field = 'username'
+    # get parameter in url
     slug_url_kwarg = 'username'
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.username != self.kwargs.get(self.slug_url_kwarg):
+            raise Http404("You have no privilege to search other user's profile.")
+        else:
+            super(UserDetailView, self).get(self, request, *args, **kwargs)
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
@@ -23,7 +41,10 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
 
-    fields = ['name', ]
+    fields = ['first_name', 'last_name','id_number', 'gender',
+              'county', 'address', 'home_number', 'mobile_number',
+              'office_number', 'spouse_name', 'education','experience',
+              'comment', 'profile_pic']
 
     # we already imported User in the view code above, remember?
     model = User
@@ -38,8 +59,3 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return User.objects.get(username=self.request.user.username)
 
 
-class UserListView(LoginRequiredMixin, ListView):
-    model = User
-    # These next two lines tell the view to index lookups by username
-    slug_field = 'username'
-    slug_url_kwarg = 'username'

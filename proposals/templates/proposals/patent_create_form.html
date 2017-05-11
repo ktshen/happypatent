@@ -1,0 +1,14 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+    {% crispy form %}
+
+    {% for id, form in modal_form %}
+        {% include "proposals/ajax_modal.html" with id=id form=form %}
+    {% endfor %}
+
+    <script src="{% static "js/patent-create.js" %}"></script>
+{% endblock content %}
