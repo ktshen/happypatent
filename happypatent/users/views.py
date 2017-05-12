@@ -18,6 +18,7 @@ class DashBoardView(LoginRequiredMixin, TemplateView):
     template_name = "users/dashboard.html"
 
 
+
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     slug_field = 'username'

@@ -23,6 +23,7 @@ class AjaxSelect2Mixin(object):
         if self.modelform:
             if not attrs:
                 attrs = {}
+            attrs["style"] = "width: 100%"
             attrs["modelform_rand"] = str(randint(10000, 99999))
             attrs["modelform_id"] = signing.dumps(self.modelform.__name__+attrs["modelform_rand"]).rsplit(":", 1)[1]
         super(AjaxSelect2Mixin, self).__init__(attrs=attrs, choices=choices, data_view=data_view, **kwargs)
@@ -45,10 +46,8 @@ class AjaxSelect2Mixin(object):
         })
 
     class Media:
-        js = ["js/tether.min.js", "js/bootstrap.min.js", "js/jquery.form.min.js", "js/ajax-select2.js", ]
-        css = {
-            "all": ['css/bootstrap.min.css', ]
-        }
+        js = ["js/jquery.form.min.js", "js/ajax-select2.js", ]
+
 
 
 class AjaxSelect2Widget(AjaxSelect2Mixin, ModelSelect2Widget):
@@ -63,11 +62,7 @@ class MySelect2Widget(Select):
     def __init__(self, attrs=None, choices=()):
         if not attrs:
             attrs = {}
-        attrs["class"] = "select2-js"
+        attrs["class"] = "form-control select2-js"
+        attrs["style"] = "width: 100%"
         super(MySelect2Widget, self).__init__(attrs, choices)
-
-    @property
-    def media(self):
-        return forms.Media(css={'all': (settings.SELECT2_CSS,)},
-                           js=(settings.SELECT2_JS, "js/render-select2.js",))
 

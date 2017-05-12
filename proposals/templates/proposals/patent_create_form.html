@@ -3,12 +3,21 @@
 {% load static %}
 
 {% block content %}
+<div class="row">
+    <div class="col-md-10">
+        {% crispy form %}
 
-    {% crispy form %}
+        {% for id, form in modal_form %}
+            {% include "proposals/ajax_modal.html" with id=id form=form %}
+        {% endfor %}
 
-    {% for id, form in modal_form %}
-        {% include "proposals/ajax_modal.html" with id=id form=form %}
-    {% endfor %}
+    </div>
+</div>
 
-    <script src="{% static "js/patent-create.js" %}"></script>
 {% endblock content %}
+
+
+{% block javascript %}
+<script src="{% static "js/patent-create.js" %}"></script>
+<script src="{% static "js/render-select2.js" %}"></script>
+{% endblock %}

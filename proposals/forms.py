@@ -107,6 +107,7 @@ class PatentModelForm(forms.ModelForm):
         self.helper = FormHelper(self)
         self.helper.layout.append(Submit('save', 'save'))
 
+
     class Meta:
         model = Patent
         fields = ('case_id', 'chinese_title', 'english_title', 'client', 'client_type',
