@@ -1,6 +1,11 @@
 {% extends "users/base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
     {% crispy form %}
 {% endblock %}
+{##}
+{#{% block javascript %}#}
+{#<script src="{% static "js/render-select2.js" %}"></script>#}
+{#{% endblock %}#}

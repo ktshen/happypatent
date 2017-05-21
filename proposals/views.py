@@ -7,7 +7,7 @@ from django_select2.views import AutoResponseView
 
 from .models import Employee, Patent, Agent, Client, ContactPerson, User
 from .forms import EmployeeModelForm, PatentModelForm, ContactPersonModelForm, ClientModelForm, AgentModelForm
-
+from .utils import CaseIDGenerator
 
 def get_model_fields_data(obj):
     return [(field.name, getattr(obj,field.name)) for field in obj._meta.fields]
@@ -98,6 +98,9 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, CreateView
     template_name = 'proposals/patent_create_form.html'
     form_class = PatentModelForm
 
+    def get_initial(self):
+        return {"case_id": CaseIDGenerator().get_latest_id()}
+
     def get_context_data(self, **kwargs):
         context = super(PatentCreateView, self).get_context_data(**kwargs)
         context["modal_form"] = []
@@ -113,9 +116,24 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, CreateView
                 ])
         return context
 
+    def post(self, request, *args, **kwargs):
+        if request.POST["case_id"] != CaseIDGenerator().get_latest_id():
+            post = request.POST.copy()
+            post["case_id"] = CaseIDGenerator().get_latest_id()
+            self.request.POST = post
+        return super(PatentCreateView, self).post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        response = super(PatentCreateView, self).form_valid(form)
+        case_id = self.request.POST["case_id"]
+        CaseIDGenerator().update_latest_id(case_id)
+        return response
+
 
 class PatentDetailView(LoginRequiredMixin, DetailView):
     model = Patent
+    slug_field = "case_id"
+    slug_url_kwarg = "case_id"
 
 
 class PatentUpdateView(LoginRequiredMixin, UpdateView):

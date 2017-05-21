@@ -39,7 +39,7 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-    
+
 </head>
 <body class="hold-transition skin-green sidebar-mini">
 <!-- jQuery 2.2.3 -->
@@ -72,7 +72,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{% static "dist/js/demo.js" %}"></script>
 <!-- Happypatent Project Specific -->
-<script src="{% static "js/project.js" %}"></script>
+<script src="{% static "js/happypatent.js" %}"></script>
 {% block javascript %}
 {% endblock %}
 
@@ -287,7 +287,7 @@
                     </div>
                   </form>
                 </li>
-                <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Create New Employee</a></li>
+                <li><a href="{% url "proposals:employee-create" %}"><i class="fa fa-circle-o"></i> Create New Employee</a></li>
               </ul>
             </li>
             <li>
