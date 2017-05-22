@@ -69,3 +69,4 @@ class MySelect2Widget(Select):
     class Media:
         js = ["js/render-select2.js"]
 
+

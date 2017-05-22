@@ -36,4 +36,9 @@ $(document).ready(function(){
             });
         });
     });
+
+    //Bootstrap datepicker
+    $('.dateinput').datepicker({
+        format: 'yyyy-mm-dd',
+    });
 });

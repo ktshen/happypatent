@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="{% static "dist/css/AdminLTE.min.css" %}">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="{% static "dist/css/skins/skin-green.min.css" %}">
+  <link rel="stylesheet" href="{% static "dist/css/skins/skin-red-light.min.css" %}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,7 +41,7 @@
   <![endif]-->
 
 </head>
-<body class="hold-transition skin-green sidebar-mini">
+<body class="hold-transition skin-red-light sidebar-mini">
 <!-- jQuery 2.2.3 -->
 <script src="{% static "plugins/jQuery/jquery-2.2.3.min.js" %}"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -392,23 +392,26 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
+      {% if messages %}
+          {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-check"></i>{{ message.tags }}</h4>
+                {{ message }}
+              </div>
+          {% endfor %}
+      {% endif %}
+
       <h1>
         Advanced Form Elements
         <small>Preview</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Forms</a></li>
-        <li class="active">Advanced Elements</li>
-      </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
         {% block content %}
         {% endblock %}
-
-
     </section>
     <!-- /.content -->
   </div>

@@ -1,7 +1,9 @@
 from django import forms
 from django.urls import reverse
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+
 from .models import Employee, Patent, Agent, ContactPerson, Client
 from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
 
