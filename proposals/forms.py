@@ -1,7 +1,7 @@
 from django import forms
 from django.urls import reverse
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit,Layout, Fieldset, Div,Field
 from .models import Employee, Patent, Agent, ContactPerson, Client
 from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
 
@@ -43,6 +43,39 @@ class AgentModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AgentModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
+        self.helper.layout=Layout(
+            Fieldset(
+                '',
+                Div(
+                    Field(
+                        'agent_title',
+                        size="32"
+
+                    ),
+                    Field(
+                        'country',
+                        size="32"
+                    ),
+                    css_class="form-inline"
+                ),
+                Div(
+                    Field(
+                        'representative',
+                        size="32"
+                    ),
+                    Field(
+                        'office_number',
+                        size="32"
+                    ),
+                    css_class="form-inline"
+                ),
+                'contact_person',
+
+                'email',
+                'remarks',
+            )
+
+        )
         self.helper.layout.append(Submit('save', 'save'))
 
     class Meta:
@@ -51,6 +84,12 @@ class AgentModelForm(forms.ModelForm):
                   'office_number', 'remarks')
         widgets = {
             'contact_person': AjaxSelect2Widget(search_fields=["name__icontains"]),
+        }
+
+    class Media:
+        js = []
+        css = {
+            'all':( 'css/agent_create.css',)
         }
 
 
