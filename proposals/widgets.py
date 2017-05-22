@@ -66,3 +66,7 @@ class MySelect2Widget(Select):
         attrs["style"] = "width: 100%"
         super(MySelect2Widget, self).__init__(attrs, choices)
 
+    class Media:
+        js = ["js/render-select2.js"]
+
+

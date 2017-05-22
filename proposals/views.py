@@ -2,12 +2,13 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect
+from django.contrib.messages.views import SuccessMessageMixin
 
 from django_select2.views import AutoResponseView
 
 from .models import Employee, Patent, Agent, Client, ContactPerson, User
 from .forms import EmployeeModelForm, PatentModelForm, ContactPersonModelForm, ClientModelForm, AgentModelForm
-
+from .utils import CaseIDGenerator
 
 def get_model_fields_data(obj):
     return [(field.name, getattr(obj,field.name)) for field in obj._meta.fields]
@@ -74,10 +75,20 @@ class Select2View(AutoResponseView):
         })
 
 
-class EmployeeCreateView(LoginRequiredMixin, CreateView):
+class EmployeeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Employee
     template_name = "proposals/employee_create.html"
     form_class = EmployeeModelForm
+    success_message = "%(field)s was created successfully"
+
+    def get_success_message(self, cleaned_data):
+        if self.object.chinese_name:
+            field = self.object.chinese_name
+        elif self.object.english_name:
+            field = self.object.chinese_name
+        else:
+            field = self.object.employee_id
+        return self.success_message % dict(field=field)
 
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
@@ -93,10 +104,14 @@ class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
     model = Employee
 
 
-class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, CreateView):
+class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
     model = Patent
     template_name = 'proposals/patent_create_form.html'
     form_class = PatentModelForm
+    success_message = "%(case_id)s was created successfully"
+
+    def get_initial(self):
+        return {"case_id": CaseIDGenerator().get_latest_id()}
 
     def get_context_data(self, **kwargs):
         context = super(PatentCreateView, self).get_context_data(**kwargs)
@@ -113,9 +128,29 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, CreateView
                 ])
         return context
 
+    def post(self, request, *args, **kwargs):
+        if request.POST["case_id"] != CaseIDGenerator().get_latest_id():
+            post = request.POST.copy()
+            post["case_id"] = CaseIDGenerator().get_latest_id()
+            self.request.POST = post
+        return super(PatentCreateView, self).post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        response = super(PatentCreateView, self).form_valid(form)
+        case_id = self.request.POST["case_id"]
+        CaseIDGenerator().update_latest_id(case_id)
+        return response
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            case_id=self.object.case_id,
+        )
+
 
 class PatentDetailView(LoginRequiredMixin, DetailView):
     model = Patent
+    slug_field = "case_id"
+    slug_url_kwarg = "case_id"
 
 
 class PatentUpdateView(LoginRequiredMixin, UpdateView):
@@ -123,10 +158,16 @@ class PatentUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class ContactPersonCreateView(LoginRequiredMixin, UserAppendCreateViewMixin,
-                              AjaxableResponseMixin, CreateView):
+                              AjaxableResponseMixin, SuccessMessageMixin, CreateView):
     model = ContactPerson
     template_name = "proposals/contact_person_create.html"
     form_class = ContactPersonModelForm
+    success_message = "%(name)s was created successfully."
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            name=self.object.name,
+        )
 
 
 class ContactPersonDetailView(LoginRequiredMixin, DetailView):
@@ -138,10 +179,17 @@ class ContactPersonUpdateView(LoginRequiredMixin, UpdateView):
     model = ContactPerson
 
 
-class AgentCreateView(LoginRequiredMixin, AjaxableResponseMixin, CreateView):
+class AgentCreateView(LoginRequiredMixin, AjaxableResponseMixin,
+                      SuccessMessageMixin, CreateView):
     model = Agent
     template_name = "proposals/agent_create.html"
     form_class = AgentModelForm
+    success_message = "%(agent_title)s was created successfully."
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            agent_title=self.object.agent_title,
+        )
 
 
 class AgentDetailView(LoginRequiredMixin, DetailView):
@@ -154,10 +202,17 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
     model = Agent
 
 
-class ClientCreateView(LoginRequiredMixin, AjaxableResponseMixin, CreateView):
+class ClientCreateView(LoginRequiredMixin, AjaxableResponseMixin,
+                       SuccessMessageMixin, CreateView):
     model = Client
     template_name = "proposals/client_create.html"
     form_class = ClientModelForm
+    success_message = "%(client_ch_name)s was created successfully."
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            client_ch_name=self.object.client_ch_name,
+        )
 
 
 class ClientDetailView(LoginRequiredMixin, DetailView):

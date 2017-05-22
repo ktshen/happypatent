@@ -1,7 +1,9 @@
 from django import forms
 from django.urls import reverse
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit,Layout, Fieldset, Div,Field
+
 from .models import Employee, Patent, Agent, ContactPerson, Client
 from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
 
@@ -146,7 +148,6 @@ class PatentModelForm(forms.ModelForm):
         self.helper = FormHelper(self)
         self.helper.layout.append(Submit('save', 'save'))
 
-
     class Meta:
         model = Patent
         fields = ('case_id', 'chinese_title', 'english_title', 'client', 'client_type',
@@ -159,6 +160,7 @@ class PatentModelForm(forms.ModelForm):
                   'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks')
 
         widgets = {
+            'case_id': forms.TextInput(attrs={"readonly": True}),
             'client': AjaxSelect2Widget(search_fields=["client_en_name__icontains", "client_ch_name__icontains"],
                                         able_ajax_create=True,
                                         modelform=AjaxClientModelForm),

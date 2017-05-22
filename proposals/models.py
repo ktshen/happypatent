@@ -250,7 +250,7 @@ class Patent(_BaseModel):
         return self.case_id
 
     def get_absolute_url(self):
-        pass
+        return reverse("proposals:patent-detail", args=[self.case_id])
 
 
 @python_2_unicode_compatible

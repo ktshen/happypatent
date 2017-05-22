@@ -25,9 +25,9 @@ urlpatterns = [
         name='employee-update'),
 
     url(r'^patent/create/$', views.PatentCreateView.as_view(), name='patent-create'),
-    url(r'^(?P<case_id>\d+)/detail/$', views.PatentDetailView.as_view(),
+    url(r'^(?P<case_id>[-\w]+)/detail/$', views.PatentDetailView.as_view(),
         name='patent-detail'),
-    url(r'^(?P<case_id>\d+)/update/$', views.PatentUpdateView.as_view(),
+    url(r'^(?P<case_id>[-\w]+)/update/$', views.PatentUpdateView.as_view(),
         name='patent-update'),
 
     url(r'^contact_person/create/$', views.ContactPersonCreateView.as_view(), name='contact_person-create'),
