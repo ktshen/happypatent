@@ -1,5 +1,290 @@
 {% extends "users/base.html" %}
+{% load static %}
 
 {% block content %}
-    <h1>This is dashboard</h1>
+<div class="row">
+    <div class="col-md-3">
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">Create Task</h3>
+            </div>
+            <div class="box-body">
+              {% csrf_token %}
+              <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
+                <ul class="fc-color-picker" id="color-chooser">
+                  <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-light-blue" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-teal" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
+                  <li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
+                </ul>
+              </div>
+              <!-- /btn-group -->
+              <div class="input-group">
+                <input id="new-event" type="text" class="form-control" placeholder="Task Title">
+
+                <div class="input-group-btn">
+                  <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Add</button>
+                </div>
+                <!-- /btn-group -->
+              </div>
+              <!-- /input-group -->
+            </div>
+          </div>
+          <div class="box box-solid">
+            <div class="box-header with-border">
+                <h5 class="box-title">Drag Task to Month</h5>
+
+            </div>
+            <div class="box-body">
+              <!-- the events -->
+              <div id="external-events">
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+
+        </div>
+    <div class="col-md-7">
+        <div class="box box-success">
+            <div class="box-body pad">
+                <!-- THE CALENDAR -->
+                <div id='calendar'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+$(document).ready(function() {
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    <!-- JS for fullcalender -->
+    $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next',
+            center: 'title',
+            right: 'listWeek,month'
+        },
+        views: {
+            listWeek: { buttonText: 'Week' },
+            month: { buttonText: 'Month' }
+        },
+        defaultView: 'month',
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        droppable: true,
+        events: function(start, end, timezone, callback) {
+            $.ajax({
+                url: '{% url "users:calendar_event" %}',
+                dataType: 'json',
+                data: {
+                    start: start.unix(),
+                    end: end.unix()
+                },
+                success: function(params) {
+                    var events = [];
+                    params.forEach(function(entry){
+                        if("case_id" in entry){
+                            if ("control_date" in entry){
+                                events.push({
+                                    id: entry["id"],
+                                    title: entry["case_id"],
+                                    url: ("url" in entry)? entry.url : undefined,
+                                    allDay: true,
+                                    editable: false,
+                                    start: new Date(entry["control_date"]),
+                                    backgroundColor: "#f39c12", //yellow
+                                    borderColor: "#f39c12" //yellow
+                                });
+                            }
+                            if ("deadline" in entry){
+                                events.push({
+                                    id: entry["id"],
+                                    title: entry["case_id"],
+                                    url: ("url" in entry)? entry.url : undefined,
+                                    allDay: true,
+                                    editable: false,
+                                    start: new Date(entry["deadline"]),
+                                    backgroundColor: "#f56954", //red
+                                    borderColor: "#f56954" //red
+                                });
+                            }
+                        }
+                        else if("title" in entry){
+                            var e = {
+                                id: entry["id"],
+                                title: entry["title"],
+                                allDay:true,
+                                start: new Date(entry["start"]),
+                                backgroundColor: entry["backgroundColor"], //yellow
+                                borderColor: entry["border-color"] //yellow
+                            };
+                            if("end" in entry){e.end=entry["end"]}
+                            events.push(e);
+                        }
+                    });
+                    callback(events);
+                }
+            });
+        },
+        dragRevertDuration: 0,
+        drop: function (date, allDay) { // this function is called when something is dropped
+            // retrieve the dropped element's stored Event Object
+            var originalEventObject = $(this).data('eventObject');
+
+            // we need to copy it, so that multiple events don't have a reference to the same object
+            var copiedEventObject = $.extend({}, originalEventObject);
+            // assign it the date that was reported
+            copiedEventObject.start = date;
+            copiedEventObject.allDay = allDay;
+            copiedEventObject.backgroundColor = $(this).css("background-color");
+            copiedEventObject.borderColor = $(this).css("border-color");
+            $.ajax({
+                url: "{% url "users:calendar_event_create" %}",
+                method: "POST",
+                data: {
+                    "title": originalEventObject.title,
+                    "start": date._d.toUTCString(),
+                    "backgroundColor": $(this).css("background-color"),
+                    "border-color": $(this).css("border-color"),
+                },
+                dataType: "json",
+                success: function(data){
+                    copiedEventObject.id = data.id;
+                    // render the event on the calendar
+                    // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+                    // remove the element from the "Newly Created Events" list
+                },
+                error: function(data){
+                    alert("Can't create new task. Something goes wrong.")
+                }
+            });
+            $(this).remove();
+        },
+        eventDragStop: function( event, jsEvent, ui, view ) {
+            if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
+                $('#calendar').fullCalendar('removeEvents', event._id);
+                var ev = $("<div />");
+                ev.css({"background-color": event.backgroundColor, "border-color": event.borderColor, "color": "#fff"}).addClass("external-event");
+                ev.html(event.title);
+                $('#external-events').prepend(ev);
+                ini_events(ev);
+
+                $.ajax({
+                    url: "{% url "users:calendar_event_delete" %}",
+                    method: "POST",
+                    dataType: "json",
+                    data: {"id": event.id},
+                });
+            }
+        },
+        eventDrop: function(event, delta, revertFunc, jsEvent, ui, view){
+            var data = {"id": event.id, "start": event.start._d.toUTCString()};
+            if (event._end !== null) {data["end"] = event.end._d.toUTCString()}
+            $.ajax({
+                url: "{% url "users:calendar_event_update" %}",
+                method: "POST",
+                dataType: "json",
+                data: data,
+            })
+        },
+        eventResize: function(event, delta, revertFunc, jsEvent, ui, view) {
+            $.ajax({
+                url: "{% url "users:calendar_event_update" %}",
+                method: "POST",
+                dataType: "json",
+                data: {"id": event.id, "end": event.end._d.toUTCString()},
+            })
+        },
+    });
+
+    //Check if draggable event is out of calendar's border
+    var isEventOverDiv = function(x, y) {
+        var external_events = $( '#calendar' );
+        var offset = external_events.offset();
+        offset.right = external_events.width() + offset.left;
+        offset.bottom = external_events.height() + offset.top;
+        return x <= offset.left || x >= offset.right || y >= offset.bottom || y <= offset.top;
+    };
+
+    function ini_events(ele) {
+        ele.each(function () {
+            // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+            // it doesn't need to have a start or end
+            var eventObject = {
+              title: $.trim($(this).text()) // use the element's text as the event title
+            };
+
+            // store the Event Object in the DOM element so we can get to it later
+            $(this).data('eventObject', eventObject);
+
+            // make the event draggable using jQuery UI
+            $(this).draggable({
+              zIndex: 1070,
+              revert: true, // will cause the event to go back to its
+              revertDuration: 0  //  original position after the drag
+            });
+        });
+    }
+
+    ini_events($('#external-events div.external-event'));
+
+    /* ADDING EVENTS */
+    var currColor = "#3c8dbc"; //Red by default
+    //Color chooser button
+    var colorChooser = $("#color-chooser-btn");
+    $("#color-chooser > li > a").click(function (e) {
+        e.preventDefault();
+        //Save color
+        currColor = $(this).css("color");
+        //Add color effect to button
+        $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
+    });
+    $("#add-new-event").click(function (e) {
+        e.preventDefault();
+        //Get value and make sure it is not null
+        var val = $("#new-event").val();
+        if (val.length == 0) {
+            return;
+        }
+        //Create events
+        var event = $("<div />");
+        event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
+        event.html(val);
+        $('#external-events').prepend(event);
+        //Add draggable funtionality
+        ini_events(event);
+        //Remove event from text input
+        $("#new-event").val("");
+    });
+    <!-- End fullcalendar -->
+
+
+
+});
+
+</script>
+
 {% endblock %}

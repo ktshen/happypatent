@@ -11,16 +11,10 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
 
-    # User management
+    # My stuff
     url(r'^accounts/', include('allauth.urls')),
     url(r'^proposals/', include('proposals.urls', namespace="proposals", app_name="proposals")),
-    # url(r'^select2/', include('django_select2.urls')),
-
     url(r'', include('happypatent.users.urls', namespace='users')),
-
-
-    # Your stuff: custom urls includes go here
-
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

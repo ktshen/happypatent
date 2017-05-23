@@ -68,3 +68,19 @@ class User(AbstractUser, BaseProfileModel):
 
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})
+
+
+@python_2_unicode_compatible
+class CalendarEvent(models.Model):
+    title = models.CharField(max_length=50)
+    start_date = models.DateField()
+    end_date = models.DateField(blank=True, null=True)
+    background_color = models.CharField(max_length=20)
+    border_color = models.CharField(max_length=20)
+    created_by = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    create = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
