@@ -3,7 +3,31 @@
 {% block title %}Forbidden (403){% endblock %}
 
 {% block content %}
-<h1>Forbidden (403)</h1>
-
-<p>CSRF verification failed. Request aborted.</p>
+<div class="error-page">
+    <h2 class="headline text-yellow"> 403</h2>
+    <div class="error-content">
+      <h3><i class="fa fa-warning text-yellow"></i> Forbidden (403)</h3>
+      <p>
+        CSRF verification failed. Request aborted.
+        Meanwhile, you may <a href="{% url "users:dashboard" %}">return to dashboard</a>
+      </p>
+    </div>
+    <!-- /.error-content -->
+</div>
+<!-- /.error-page -->
 {% endblock content %}
+
+{% block inner %}
+<div class="error-page">
+    <h2 class="headline text-yellow"> 404</h2>
+    <div class="error-content">
+      <h3><i class="fa fa-warning text-yellow"></i> Forbidden (403)</h3>
+      <p>
+        CSRF verification failed. Request aborted.
+        Meanwhile, you may <a href="{% url "users:home" %}">return to dashboard</a>
+      </p>
+    </div>
+    <!-- /.error-content -->
+</div>
+<!-- /.error-page -->
+{% endblock %}

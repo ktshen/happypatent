@@ -277,3 +277,9 @@ ADMIN_URL = r'^admin/'
 # ------------------------------------------------------------------------------
 SELECT2_CSS = "css/empty.css"
 
+
+# Upload Image Limitation
+IMAGE_SIZE_LIMITATION = 5242880
+IMAGE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png']
+
+

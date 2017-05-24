@@ -14,7 +14,7 @@ urlpatterns = [
         name='redirect'
     ),
     url(
-        regex=r'user/^(?P<username>[\w.@+-]+)/$',
+        regex=r'^user/(?P<username>[\w.@+-]+)/$',
         view=views.UserDetailView.as_view(),
         name='detail'
     ),

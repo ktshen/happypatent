@@ -6,8 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from datetime import datetime
 from .models import User, CalendarEvent
+from .forms import UserProfileModelForm
 from proposals.models import Patent
-import pytz
 
 DATE_FMT = "%a, %d %b %Y %X GMT"
 
@@ -22,7 +22,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         if self.request.user.username != self.kwargs.get(self.slug_url_kwarg):
             raise Http404("You have no privilege to search other user's profile.")
         else:
-            super(UserDetailView, self).get(self, request, *args, **kwargs)
+            return super(UserDetailView, self).get(self, request, *args, **kwargs)
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
@@ -34,16 +34,10 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
-
-    fields = ['first_name', 'last_name','id_number', 'gender',
-              'county', 'address', 'home_number', 'mobile_number',
-              'office_number', 'spouse_name', 'education','experience',
-              'comment', 'profile_pic']
-
-    # we already imported User in the view code above, remember?
     model = User
+    form_class = UserProfileModelForm
+    template_name = "users/user_form.html"
 
-    # send the user back to their own page after a successful update
     def get_success_url(self):
         return reverse('users:detail',
                        kwargs={'username': self.request.user.username})

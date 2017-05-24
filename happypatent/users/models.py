@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from .utils import image_validate
 
 
 @python_2_unicode_compatible
@@ -20,7 +21,7 @@ class BaseProfileModel(models.Model):
     gender = models.CharField(_('Gender'),
                               choices=GENDER_CHOICE,
                               max_length=10,
-                              default='m')
+                              blank=True)
 
     county = models.CharField(_('County/City'),
                               max_length=30,
@@ -52,6 +53,7 @@ class BaseProfileModel(models.Model):
 
     profile_pic = models.ImageField(_('Profile Picture'),
                                     upload_to='photos/',
+                                    validators=[image_validate,],
                                     blank=True)
 
     class Meta:
