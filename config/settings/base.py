@@ -39,6 +39,7 @@ DJANGO_APPS = [
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
 
     # Useful template tags:
     # 'django.contrib.humanize',
@@ -276,7 +277,6 @@ ADMIN_URL = r'^admin/'
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
 SELECT2_CSS = "css/empty.css"
-
 
 # Upload Image Limitation
 IMAGE_SIZE_LIMITATION = 5242880

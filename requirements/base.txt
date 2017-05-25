@@ -6,6 +6,7 @@ wheel==0.29.0
 
 
 # Bleeding edge Django
+# Happypatent hasn't tested 1.11 yet. Some features might not be compatible.
 django==1.10.7 # pyup: >=1.10,<1.11
 
 # Configuration
@@ -45,8 +46,7 @@ django-redis==4.7.0
 redis>=2.10.5
 
 
-
-
-
 # Your custom requirements go here
+Django-Select2==5.10.0
+django-haystack
 

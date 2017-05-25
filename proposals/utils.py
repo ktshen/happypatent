@@ -3,6 +3,7 @@ from django.core.cache import cache
 
 from .models import Patent
 
+
 class CaseIDGenerator(object):
     """
     - Class that helps model 'Patent' to process latest case id, which could get or set a latest 

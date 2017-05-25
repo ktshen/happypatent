@@ -1,13 +1,19 @@
+from datetime import datetime
+
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, FormMixin
+from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.messages.views import SuccessMessageMixin
-
+from django.shortcuts import render
+from django.db.models import Q
 from django_select2.views import AutoResponseView
+from django.contrib.postgres.search import SearchVector
 
 from .models import Employee, Patent, Agent, Client, ContactPerson, User
-from .forms import EmployeeModelForm, PatentModelForm, ContactPersonModelForm, ClientModelForm, AgentModelForm
+from .forms import EmployeeModelForm, PatentModelForm, ContactPersonModelForm, \
+                   ClientModelForm, AgentModelForm, PatentSearchForm
 from .utils import CaseIDGenerator
 
 def get_model_fields_data(obj):
@@ -155,6 +161,72 @@ class PatentDetailView(LoginRequiredMixin, DetailView):
 
 class PatentUpdateView(LoginRequiredMixin, UpdateView):
     model = Patent
+
+
+class PatentSearchView(LoginRequiredMixin, FormMixin, ListView):
+    model = Patent
+    form_class = PatentSearchForm
+    template_name = "proposals/patent_search.html"
+
+    def get(self, request, *args, **kwargs):
+        if "search" not in request.GET:
+            self.object_list = self.get_queryset()
+            return render(request, self.get_template_names(), {"form": self.get_form()})
+        return super(PatentSearchView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        if self.request.method != "GET" or "search" not in self.request.GET:
+            return super(PatentSearchView, self).get_queryset()
+        GET = self.request.GET
+        qs = Patent.objects.all()
+        # Process ForeignKey object first
+        if "client" in GET:
+            qs = qs.filter(client__client_id=GET["client"])
+        if "inventor" in GET:
+            qs = qs.filter(inventor__pk=GET["inventor"])
+        if "local_agent" in GET:
+            qs = qs.filter(local_agent__agent_id=GET["local_agent"])
+        if "foreign_agent" in GET:
+            qs = qs.filter(foreign_agent__agent_id=GET["foreign_agent"])
+
+        # Process Date query
+        start = None
+        end = None
+        if "start" in GET:
+            start = end = GET["start"]
+        if "end" in GET:
+            end = GET["end"]
+        if not start and end:
+            start = end
+        if start and end:
+            start = datetime.strptime(start, "%Y-%m-%d").date()
+            end = datetime.strptime(end, "%Y-%m-%d").date()
+            qs = qs.filter(
+                Q(control_date__range=(start, end)) |
+                Q(filing_date__range=(start, end)) |
+                Q(deadline__range=(start, end))
+            )
+
+        # Process "q"
+        if "q" in GET:
+            qs = qs.filter(
+                Q(case_id__icontains=GET["q"]) |
+                Q(chinese_title__icontains=GET["q"]) |
+                Q(english_title__icontains=GET["q"]) |
+                Q(application_type__icontains=GET["q"]) |
+                Q(client_ref_no__icontains=GET["q"]) |
+                Q(owner__icontains=GET["q"]) |
+                Q(case_status__icontains=GET["q"]) |
+                Q(country__icontains=GET["q"]) |
+                Q(application_no__icontains=GET["q"]))
+        return qs
+
+
+
+
+
+
+
 
 
 class ContactPersonCreateView(LoginRequiredMixin, UserAppendCreateViewMixin,

@@ -22,4 +22,3 @@ def image_validate(value):
                 msg = msg + ", " + allowed[i]
         msg = msg + '.'
         raise ValidationError(msg)
-

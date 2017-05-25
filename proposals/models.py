@@ -199,7 +199,7 @@ class Patent(_BaseModel):
     chinese_title = models.CharField(_('Chinese Title'), max_length=100)
     english_title = models.CharField(_('English Title'), max_length=100)
     client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
-    client_type = models.CharField(_('Type'), max_length=30,
+    application_type = models.CharField(_('Type'), max_length=30,
                                    choices=APPLICATION_TYPE_CHOICES, blank=True)
     client_ref_no = models.CharField(_('Client\'s ref. No.'), max_length=30)
     country = models.CharField(_('Country'), max_length=30,

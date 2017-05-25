@@ -1,15 +1,13 @@
 from django.contrib import admin
 
-from .models import Employee, Agent, ContactPerson, Client,  Patent, Work, ContactPerson
-from .models import Test1, Test2
+from .models import Employee, Agent, ContactPerson, Client,  Patent, Work
 # Register your models here.
-
-
 
 
 @admin.register(Agent)
 class AgentModelAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(ContactPerson)
 class ContactPersonModelAdmin(admin.ModelAdmin):
@@ -25,7 +23,6 @@ class ClientModelAdmin(admin.ModelAdmin):
     ordering        = ('client_id', 'created', 'update', 'client_ch_name',)
 
 
-
 @admin.register(Employee)
 class EmployeeModelAdmin(admin.ModelAdmin):
     date_hierarchy  = 'update'
@@ -37,20 +34,11 @@ class EmployeeModelAdmin(admin.ModelAdmin):
 
 @admin.register(Patent)
 class PatentModelAdmin(admin.ModelAdmin):
-    list_display = ('case_id', 'chinese_title', 'english_title', 'client_type',
+    list_display = ('case_id', 'chinese_title', 'english_title', 'application_type',
                     'control_item', 'control_date', 'deadline')
-    list_filter = ('control_item', 'client_type')
+    list_filter = ('control_item', 'application_type')
     search_fields = ('chinese_title', 'english_title',)
     date_hierarchy = 'deadline'
-    ordering = ['deadline', 'control_item', 'client_type']
-
-
-@admin.register(Test1)
-class Test1ModelAdmin(admin.ModelAdmin):
-    pass
-
-@admin.register(Test2)
-class Test2ModelAdmin(admin.ModelAdmin):
-    pass
+    ordering = ['deadline', 'control_item', 'application_type']
 
 
