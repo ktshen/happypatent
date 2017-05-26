@@ -35,7 +35,7 @@ class EmployeeModelForm(forms.ModelForm):
     class Meta:
         model = Employee
         fields = ('chinese_name', 'english_name', 'id_number', 'gender', 'email', 'county', 'address',
-                  'home_number', 'office_number', 'employee_id', 'engagement_date', 'title_id',
+                  'home_number', 'office_number', 'engagement_date', 'title_id',
                   'spouse_name', 'education', 'experience', 'remarks')
         widgets = {
             "gender": MySelect2Widget(),

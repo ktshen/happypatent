@@ -33,22 +33,19 @@ class Employee(BaseProfileModel, _BaseModel):
         ('m', _('Male')),
         ('f', _('Female'))
     )
+
     chinese_name = models.CharField(_("Chinese Name"),
                                     max_length=30)
 
     english_name = models.CharField(_('English Name'),
                                     max_length=30)
 
-    employee_id = models.CharField(_('Employee ID'),
-                                   max_length=20,
-                                   unique=True)
-
     email = models.EmailField()
 
     engagement_date = models.DateField(_('Engagement Date'),
                                        default=timezone.now)
 
-    title_id = models.CharField(_('Title Id'),
+    title_id = models.CharField(_('Title ID'),
                                 max_length=30,
                                 blank=True)
 
@@ -56,7 +53,18 @@ class Employee(BaseProfileModel, _BaseModel):
         return self.chinese_name
 
     def get_absolute_url(self):
-        return reverse("proposals:employee-detail", args=[self.pk, ])
+        return reverse("proposals:employee-detail", args=[self.pk,])
+
+    @property
+    def employee_id(self):
+        """
+        Employee ID format: E0001, E1211, E29931 ....
+        :return: 
+        """
+        e_id = str(self.pk)
+        if len(e_id) < 4:
+            e_id = '0' * (3 - len(e_id)) + e_id
+        return "E" + e_id
 
 
 @python_2_unicode_compatible

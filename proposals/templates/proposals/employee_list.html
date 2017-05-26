@@ -24,15 +24,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for agent in object_list %}
+                {% for object in object_list %}
                 <tr>
-                  <td><a href="{{ agent.get_absolute_url }}">{{ agent.agent_id }}</a></td>
-                  <td><a href="{{ agent.get_absolute_url }}">{{ agent.agent_title }}</a></td>
-                  <td>{{ agent.representative }}</td>
-                  <td>{{ agent.office_number }}</td>
-                  <td>{% if agent.contact_person %}<a href="{{ agent.contact_person.get_absolute_url }}">{{ agent.contact_person.name }}</a>{% else %}None{% endif %}</td>
-                  <td>{{ agent.country }}</td>
-                  <td>{% if agent.email %}{{ agent.email }}{% else %}None{% endif %}</td>
+                  <td><a href="{{ object.get_absolute_url }}">{{ object.chinese_name }}</a></td>
+                  <td><a href="{{ object.get_absolute_url }}">{{ object.english_name }}</a></td>
+                  <td>{{ object.employee_id }}</td>
+                  <td>{% if object.mobile_number %}{{ object.mobile_number }}{% else %}None{% endif %}</td>
+                  <td>{% if object.office_number %}{{ object.office_number }}{% else %}None{% endif %}</td>
+                  <td>{% if object.address %}{{ object.address }}{% else %}None{% endif %}</td>
+                  <td>{{ object.email }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

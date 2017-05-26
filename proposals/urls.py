@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^employee/create/$', views.EmployeeCreateView.as_view(), name='employee-create'),
     url(r'^employee/(?P<pk>\d+)/detail/$', views.EmployeeDetailView.as_view(),
         name='employee-detail'),
-    url(r'^(?P<pk>\d+)/update/$', views.EmployeeUpdateView.as_view(),
+    url(r'^employee/(?P<pk>\d+)/update/$', views.EmployeeUpdateView.as_view(),
         name='employee-update'),
     url(r'^employee/list/$', views.EmployeeListView.as_view(), name='employee-list'),
 

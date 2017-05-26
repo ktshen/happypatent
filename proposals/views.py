@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
@@ -80,7 +78,7 @@ class Select2View(AutoResponseView):
 
 class EmployeeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Employee
-    template_name = "proposals/employee_create.html"
+    template_name = 'proposals/employee_form.html'
     form_class = EmployeeModelForm
     success_message = "%(field)s was created successfully"
 
@@ -97,14 +95,11 @@ class EmployeeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
     model = Employee
 
-    def get_context_data(self, **kwargs):
-        context = super(EmployeeDetailView, self).get_context_data(**kwargs)
-        context["object_fields_data"] = get_model_fields_data(self.object)
-        return context
-
 
 class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
     model = Employee
+    template_name = "proposals/employee_form.html"
+    form_class = EmployeeModelForm
 
 
 class EmployeeListView(LoginRequiredMixin, ListView):

@@ -56,6 +56,9 @@ class BaseProfileModel(models.Model):
                                     validators=[image_validate,],
                                     blank=True)
 
+    def gender_template(self):
+        return dict(BaseProfileModel.GENDER_CHOICE)[self.gender]
+
     class Meta:
         abstract = True
 

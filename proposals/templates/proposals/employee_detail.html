@@ -1,16 +1,85 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<div>
-    <p>{{object.chinese_name}}</p>
-    {% for name, value in object_fields_data %}
-        <h3>{{name}}</h3>
-        {% if name == "profile_pic" %}
-            <img src="{{MEDIA_URL}}{{value}}">
-        {% else %}
-            <p>{{value}}</p>
-        {% endif %}
-    {% endfor %}
-</div>
+<div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title text-blue">{{ object.chinese_name }}</h3>
+      <div class="pull-right">
+          <a class="btn btn-warning" href="{% url "proposals:employee-update" object.pk %}" role="button">Update</a>
+      </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Employee ID</h4>
+                <p>{{ object.employee_id }}</p>
+                <h4>Chinese Name</h4>
+                <p>{{ object.chinese_name }}</p>
+                <h4>English Name</h4>
+                <p>{{ object.english_name }}</p>
+            </div>
+            <div class="col-md-4">
+                <h4>ID Number</h4>
+                <p>{% if object.id_number %}{{ object.id_number }}{% else %}None{% endif %}</p>
+                <h4>Gender</h4>
+                <p>{{ object.gender_template }}</p>
+                <h4>Email</h4>
+                <p>{% if object.status %}{{ object.status }}{% else %}None{% endif %}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Home Phone Number</h4>
+                <p>{% if object.home_number %}{{ object.home_number }}{% else %}None{% endif %}</p>
+                <h4>Mobile Number</h4>
+                <p>{% if object.mobile_number %}{{ object.mobile_number }}{% else %}None{% endif %}</p>
+                <h4>Office Number</h4>
+                <p>{% if object.office_number %}{{ object.office_number }}{% else %}None{% endif %}</p>
+            </div>
+            <div class="col-md-4">
+                <h4>County/City</h4>
+                <p>{% if object.county %}{{ object.county }}{% else %}None{% endif %}</p>
+                <h4>Address</h4>
+                <p>{% if object.ddress %}{{ object.ddress }}{% else %}None{% endif %}</p>
+            </div>
+            <div class="col-md-4">
+                <h4>Engagement Date</h4>
+                <p>{{ object.engagement_date }}</p>
+                <h4>Title ID</h4>
+                <p>{% if object.title_id  %}{{ object.title_id }}{% else %}None{% endif %}</p>
+                <h4>Spouse Name</h4>
+                <p>{% if object.spouse_name %}{{ object.spouse_name }}{% else %}None{% endif %}</p>
 
-{% endblock %}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+             <div class="col-md-4">
+                <h4>Education</h4>
+                <textarea rows="7" cols="40" readonly>{{ object.education }}</textarea>
+            </div>
+            <div class="col-md-4">
+                <h4>Experience</h4>
+                <textarea rows="7" cols="40" readonly>{{ object.experience }}</textarea>
+            </div>
+        </div>
+        <div class="row">
+             <div class="col-md-8">
+                <h4>Remarks</h4>
+                <textarea rows="10" cols="100" readonly>{{ object.remarks }}</textarea>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <div class="row" >
+          <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
+          <div class="col-sm-4"><h5>Last update at {{ object.update }}</h5></div>
+      </div>
+      <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
+    </div>
+    <!-- /.box-footer-->
+</div>
+{% endblock content %}
