@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">All Clients</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="list_table" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Agent's ID</th>
+                  <th>Agent's title</th>
+                  <th>Representative</th>
+                  <th>Office Number</th>
+                  <th>Contact Person</th>
+                  <th>Country</th>
+                  <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for agent in object_list %}
+                <tr>
+                  <td><a href="{{ agent.get_absolute_url }}">{{ agent.agent_id }}</a></td>
+                  <td><a href="{{ agent.get_absolute_url }}">{{ agent.agent_title }}</a></td>
+                  <td>{{ agent.representative }}</td>
+                  <td>{{ agent.office_number }}</td>
+                  <td>{% if agent.contact_person %}<a href="{{ agent.contact_person.get_absolute_url }}">{{ agent.contact_person.name }}</a>{% else %}None{% endif %}</td>
+                  <td>{{ agent.country }}</td>
+                  <td>{% if agent.email %}{{ agent.email }}{% else %}None{% endif %}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+</div>
+{% endblock content %}
+

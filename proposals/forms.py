@@ -17,7 +17,7 @@ class ContactPersonModelForm(forms.ModelForm):
 
     class Meta:
         model = ContactPerson
-        fields = ('name', 'title', 'ext_number', 'email', 'remarks')
+        fields = ('name', 'title', 'phone_number', 'email', 'remarks')
 
 
 class AjaxContactPersonModelForm(ContactPersonModelForm):
@@ -152,7 +152,7 @@ class PatentModelForm(forms.ModelForm):
     class Meta:
         model = Patent
         fields = ('case_id', 'chinese_title', 'english_title', 'client', 'application_type',
-                  'client_ref_no', 'country', 'request_examination', 'examination_date',
+                  'country', 'request_examination', 'examination_date',
                   'inventor', 'case_status', 'filing_date', 'application_no', 'publication_date',
                   'publication_no', 'patent_date', 'patent_no', 'patent_term', 'certificate_no',
                   'local_agent', 'foreign_agent', 'pre_decision_date', 'pre_decision_no',
@@ -180,35 +180,3 @@ class PatentModelForm(forms.ModelForm):
             'priority': MySelect2Widget(),
             'prio_country': MySelect2Widget(),
         }
-
-
-class PatentSearchForm(forms.ModelForm):
-
-    search = forms.BooleanField(initial=True, widget=forms.HiddenInput(), required=True)
-    q = forms.CharField(label="Query", max_length=20)
-    start = forms.DateField(label="Start Date", input_formats="%Y-%m-%d")
-    end = forms.DateField(label="End Date", input_formats="%Y-%m-%d")
-
-    def __init__(self, *args, **kwargs):
-        super(PatentSearchForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.layout.append(Submit('search', 'search'))
-        self.helper.form_method = "GET"
-        for f in self.fields.keys():
-            self.fields[f].required = False
-
-    class Meta:
-        model = Patent
-        fields = ('search', 'q', 'start', 'end', 'client', 'inventor', 'local_agent', 'foreign_agent')
-
-        widgets = {
-            'client': AjaxSelect2Widget(search_fields=["client_en_name__icontains", "client_ch_name__icontains"]),
-            'local_agent': AjaxSelect2Widget(search_fields=["agent_title__icontains"]),
-            'foreign_agent': AjaxSelect2Widget(search_fields=["agent_title__icontains"]),
-            'inventor': AjaxSelect2MultipleWidget(search_fields=['chinese_name__icontains', 'english_name__icontains']),
-            'country': MySelect2Widget(),
-        }
-
-
-
-

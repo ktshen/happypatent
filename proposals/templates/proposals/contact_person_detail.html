@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title text-blue">{{ object.name }}</h3>
+      <div class="pull-right">
+          <a class="btn btn-warning" href="{% url "proposals:contact_person-update" object.pk %}" role="button">Update</a>
+      </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Name</h4>
+                <p>{{ object.name }}</p>
+                <h4>Title</h4>
+                <p>{{ object.title }}</p>
+                <h4>Phone Number</h4>
+                <p>{% if object.phone_number %}{{ object.phone_number }}{% else %}None{% endif %}</p>
+                <h4>Email</h4>
+                <p>{% if object.email %}{{ object.email }}{% else %}None{% endif %}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Remarks</h4>
+                <textarea rows="10" cols="100" readonly>{{ object.remarks }}</textarea>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <div class="row" >
+          <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
+          <div class="col-sm-4"><h5>Last update at {{ object.update }}</h5></div>
+      </div>
+      <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
+    </div>
+    <!-- /.box-footer-->
+</div>
+
+
+
+{% endblock content %}

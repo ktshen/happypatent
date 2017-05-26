@@ -4,36 +4,39 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-10">
-        {% if not object_list %}
-            {% crispy form %}
-        {% else %}
+    <div class="col-md-12">
         <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Results</h3>
+              <h3 class="box-title">Your Patents</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="list_table" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>Case ID</th>
                   <th>Chinese Title</th>
                   <th>English Title</th>
-                  <th>Client</th>
-                  <th>Country</th>
                   <th>Control Date</th>
+                  <th>Deadline</th>
+                  <th>Case status</th>
+                  <th>Client</th>
+                  <th>Local Agent</th>
+                  <th>Country</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for patent in object_list %}
                 <tr>
                   <td><a href="{{ patent.get_absolute_url }}">{{ patent.case_id }}</a></td>
-                    <td><a href="{{ patent.get_absolute_url }}">{{ patent.chinese_title }}</a></td>
+                  <td><a href="{{ patent.get_absolute_url }}">{{ patent.chinese_title }}</a></td>
                   <td>{{ patent.english_title }}</td>
-                  <td>{{ patent.client.abbr_client }}</td>
-                  <td>{{ patent.country }}</td>
                   <td>{{ patent.control_date}}</td>
+                  <td>{{ patent.deadline}}</td>
+                  <td>{{ patent.case_status_template }}</td>
+                  <td>{{ patent.client.abbr_client }}</td>
+                  <td>{{ patent.local_agent.agent_title }}</td>
+                  <td>{{ patent.country }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -43,21 +46,6 @@
           </div>
           <!-- /.box -->
         </div>
-        <!-- /.col -->
-    {% endif %}
 </div>
-<script>
-$(document).ready(function(){
-    $('#example1').DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": false,
-      "info": true,
-      "autoWidth": true
-    });
-})
-</script>
-
 {% endblock content %}
 

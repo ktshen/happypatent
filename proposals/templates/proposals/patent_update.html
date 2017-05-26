@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10">
+        {% crispy form %}
+        {% for id, form in modal_form %}
+            {% include "proposals/ajax_modal.html" with id=id form=form %}
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block javascript %}
+<script src="{% static "js/patent-create.js" %}"></script>
+<script src="{% static "js/render-select2.js" %}"></script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">All Clients</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="list_table" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Client ID</th>
+                  <th>Chinese name</th>
+                  <th>English name</th>
+                  <th>Country</th>
+                  <th>Phone Number</th>
+                  <th>Contact Person #1</th>
+                  <th>Contact Person #2</th>
+                  <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for client in object_list %}
+                <tr>
+                  <td><a href="{{ client.get_absolute_url }}">{{ client.client_id }}</a></td>
+                  <td><a href="{{ client.get_absolute_url }}">{{ client.client_ch_name }}</a></td>
+                  <td><a href="{{ client.get_absolute_url }}">{{ client.client_en_name }}</a></td>
+                  <td>{{ client.country }}</td>
+                  <td>{{ client.phone_number}}</td>
+                  <td><a href="{{ client.contact_person1.get_absolute_url }}">{{ client.contact_person1.name }}</a></td>
+                  <td>{{ client.contact_person2.name }}</td>
+                  <td>{{ client.status }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+</div>
+{% endblock content %}
+

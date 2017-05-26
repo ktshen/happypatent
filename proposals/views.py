@@ -1,19 +1,16 @@
 from datetime import datetime
 
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, FormMixin
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render
-from django.db.models import Q
 from django_select2.views import AutoResponseView
-from django.contrib.postgres.search import SearchVector
 
 from .models import Employee, Patent, Agent, Client, ContactPerson, User
 from .forms import EmployeeModelForm, PatentModelForm, ContactPersonModelForm, \
-                   ClientModelForm, AgentModelForm, PatentSearchForm
+                   ClientModelForm, AgentModelForm
 from .utils import CaseIDGenerator
 
 def get_model_fields_data(obj):
@@ -110,9 +107,13 @@ class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
     model = Employee
 
 
+class EmployeeListView(LoginRequiredMixin, ListView):
+    model = Employee
+
+
 class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
     model = Patent
-    template_name = 'proposals/patent_create_form.html'
+    template_name = 'proposals/patent_create.html'
     form_class = PatentModelForm
     success_message = "%(case_id)s was created successfully"
 
@@ -161,72 +162,17 @@ class PatentDetailView(LoginRequiredMixin, DetailView):
 
 class PatentUpdateView(LoginRequiredMixin, UpdateView):
     model = Patent
+    slug_field = "case_id"
+    slug_url_kwarg = "case_id"
+    form_class = PatentModelForm
+    template_name = "proposals/patent_create.html"
 
 
-class PatentSearchView(LoginRequiredMixin, FormMixin, ListView):
+class PatentListView(LoginRequiredMixin, ListView):
     model = Patent
-    form_class = PatentSearchForm
-    template_name = "proposals/patent_search.html"
-
-    def get(self, request, *args, **kwargs):
-        if "search" not in request.GET:
-            self.object_list = self.get_queryset()
-            return render(request, self.get_template_names(), {"form": self.get_form()})
-        return super(PatentSearchView, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        if self.request.method != "GET" or "search" not in self.request.GET:
-            return super(PatentSearchView, self).get_queryset()
-        GET = self.request.GET
-        qs = Patent.objects.all()
-        # Process ForeignKey object first
-        if "client" in GET:
-            qs = qs.filter(client__client_id=GET["client"])
-        if "inventor" in GET:
-            qs = qs.filter(inventor__pk=GET["inventor"])
-        if "local_agent" in GET:
-            qs = qs.filter(local_agent__agent_id=GET["local_agent"])
-        if "foreign_agent" in GET:
-            qs = qs.filter(foreign_agent__agent_id=GET["foreign_agent"])
-
-        # Process Date query
-        start = None
-        end = None
-        if "start" in GET:
-            start = end = GET["start"]
-        if "end" in GET:
-            end = GET["end"]
-        if not start and end:
-            start = end
-        if start and end:
-            start = datetime.strptime(start, "%Y-%m-%d").date()
-            end = datetime.strptime(end, "%Y-%m-%d").date()
-            qs = qs.filter(
-                Q(control_date__range=(start, end)) |
-                Q(filing_date__range=(start, end)) |
-                Q(deadline__range=(start, end))
-            )
-
-        # Process "q"
-        if "q" in GET:
-            qs = qs.filter(
-                Q(case_id__icontains=GET["q"]) |
-                Q(chinese_title__icontains=GET["q"]) |
-                Q(english_title__icontains=GET["q"]) |
-                Q(application_type__icontains=GET["q"]) |
-                Q(client_ref_no__icontains=GET["q"]) |
-                Q(owner__icontains=GET["q"]) |
-                Q(case_status__icontains=GET["q"]) |
-                Q(country__icontains=GET["q"]) |
-                Q(application_no__icontains=GET["q"]))
-        return qs
-
-
-
-
-
-
-
+        return self.model.objects.filter(created_by__username=self.request.user.username).order_by('-update', '-created')
 
 
 class ContactPersonCreateView(LoginRequiredMixin, UserAppendCreateViewMixin,
@@ -244,11 +190,18 @@ class ContactPersonCreateView(LoginRequiredMixin, UserAppendCreateViewMixin,
 
 class ContactPersonDetailView(LoginRequiredMixin, DetailView):
     model = ContactPerson
-    template_name = "contact_person_detail.html"
+    template_name = "proposals/contact_person_detail.html"
 
 
 class ContactPersonUpdateView(LoginRequiredMixin, UpdateView):
     model = ContactPerson
+    template_name = "proposals/contact_person_create.html"
+    form_class = ContactPersonModelForm
+
+
+class ContactPersonListView(LoginRequiredMixin, ListView):
+    model = ContactPerson
+    template_name = "proposals/contact_person_list.html"
 
 
 class AgentCreateView(LoginRequiredMixin, AjaxableResponseMixin,
@@ -270,8 +223,16 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "agent_id"
 
 
+class AgentListView(LoginRequiredMixin, ListView):
+    model = Agent
+
+
 class AgentUpdateView(LoginRequiredMixin, UpdateView):
     model = Agent
+    slug_field = "agent_id"
+    slug_url_kwarg = "agent_id"
+    template_name = "proposals/agent_create.html"
+    form_class = AgentModelForm
 
 
 class ClientCreateView(LoginRequiredMixin, AjaxableResponseMixin,
@@ -295,5 +256,11 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
+    slug_field = "client_id"
+    slug_url_kwarg = "client_id"
+    template_name = "proposals/client_create.html"
+    form_class = ClientModelForm
 
 
+class ClientListView(LoginRequiredMixin, ListView):
+    model = Client

@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="{% static "dist/css/AdminLTE.min.css" %}">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="{% static "dist/css/skins/skin-red-light.min.css" %}">
+  <link rel="stylesheet" href="{% static "dist/css/skins/skin-blue-light.css" %}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -46,7 +46,7 @@
   <![endif]-->
 
 </head>
-<body class="hold-transition skin-red-light sidebar-mini">
+<body class="hold-transition skin-blue-light sidebar-mini">
 <!-- jQuery 2.2.3 -->
 <script src="{% static "plugins/jQuery/jquery-2.2.3.min.js" %}"></script>
 {#<!-- jQuery UI 1.11.4 -->#}
@@ -117,34 +117,19 @@
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="{% static "img/user2-160x160.jpg" %}" class="user-image" alt="User Image">
+              <img src="{% static "img/blank-profile.png" %}" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">{{ user.first_name }} {{ user.last_name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="{% static "img/user2-160x160.jpg" %}" class="img-circle" alt="User Image">
+                <img src="{% static "img/blank-profile.png" %}" class="img-circle" alt="User Image">
 
                 <p>
                   {{ user.username }}
-                  <small>Member since Nov. 2012</small>
+                  <small>Member since {{ user.date_joined }}</small>
                 </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
@@ -191,106 +176,68 @@
             <!-- Optionally, you can add icons to the links -->
             <li id="sidebar-dashboard">
                 <a href="{% url "users:dashboard" %}">
-                    <i class="fa fa-dashboard"></i>
+                    <i class="fa fa-home"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="treeview" id="sidebar-proposals">
+            <li id="sidebar-patent">
               <a href="#">
-                <i class="fa fa-file-text-o"></i> <span>Proposals</span>
+                <i class="fa fa-file-text-o"></i>
+                <span>Patent</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+
+              <ul class="treeview-menu">
+                <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Create New Patent</a></li>
+                <li><a href="{% url "proposals:patent-list" %}"><i class="fa fa-circle-o"></i> All Your Patents</a></li>
+              </ul>
+            </li>
+            <li class="treeview" id="sidebar-employee">
+                  <a href="#"><i class="fa fa-group"></i> <span>Employee</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                  </a>
+
+                  <ul class="treeview-menu">
+                    <li><a href="{% url "proposals:employee-create" %}"><i class="fa fa-circle-o"></i> Create New Employee</a></li>
+                    <li><a href="{% url "proposals:employee-list" %}"><i class="fa fa-circle-o"></i> See All Employees</a></li>
+                  </ul>
+                </li>
+            <li class="treeview" id="sidebar-client">
+                  <a href="#"><i class="fa fa-gg-circle"></i>
+                    <span>Client</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                  </a>
+                  <ul class="treeview-menu">
+                    <li><a href="{% url "proposals:client-create" %}"><i class="fa fa-circle-o"></i> Create New Client</a></li>
+                    <li><a href="{% url "proposals:client-list" %}"><i class="fa fa-circle-o"></i> See All Clients</a></li>
+                  </ul>
+                </li>
+            <li class="treeview" id="sidebar-agent">
+                <a href="#"><i class="fa fa-suitcase"></i> <span>Agent</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                  </a>
+
+                  <ul class="treeview-menu">
+                    <li><a href="{% url "proposals:agent-create" %}"><i class="fa fa-circle-o"></i> Create New Agent</a></li>
+                    <li><a href="{% url "proposals:agent-list" %}"><i class="fa fa-circle-o"></i> See All Agents</a></li>
+                  </ul>
+                </li>
+            <li class="treeview" id="sidebar-others">
+              <a href="#">
+                <i class="fa fa-th-list"></i> <span>Others</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li>
-                  <a href="#"><i class="fa fa-circle-o"></i> Employee
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-
-                  <ul class="treeview-menu">
-                    <li>
-                      <form action="#" method="get" class="sidebar-form">
-                        <div class="input-group">
-                          <input type="text" name="q" class="form-control" placeholder="Search Employee...">
-                              <span class="input-group-btn">
-                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                                </button>
-                              </span>
-                        </div>
-                      </form>
-                    </li>
-                    <li><a href="{% url "proposals:employee-create" %}"><i class="fa fa-circle-o"></i> Create New Employee</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-circle-o"></i> Agent
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-
-                  <ul class="treeview-menu">
-                    <li>
-                      <form action="#" method="get" class="sidebar-form">
-                        <div class="input-group">
-                          <input type="text" name="q" class="form-control" placeholder="Search Agent...">
-                          <span class="input-group-btn">
-                            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                            </button>
-                          </span>
-                        </div>
-                      </form>
-                    </li>
-                    <li><a href="{% url "proposals:agent-create" %}"><i class="fa fa-circle-o"></i> Create New Agent</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-circle-o"></i> Client
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-
-                  <ul class="treeview-menu">
-                    <li>
-                      <form action="#" method="get" class="sidebar-form">
-                        <div class="input-group">
-                          <input type="text" name="q" class="form-control" placeholder="Search Client...">
-                              <span class="input-group-btn">
-                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                                </button>
-                              </span>
-                        </div>
-                      </form>
-                    </li>
-                    <li><a href="{% url "proposals:client-create" %}"><i class="fa fa-circle-o"></i> Create New Client</a></li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-circle-o"></i> Patent
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-
-                  <ul class="treeview-menu">
-                    <li>
-                      <form action="#" method="get" class="sidebar-form">
-                        <div class="input-group">
-                          <input type="text" name="q" class="form-control" placeholder="Search Patent...">
-                              <span class="input-group-btn">
-                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                                </button>
-                              </span>
-                        </div>
-                      </form>
-                    </li>
-                    <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Create New Patent</a></li>
-                  </ul>
-                </li>
                 <li>
                   <a href="#"><i class="fa fa-circle-o"></i> Contact Person
                     <span class="pull-right-container">
@@ -299,22 +246,10 @@
                   </a>
 
                   <ul class="treeview-menu">
-                    <li>
-                      <form action="#" method="get" class="sidebar-form">
-                        <div class="input-group">
-                          <input type="text" name="q" class="form-control" placeholder="Search Contact Person...">
-                              <span class="input-group-btn">
-                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                                </button>
-                              </span>
-                        </div>
-                      </form>
-                    </li>
-                    <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Create Contact Person</a></li>
+                    <li><a href="{% url "proposals:contact_person-create" %}"><i class="fa fa-circle-o"></i> Create Contact Person</a></li>
+                    <li><a href="{% url "proposals:contact_person-list" %}"><i class="fa fa-circle-o"></i> All Contact Person</a></li>
                   </ul>
                 </li>
-
-
               </ul>
             </li>
           </ul>

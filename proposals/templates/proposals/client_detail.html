@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title text-blue">{{ object.client_ch_name }}</h3>
+      <div class="pull-right">
+          <a class="btn btn-warning" href="{% url "proposals:client-update" object.client_id %}" role="button">Update</a>
+      </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Client ID</h4>
+                <p>{{ object.client_id }}</p>
+                <h4>Client name in abbreviated form</h4>
+                <p>{{ object.abbr_client }}</p>
+                <h4>Client Chinese name</h4>
+                <p>{{ object.client_ch_name }}</p>
+                <h4>Client English name</h4>
+                <p>{{ object.client_en_name }}</p>
+                <h4>Country</h4>
+                <p>{{ object.country }}</p>
+                <h4>Status</h4>
+                <p>{% if object.status %}{{ object.status }}{% else %}None{% endif %}</p>
+            </div>
+            <div class="col-md-4">
+                <h4>Post Office Address</h4>
+                <p>{{ object.post_address }}</p>
+                <h4>English Address</h4>
+                <p>{% if object.english_address %}{{ object.english_address }}{% else %}None{% endif %}</p>
+                <h4>Invoice(Application form) address</h4>
+                <p>{% if object.invoice_address %}{{ object.invoice_address }}{% else %}None{% endif %}</p>
+                <h4>Phone Number</h4>
+                <p>{{ object.phone_number }}</p>
+                <h4>Fax Number</h4>
+                <p>{% if object.fax_number %}{{ object.fax_number }}{% else %}None{% endif %}</p>
+            </div>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Contact Person #1</h4>
+                <p><a href="{{ object.contact_person1.get_absolute_url }}">{{ object.contact_person1.name }}</a></p>
+                <h4>Contact Person #2</h4>
+                <p>{% if object.contact_person2 %}<a href="{{ object.contact_person2.get_absolute_url }}">{{ object.contact_person2 }}</a>{% else %}None{% endif %}</p>
+            </div>
+            <div class="col-md-4">
+                <h4>Representative's Chinese name</h4>
+                <p>{{ object.repr_chinese_name }}</p>
+                <h4>Representative's English name</h4>
+                <p>{{ object.repr_english_name }}</p>
+                <h4>VAT No.</h4>
+                <p>{{ object.vat_no }}</p>
+                <h4>Number of employees</h4>
+                <p>{{ object.number_employee }}</p>
+            </div>
+            <div class="col-md-4">
+                <h4>Primary owner</h4>
+                <p>{{ object.primary_owner }}</p>
+                <h4>Secondary owner</h4>
+                <p>{% if object.secondary_owner %}{{ object.secondary_owner }}{% else %}None{% endif %}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Remarks</h4>
+                <textarea rows="10" cols="100" readonly>{{ object.remarks }}</textarea>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <div class="row" >
+          <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
+          <div class="col-sm-4"><h5>Last update at {{ object.update }}</h5></div>
+      </div>
+      <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
+    </div>
+    <!-- /.box-footer-->
+</div>
+
+
+{% endblock content %}

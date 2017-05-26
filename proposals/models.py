@@ -34,12 +34,10 @@ class Employee(BaseProfileModel, _BaseModel):
         ('f', _('Female'))
     )
     chinese_name = models.CharField(_("Chinese Name"),
-                                    max_length=30,
-                                    blank=True)
+                                    max_length=30)
 
     english_name = models.CharField(_('English Name'),
-                                    max_length=30,
-                                    blank=True)
+                                    max_length=30)
 
     employee_id = models.CharField(_('Employee ID'),
                                    max_length=20,
@@ -55,7 +53,7 @@ class Employee(BaseProfileModel, _BaseModel):
                                 blank=True)
 
     def __str__(self):
-        return self.employee_id
+        return self.chinese_name
 
     def get_absolute_url(self):
         return reverse("proposals:employee-detail", args=[self.pk, ])
@@ -65,17 +63,20 @@ class Employee(BaseProfileModel, _BaseModel):
 class ContactPerson(_BaseModel):
     name = models.CharField(_('Name'), max_length=30, default=" ")
     title = models.CharField(_('Title'), max_length=30, blank=True)
-    ext_number = models.CharField(_('Ext.'), max_length=50)
-    email = models.EmailField(_('Email'))
+    phone_number = models.CharField(_('Phone Number'), max_length=50, blank=True)
+    email = models.EmailField(_('Email'), blank=True)
 
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("proposals:contact_person-detail", args=[self.pk])
+
 
 @python_2_unicode_compatible
 class Client(_BaseModel):
-    client_id = models.AutoField(_('Client ID'), primary_key=True, editable=False)
-    abbr_client = models.CharField(_('Client name in abbreviated form'), max_length=30)
+    client_id = models.AutoField(_('Client\'s ID'), primary_key=True, editable=False)
+    abbr_client = models.CharField(_('Client\'s name in abbreviated form'), max_length=30)
     client_ch_name = models.CharField(_('Client Chinese name'), max_length=50)
     client_en_name = models.CharField(_('Client English name'), max_length=50)
     country = models.CharField(_('Country'), max_length=50)
@@ -84,10 +85,17 @@ class Client(_BaseModel):
     invoice_address = models.CharField(_('Invoice(Application form) address'), max_length=100, blank=True)
     phone_number = models.CharField(_('Phone Number'), max_length=50)
     fax_number = models.CharField(_('Fax Number'), max_length=50, blank=True)
-    contact_person1 = models.ForeignKey(to=ContactPerson, on_delete=models.CASCADE, related_name="client1",
+    contact_person1 = models.ForeignKey(verbose_name=_("Contact Person #1"),
+                                        to=ContactPerson,
+                                        on_delete=models.SET_NULL,
+                                        related_name="client1",
                                         null=True)
-    contact_person2 = models.ForeignKey(to=ContactPerson, on_delete=models.SET_NULL, null=True,
-                                        related_name="client2", blank=True)
+    contact_person2 = models.ForeignKey(verbose_name=_("Contact Person #2"),
+                                        to=ContactPerson,
+                                        on_delete=models.SET_NULL,
+                                        null=True,
+                                        related_name="client2",
+                                        blank=True)
     repr_chinese_name = models.CharField(_('Representative\'s Chinese name'), max_length=50)
     repr_english_name = models.CharField(_('Representative\'s English name'), max_length=50)
     vat_no = models.CharField(_('VAT No.'), max_length=30)
@@ -105,9 +113,6 @@ class Client(_BaseModel):
 
     @property
     def name(self):
-        """
-        Get both Chinese and English name
-        """
         return self.client_ch_name
 
     def get_absolute_url(self):
@@ -120,12 +125,15 @@ class Client(_BaseModel):
 
 @python_2_unicode_compatible
 class Agent(_BaseModel):
-    agent_id = models.AutoField(_('Client ID'), primary_key=True, editable=False)
+    agent_id = models.AutoField(_('Agent\'s ID'), primary_key=True, editable=False)
     agent_title = models.CharField(_('Agent\'s title'), max_length=50, unique=True)
     country = models.CharField(_('Country'), max_length=50)
     representative = models.CharField(_('Representative'), max_length=50)
     email = models.EmailField(blank=True)
-    contact_person = models.ForeignKey(to=ContactPerson, on_delete=models.SET_NULL, null=True, blank=True)
+    contact_person = models.ForeignKey(verbose_name=_("Contact Person"),
+                                       to=ContactPerson,
+                                       on_delete=models.SET_NULL,
+                                       null=True, blank=True)
     office_number = models.CharField(_('Office Number(ext. personal)'), max_length=50)
 
     def __str__(self):
@@ -195,13 +203,11 @@ class Patent(_BaseModel):
     )
 
     case_id = models.CharField(_('Case ID'), max_length=30, unique=True)
-    # our_ref_no = pk
     chinese_title = models.CharField(_('Chinese Title'), max_length=100)
     english_title = models.CharField(_('English Title'), max_length=100)
     client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
     application_type = models.CharField(_('Type'), max_length=30,
                                    choices=APPLICATION_TYPE_CHOICES, blank=True)
-    client_ref_no = models.CharField(_('Client\'s ref. No.'), max_length=30)
     country = models.CharField(_('Country'), max_length=30,
                                choices=COUNTRY_CHOICES)
     request_examination = models.CharField(_('Request Examination'), max_length=30,
@@ -236,7 +242,6 @@ class Patent(_BaseModel):
     drawing_pages = models.IntegerField(_('Number of drawing pages'), blank=True, null=True)
     figures_number = models.IntegerField(_('Number of figures'), blank=True, null=True)
     owner = models.CharField(_('Owner'), max_length=50)
-
     priority = models.CharField(_('Priority'), max_length=30, choices=YES_OR_NO, default='no')
     prio_country = models.CharField(_('(Priority) Country'), max_length=30,
                                     choices=COUNTRY_CHOICES, blank=True)
@@ -251,6 +256,14 @@ class Patent(_BaseModel):
 
     def get_absolute_url(self):
         return reverse("proposals:patent-detail", args=[self.case_id])
+
+    def case_status_template(self):
+        return dict(Patent.CASE_STATUS_CHOICES)[self.case_status]
+
+    def control_item_template(self):
+        return dict(Patent.CONTROL_ITEM_CHOICES)[self.control_item]
+
+
 
 
 @python_2_unicode_compatible
@@ -286,25 +299,3 @@ class Work(_BaseModel):
 
     def __str__(self):
         return self.work_id
-
-
-class Test1(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("proposals:test1-detail", args=[self.pk, ])
-
-
-class Test2(models.Model):
-    name = models.CharField(max_length=50)
-    m2m = models.ManyToManyField(to=Test1)
-    created_by = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True)
-
-    def get_absolute_url(self):
-        return reverse("proposals:test-detail", args=[self.pk, ])
-
-    def __str__(self):
-        return self.name

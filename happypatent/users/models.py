@@ -35,7 +35,7 @@ class BaseProfileModel(models.Model):
                                    max_length=15,
                                    blank=True)
 
-    mobile_number = models.CharField(_('Mobile'),
+    mobile_number = models.CharField(_('Mobile Number'),
                                      max_length=15,
                                      blank=True)
 

@@ -4,7 +4,23 @@ $(document).ready(function(){
 
     // Add class "active" to sidebar menu's option, based on current url
     $(function() {
-      $('#sidebar-' + location.pathname.split("/")[1]).addClass('active');
+        var loc = location.pathname.split("/");
+        if(loc[1] === "dashboard"){
+            $('#sidebar-' + loc[1]).addClass('active');
+        }
+        else if (loc[1] === "proposals"){
+            $('#sidebar-' + loc[2]).addClass('active');
+        }
+    });
+
+    // Datatable initialize
+    $('#list_table').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": false,
+      "info": true,
+      "autoWidth": true
     });
 
 
