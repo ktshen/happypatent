@@ -19,8 +19,7 @@ services:
       dockerfile: ./compose/django/Dockerfile-dev
     command: /start-dev.sh
     depends_on:
-      - postgres{% if cookiecutter.use_mailhog == 'y' %}
-      - mailhog{% endif %}
+      - postgres
     environment:
       - POSTGRES_USER=happypatent
       - USE_DOCKER=yes
@@ -29,7 +28,7 @@ services:
     ports:
       - "8000:8000"
 
-{% if cookiecutter.use_pycharm == 'y' %}
+
   pycharm:
     build:
       context: .
@@ -40,11 +39,6 @@ services:
       - POSTGRES_USER=happypatent
     volumes:
       - .:/app
-{% endif %}
 
-{% if cookiecutter.use_mailhog == 'y' %}
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "8025:8025"
-{% endif %}
+
+
