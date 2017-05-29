@@ -18,6 +18,7 @@ RUN sed -i 's/\r//' /entrypoint.sh \
     && chmod +x /gunicorn.sh \
     && chown django /gunicorn.sh
 
+
 COPY . /app
 
 RUN chown -R django /app

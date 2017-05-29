@@ -1,7 +1,8 @@
 #!/bin/bash
-
 # stop on errors
 set -e
+
+
 
 # we might run into trouble when using the default `postgres` user, e.g. when dropping the postgres
 # database in restore.sh. Check that something else is used here
@@ -46,6 +47,7 @@ if dropdb -h postgres -U $POSTGRES_USER $POSTGRES_USER
 then echo "deleted $POSTGRES_USER database"
 else echo "database $POSTGRES_USER does not exist, continue"
 fi
+
 
 # create a new database
 echo "creating new database $POSTGRES_USER"
