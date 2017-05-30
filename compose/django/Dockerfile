@@ -2,8 +2,8 @@ FROM python:3.5
 
 ENV PYTHONUNBUFFERED 1
 
-RUN groupadd -r django \
-    && useradd -r -g django django
+RUN useradd -g 0 django
+
 
 # Requirements have to be pulled and installed here, otherwise caching won't work
 COPY ./requirements /requirements
@@ -19,9 +19,10 @@ RUN sed -i 's/\r//' /entrypoint.sh \
     && chown django /gunicorn.sh
 
 COPY . /app
+# Create media uploading directory
+RUN mkdir -p /app/happypatent/media
 
-RUN chown -R django /app
-RUN chown -R django:root /app/happypatent/media
+RUN chown -R django:root /app
 
 USER django
 
