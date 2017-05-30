@@ -22,7 +22,7 @@ services:
     command: /gunicorn.sh
     env_file: .env
     volumes:
-      - ./media:media/
+      - ./media:/app/media
 
   nginx:
     build: ./compose/nginx
