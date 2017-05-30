@@ -6,7 +6,6 @@ def image_validate(value):
     if value.size > settings.IMAGE_SIZE_LIMITATION:
         raise ValidationError('File too large. Size should not exceed 5 MiB.')
     img_ext = value.name.split('.')
-    print(img_ext)
     if len(img_ext) > 2:
         raise ValidationError('File\'s name should not contain more than 2 \'.\' (dots).')
     img_ext = img_ext[1].lower()

@@ -22,7 +22,7 @@ services:
     command: /gunicorn.sh
     env_file: .env
     volumes:
-      - ./media:/app/media
+      - ./happypatent/media:/app/happypatent/media
 
   nginx:
     build: ./compose/nginx
