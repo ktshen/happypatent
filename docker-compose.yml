@@ -21,6 +21,8 @@ services:
       - redis
     command: /gunicorn.sh
     env_file: .env
+    volumes:
+      - ./media:./media
 
   nginx:
     build: ./compose/nginx

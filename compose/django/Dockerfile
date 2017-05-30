@@ -27,4 +27,6 @@ USER django
 
 WORKDIR /app
 
+RUN mkdir media
+
 ENTRYPOINT ["/entrypoint.sh"]
