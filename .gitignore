@@ -68,9 +68,9 @@ node_modules/
 .env
 
 # User-uploaded media
-happypatent/media/
+media/
 
-staticfiles/
+static/
 
 .cache/
 
