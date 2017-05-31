@@ -22,7 +22,8 @@ services:
     command: /gunicorn.sh
     env_file: .env
     volumes:
-      - ./happypatent/media:/app/happypatent/media
+      - ./media:/app/media
+      - ./staticfiles:/app/staticfiles
 
   nginx:
     build: ./compose/nginx
@@ -31,6 +32,8 @@ services:
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
+    volumes_from:
+      - django
 
   redis:
     image: redis:3.0

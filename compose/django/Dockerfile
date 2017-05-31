@@ -20,7 +20,8 @@ RUN sed -i 's/\r//' /entrypoint.sh \
 
 COPY . /app
 # Create media uploading directory
-RUN mkdir -p /app/happypatent/media
+RUN mkdir -p /app/media
+RUN mkdir -p /app/static
 
 RUN chown -R django:root /app
 
