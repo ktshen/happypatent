@@ -73,6 +73,7 @@ media/
 static/
 
 .cache/
+documents/
 
 # Virtualenv
 myenv/
