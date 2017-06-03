@@ -25,7 +25,7 @@ urlpatterns = [
     ),
 
     url(
-        regex=r'^calendar_event/$',
+        regex=r'^calendar_event/get/$',
         view=views.RetrieveCalendarEvent.as_view(),
         name='calendar_event'
     ),
