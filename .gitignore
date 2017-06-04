@@ -70,7 +70,7 @@ node_modules/
 # User-uploaded media
 media/
 
-static/
+/static/
 
 .cache/
 documents/
