@@ -6,51 +6,50 @@
 {% block content_title %}Profile{% endblock %}
 
 {% block content %}
-{#<div class="row">#}
-{#    <div class="col-md-8">#}
-{#      <h2>{{ object.username }}</h2>#}
-{#      {% if object.name %}#}
-{#        <p>{{ object.name }}</p>#}
-{#      {% endif %}#}
-{#    </div>#}
-{#</div>#}
-{##}
-{#{% if object == request.user %}#}
-{#<!-- Action buttons -->#}
-{#<div class="row">#}
-
-{#</div>#}
-{#    {% endif %}#}
-<style>
-
-</style>
-
 <div class="row">
 <div class="col-md-4">
-    <!-- Profile Image -->
-    <div class="box box-warning">
-        <div class="box-body box-profile">
-            <img class="profile-user-img img-responsive img-rounded" height="100" width="100" src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" alt="User profile picture">
-
-            <h3 class="profile-username text-center">{{ user.first_name }} {{ user.last_name }}</h3>
-
-            <ul class="list-group list-group-unbordered">
-                <li class="list-group-item">
-                  <b>Last Login</b> <a class="pull-right">{{ user.last_login }}</a>
-                </li>
-                <li class="list-group-item">
-                  <b>Joined</b> <a class="pull-right">{{ user.date_joined }}</a>
-                </li>
-                <li class="list-group-item">
-                  <b>Total Patents</b> <a class="pull-right">{{ user.get_user_patents.count }}</a>
-                </li>
-            </ul>
-            <div class="center-block">
-
-            </div>
-        </div>
+  <div class="box box-widget widget-user">
+    <!-- Add the bg color to the header using any of the bg-* classes -->
+    <div class="widget-user-header bg-black" style="background: url('{% static "img/photo1.png" %}') center center;">
+        <h2 class="widget-user-username">{{ user.first_name }} {{ user.last_name }}</h2>
+        <h4 class="widget-user-desc">{{ user.username }}</h4>
     </div>
+    <div class="widget-user-image">
+      <img class="img-circle" style="width: 95px; height:95px" src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" alt="User Avatar">
+    </div>
+    <div class="box-footer">
+      <div class="row">
+        <div class="col-md-12 border-right">
+          <div class="description-block">
+            <h4 class="description-header">Total Patents</h4>
+            <span class="badge bg-red">{{ user.get_user_patents.count }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+              <div class="description-block">
+                <h5 class="description-header">Last Login</h5>
+                <span class="badge bg-green">{{ user.last_login }}</span>
+              </div>
+              <!-- /.description-block -->
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+              <div class="description-block">
+                <h5 class="description-header">Joined</h5>
+                <span class="badge bg-aqua">{{ user.date_joined }}</span>
+              </div>
+              <!-- /.description-block -->
+          </div>
+      </div>
+      <!-- /.row -->
+    </div>
+  </div>
+  <!-- /.widget-user -->
 </div>
+
 <div class="col-md-8">
   <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
@@ -73,15 +72,12 @@
         {% endblock %}
       </div>
       <div class="{% block password_content_active %}{% endblock %} tab-pane" id="password">
-          {% block password %}
-          {% endblock %}
+        {% block password %}
+        {% endblock %}
       </div>
     </div>
   </div>
 </div>
-
 </div>
-
-
 {% endblock content %}
 
