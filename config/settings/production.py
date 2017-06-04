@@ -57,18 +57,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # # EMAIL
 # # ------------------------------------------------------------------------------
-# DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL',
-#                          default='HappyPatent <noreply@example.com>')
-# EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[HappyPatent]')
-# SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
-#
-# # Anymail with Mailgun
-# INSTALLED_APPS += ['anymail', ]
-# ANYMAIL = {
-#     'MAILGUN_API_KEY': env('DJANGO_MAILGUN_API_KEY'),
-#     'MAILGUN_SENDER_DOMAIN': env('MAILGUN_SENDER_DOMAIN')
-# }
-# EMAIL_BACKEND = 'anymail.backends.mailgun.MailgunBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = env("GMAIL_USER")
@@ -145,13 +133,13 @@ LOGGING = {
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins', ],
+            'handlers': ['mail_admins',],
             'level': 'ERROR',
             'propagate': True
         },
         'django.security.DisallowedHost': {
             'level': 'ERROR',
-            'handlers': ['console', 'mail_admins', ],
+            'handlers': ['console', 'mail_admins',],
             'propagate': True
         }
     }

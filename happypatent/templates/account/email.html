@@ -1,12 +1,16 @@
 
-{% extends "base.html" %}
+{% extends "users/base_profile.html" %}
 
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block title %}{% trans "Account" %}{% endblock %}
+{% block title %}{% trans "Manage My Email" %}{% endblock %}
 
-{% block content %}
+{% block email_tab_active %}active{% endblock %}
+{% block email_content_active %}active{% endblock %}
+
+
+{% block email %}
 <h1>{% trans "E-mail Addresses" %}</h1>
 
 {% if user.emailaddress_set.all %}

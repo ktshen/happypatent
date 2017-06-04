@@ -39,6 +39,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "users/user_form.html"
 
     def get_success_url(self):
+
         return reverse('users:detail',
                        kwargs={'username': self.request.user.username})
 
@@ -56,6 +57,7 @@ def home(request):
 
 class DashBoardView(LoginRequiredMixin, TemplateView):
     template_name = "users/dashboard.html"
+
 
 
 class RetrieveCalendarEvent(LoginRequiredMixin, View):

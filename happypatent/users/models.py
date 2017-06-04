@@ -31,7 +31,7 @@ class BaseProfileModel(models.Model):
                                max_length=100,
                                blank=True)
 
-    home_number = models.CharField(_('Home Phone Number'),
+    home_number = models.CharField(_('Home Number'),
                                    max_length=15,
                                    blank=True)
 
@@ -73,6 +73,10 @@ class User(AbstractUser, BaseProfileModel):
 
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})
+
+    def get_user_patents(self):
+        from proposals.models import Patent
+        return Patent.objects.filter(created_by__username=self.username)
 
 
 @python_2_unicode_compatible

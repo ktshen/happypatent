@@ -1,31 +1,100 @@
-{% extends "base.html" %}
+{% extends "users/base_profile.html" %}
 
-{% block title %}Happypatent | {{ object.username }}{% endblock %}
+{% load i18n %}
+{% load crispy_forms_tags %}
 
-{% block content_title %}User Detail{% endblock %}
+{% block title %}{% trans "Profile: " %}{{ user.username }}{% endblock %}
+{% block info_tab_active %}active{% endblock %}
+{% block info_content_active %}active{% endblock %}
 
-{% block content %}
+{% block info %}
 <div class="row">
-    <div class="col-md-8">
-      <h2>{{ object.username }}</h2>
-      {% if object.name %}
-        <p>{{ object.name }}</p>
-      {% endif %}
-    </div>
+<div class="col-md-4">
+    <strong><i class="fa fa-info margin-r-5"></i> ID Number</strong>
+    {% if user.id_number %}
+    <p class="text-muted">{{ user.id_number }}</p>
+    {% else %}
+    <p class="text-muted">None</p>
+    {% endif %}
 </div>
-
-{% if object == request.user %}
-<!-- Action buttons -->
-<div class="row">
-  <div class="col-sm-12">
-    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
-    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
-    <a class="btn btn-primary" href="{% url 'account_change_password' %}" role="button">Change Password</a>
-    <!-- Your Stuff: Custom user template urls -->
-  </div>
-</div>
-<!-- End Action buttons -->
+<div class="col-md-4">
+<strong><i class="fa fa-male margin-r-5"></i><i class="fa fa-female margin-r-5"></i>Gender</strong>
+{% if user.gender_template %}
+<p class="text-muted">{{ user.gender_template }}</p>
+{% else %}
+<p class="text-muted">None</p>
 {% endif %}
+</div>
+<div class="col-md-4">
+<strong><i class="fa fa-intersex margin-r-5"></i>Spouse Name</strong>
+{% if user.spouse_name %}
+<p class="text-muted">{{ user.spouse_name}}</p>
+{% else %}
+<p class="text-muted">None</p>
+{% endif %}
+</div>
+</div>
+<hr>
+<div class="row">
 
-{% endblock content %}
+<div class="col-md-4">
+<strong><i class="fa fa-phone-square margin-r-5"></i>Home Number</strong>
+{% if user.home_number %}
+<p class="text-muted">{{ user.home_number}}</p>
+{% else %}
+<p class="text-muted">None</p>
+{% endif %}
+</div>
 
+<div class="col-md-4">
+<strong><i class="fa fa-phone margin-r-5"></i>Office Number</strong>
+{% if user.office_number %}
+<p class="text-muted">{{ user.office_number}}</p>
+{% else %}
+<p class="text-muted">None</p>
+{% endif %}
+</div>
+
+<div class="col-md-4">
+<strong><i class="fa fa-mobile-phone margin-r-5"></i>Mobile Phone Number</strong>
+{% if user.mobile_number %}
+<p class="text-muted">{{ user.mobile_number }}</p>
+{% else %}
+<p class="text-muted">None</p>
+{% endif %}
+</div>
+</div>
+<hr>
+<strong><i class="fa fa-map-marker margin-r-5"></i> Address</strong>
+{% if user.county or user.address %}
+<p class="text-muted">{{ user.county }}</p>
+<p class="text-muted">{{ user.address }}</p>
+{% else %}
+<p class="text-muted">None</p>
+{% endif %}
+<hr>
+
+<strong><i class="fa fa-book margin-r-5"></i> Education</strong>
+{% if user.education %}
+<p class="text-muted">{{ user.education }}</p>
+{% else %}
+<p class="text-muted">None</p>
+{% endif %}
+<hr>
+
+<strong><i class="fa fa-pencil margin-r-5"></i> Experience</strong>
+<p>
+{% if user.experience %}
+<p class="text-muted">{{ user.experience }}</p>
+{% else %}
+<p class="text-muted">None</p>
+{% endif %}
+<hr>
+
+<strong><i class="fa fa-file-text-o margin-r-5"></i> Remarks</strong>
+{% if user.remarks %}
+<p>{{ user.remarks }}</p>
+{% else %}
+<p class="text-muted">None</p>
+{% endif %}
+{% endblock %}

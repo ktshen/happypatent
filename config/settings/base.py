@@ -53,6 +53,7 @@ THIRD_PARTY_APPS = [
     'allauth.account',  # registration
     'django_select2',
     'compressor',
+    'actstream',
 ]
 
 # Apps specific for this project go here.
@@ -88,7 +89,7 @@ MIGRATION_MODULES = {
 # DEBUG
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool('DJANGO_DEBUG', False)
+DEBUG = env.bool('DJANGO_DEBUG', True)
 
 # FIXTURE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -285,5 +286,6 @@ SELECT2_CSS = "css/empty.css"
 # Upload Image Limitation
 IMAGE_SIZE_LIMITATION = 5242880
 IMAGE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png']
+
 
 

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Happypatent | {{ object.username }}{% endblock %}
+
+{% block content_title %}Profile{% endblock %}
+
+{% block content %}
+{#<div class="row">#}
+{#    <div class="col-md-8">#}
+{#      <h2>{{ object.username }}</h2>#}
+{#      {% if object.name %}#}
+{#        <p>{{ object.name }}</p>#}
+{#      {% endif %}#}
+{#    </div>#}
+{#</div>#}
+{##}
+{#{% if object == request.user %}#}
+{#<!-- Action buttons -->#}
+{#<div class="row">#}
+
+{#</div>#}
+{#    {% endif %}#}
+<style>
+
+</style>
+
+<div class="row">
+<div class="col-md-4">
+    <!-- Profile Image -->
+    <div class="box box-warning">
+        <div class="box-body box-profile">
+            <img class="profile-user-img img-responsive img-rounded" height="100" width="100" src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" alt="User profile picture">
+
+            <h3 class="profile-username text-center">{{ user.first_name }} {{ user.last_name }}</h3>
+
+            <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                  <b>Last Login</b> <a class="pull-right">{{ user.last_login }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Joined</b> <a class="pull-right">{{ user.date_joined }}</a>
+                </li>
+                <li class="list-group-item">
+                  <b>Total Patents</b> <a class="pull-right">{{ user.get_user_patents.count }}</a>
+                </li>
+            </ul>
+            <div class="center-block">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-8">
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li class="{% block info_tab_active %}{% endblock %}"><a href="{% url 'users:detail' user.username %}">My Profile</a></li>
+      <li class="{% block update_tab_active %}{% endblock %}"><a href="{% url 'users:update' %}">Edit Profile</a></li>
+      <li class="{% block email_tab_active %}{% endblock %}"><a href="{% url 'account_email' %}" >Manage My Email</a></li>
+      <li class="{% block password_tab_active %}{% endblock %}"><a href="{% url 'account_change_password' %}">Change Password</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="{% block info_content_active %}{% endblock %} tab-pane" id="info">
+        {% block info %}
+        {% endblock %}
+      </div>
+      <div class="{% block update_content_active %}{% endblock %} tab-pane" id="info">
+        {% block update %}
+        {% endblock %}
+      </div>
+      <div class="{% block email_content_active %}{% endblock %} tab-pane" id="email">
+        {% block email %}
+        {% endblock %}
+      </div>
+      <div class="{% block password_content_active %}{% endblock %} tab-pane" id="password">
+          {% block password %}
+          {% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+{% endblock content %}
+
