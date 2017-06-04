@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" id="create-task-col">
           <div class="box box-solid">
             <div class="box-header with-border">
               <h3 class="box-title">Create Task</h3>
@@ -75,6 +75,15 @@
 
 
 <script>
+
+// Remove create task feature if device is mobile phone
+function isMobile() {
+  return (/android|blackberry|iemobile|ipad|iphone|ipod|opera mini|webos/i).test(navigator.userAgent);
+}
+
+if (isMobile()){
+    $("#create-task-col").remove();
+}
 
 $(document).ready(function() {
 
@@ -305,6 +314,8 @@ $(document).ready(function() {
         $("#new-event").val("");
     });
     <!-- End fullcalendar -->
+
+
 });
 </script>
 {% endblock %}
