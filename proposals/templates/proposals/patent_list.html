@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load user_agents %}
 
 {% block content %}
 <div class="row">
@@ -19,10 +20,12 @@
                   <th>English Title</th>
                   <th>Control Date</th>
                   <th>Deadline</th>
+                  {% if request|is_pc %}
                   <th>Case status</th>
                   <th>Client</th>
                   <th>Local Agent</th>
                   <th>Country</th>
+                  {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -33,10 +36,12 @@
                   <td>{{ patent.english_title }}</td>
                   <td>{{ patent.control_date}}</td>
                   <td>{{ patent.deadline}}</td>
+                  {% if request|is_pc %}
                   <td>{{ patent.case_status_template }}</td>
                   <td>{{ patent.client.abbr_client }}</td>
                   <td>{{ patent.local_agent.agent_title }}</td>
                   <td>{{ patent.country }}</td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
                 </tbody>

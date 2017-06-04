@@ -54,6 +54,7 @@ THIRD_PARTY_APPS = [
     'django_select2',
     'compressor',
     'actstream',
+    'django_user_agents',
 ]
 
 # Apps specific for this project go here.
@@ -74,6 +75,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -286,6 +288,9 @@ SELECT2_CSS = "css/empty.css"
 # Upload Image Limitation
 IMAGE_SIZE_LIMITATION = 5242880
 IMAGE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png']
+
+# django-user_agents settings
+USER_AGENTS_CACHE = 'default'
 
 
 

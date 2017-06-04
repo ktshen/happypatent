@@ -50,3 +50,8 @@ redis>=2.10.5
 Django-Select2==5.10.0
 django_compressor==2.1.1
 django-activity-stream==0.6.3
+pyyaml==3.12
+ua-parser==0.7.3
+user-agents==1.1.0
+django-user-agents==0.3.1
+
