@@ -53,4 +53,5 @@ django-activity-stream==0.6.3
 pyyaml==3.12
 ua-parser==0.7.3
 user-agents==1.1.0
+https://github.com/selwin/django-user_agents/archive/master.zip
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load user_agents %}
 
 {% block content %}
 <div class="row">
@@ -17,10 +18,12 @@
                   <th>Agent's ID</th>
                   <th>Agent's title</th>
                   <th>Representative</th>
-                  <th>Office Number</th>
                   <th>Contact Person</th>
                   <th>Country</th>
+                  {% if request|is_pc %}
+                  <th>Office Number</th>
                   <th>Email</th>
+                  {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -29,10 +32,12 @@
                   <td><a href="{{ agent.get_absolute_url }}">{{ agent.agent_id }}</a></td>
                   <td><a href="{{ agent.get_absolute_url }}">{{ agent.agent_title }}</a></td>
                   <td>{{ agent.representative }}</td>
-                  <td>{{ agent.office_number }}</td>
                   <td>{% if agent.contact_person %}<a href="{{ agent.contact_person.get_absolute_url }}">{{ agent.contact_person.name }}</a>{% else %}None{% endif %}</td>
                   <td>{{ agent.country }}</td>
+                  {% if request|is_pc %}
+                  <td>{{ agent.office_number }}</td>
                   <td>{% if agent.email %}{{ agent.email }}{% else %}None{% endif %}</td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
                 </tbody>

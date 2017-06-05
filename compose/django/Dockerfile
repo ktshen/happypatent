@@ -9,8 +9,7 @@ RUN useradd -g 0 django
 # wait for django-user_agents v0.3.1 to release
 COPY ./requirements /requirements
 RUN pip install --no-cache-dir -r /requirements/production.txt \
-    && rm -rf /requirements \
-    && pip install https://github.com/selwin/django-user_agents/archive/master.zip
+    && rm -rf /requirements
 
 COPY ./compose/django/gunicorn.sh ./compose/django/entrypoint.sh /
 RUN sed -i 's/\r//' /entrypoint.sh \

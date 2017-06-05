@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load user_agents %}
 
 {% block content %}
 <div class="row">
@@ -17,10 +18,12 @@
                   <th>Chinese Name</th>
                   <th>English Name</th>
                   <th>Employee ID</th>
+                  <th>Address</th>
+                  {% if request|is_pc %}
                   <th>Mobile Number</th>
                   <th>Office Number</th>
-                  <th>Address</th>
                   <th>Email</th>
+                  {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -29,10 +32,12 @@
                   <td><a href="{{ object.get_absolute_url }}">{{ object.chinese_name }}</a></td>
                   <td><a href="{{ object.get_absolute_url }}">{{ object.english_name }}</a></td>
                   <td>{{ object.employee_id }}</td>
+                  <td>{% if object.address %}{{ object.address }}{% else %}None{% endif %}</td>
+                  {% if request|is_pc %}
                   <td>{% if object.mobile_number %}{{ object.mobile_number }}{% else %}None{% endif %}</td>
                   <td>{% if object.office_number %}{{ object.office_number }}{% else %}None{% endif %}</td>
-                  <td>{% if object.address %}{{ object.address }}{% else %}None{% endif %}</td>
                   <td>{{ object.email }}</td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
                 </tbody>

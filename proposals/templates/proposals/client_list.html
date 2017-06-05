@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load user_agents %}
 
 {% block content %}
 <div class="row">
@@ -16,11 +17,17 @@
                 <tr>
                   <th>Client ID</th>
                   <th>Chinese name</th>
+                  {% if request|is_pc %}
                   <th>English name</th>
+                  {% endif %}
                   <th>Country</th>
+                  {% if request|is_pc %}
                   <th>Phone Number</th>
+                  {% endif %}
                   <th>Contact Person #1</th>
+                  {% if request|is_pc %}
                   <th>Contact Person #2</th>
+                  {% endif %}
                   <th>Status</th>
                 </tr>
                 </thead>
@@ -29,11 +36,17 @@
                 <tr>
                   <td><a href="{{ client.get_absolute_url }}">{{ client.client_id }}</a></td>
                   <td><a href="{{ client.get_absolute_url }}">{{ client.client_ch_name }}</a></td>
+                  {% if request|is_pc %}
                   <td><a href="{{ client.get_absolute_url }}">{{ client.client_en_name }}</a></td>
+                  {% endif %}
                   <td>{{ client.country }}</td>
+                  {% if request|is_pc %}
                   <td>{{ client.phone_number}}</td>
+                  {% endif %}
                   <td><a href="{{ client.contact_person1.get_absolute_url }}">{{ client.contact_person1.name }}</a></td>
+                  {% if request|is_pc %}
                   <td>{{ client.contact_person2.name }}</td>
+                  {% endif %}
                   <td>{{ client.status }}</td>
                 </tr>
                 {% endfor %}
