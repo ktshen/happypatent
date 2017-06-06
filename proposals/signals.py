@@ -8,11 +8,12 @@ def patent_handler(sender, instance, created, **kwargs):
     if created:
         action.send(creator, verb='creates', action_object=instance)
     else:
-        action.send(creator, verb='updates' % instance.case_id, action_object=instance)
+        action.send(creator, verb='updates', action_object=instance)
 
 
 def agent_handler(sender, instance, created, **kwargs):
     creator = instance.created_by
+    print(creator)
     if created:
         action.send(creator, verb='creates', action_object=instance)
     else:

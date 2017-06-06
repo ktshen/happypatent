@@ -29,8 +29,8 @@
         </div>
     </div>
     {% if request|is_pc %}
-    <div class="col-md-3">
-          <div class="box box-solid">
+    <div class="col-md-4">
+          <div class="box box-danger">
             <div class="box-header with-border">
               <h3 class="box-title">Create Task</h3>
             </div>
@@ -59,7 +59,7 @@
               <!-- /input-group -->
             </div>
           </div>
-          <div class="box box-solid">
+          <div class="box box-danger">
             <div class="box-header with-border">
                 <h5 class="box-title">Drag Task to Month</h5>
 
@@ -75,8 +75,23 @@
     </div>
     {% endif %}
 </div>
-
-
+<div class="row">
+<div class="col-md-8">
+    <div class="box box-info">
+      <div class="box-header with-border">
+          <h3 class="box-title">Activities</h3>
+      </div>
+      <div class="box-body">
+        <div class="overlay" id="timeline-loading">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <ul class="timeline">
+        </ul>
+        <button class="btn btn-primary btn-xs" id="timeline-loadmore">Load More</button>
+      </div>
+  </div>
+</div>
+</div>
 <script>
 
 $(document).ready(function() {
@@ -308,6 +323,200 @@ $(document).ready(function() {
         $("#new-event").val("");
     });
     <!-- End fullcalendar -->
+
+    <!--TimeLine-->
+    // Compare two dates, return true if they are at the same day
+    // a1 and a2 should be string format
+    function isSameDay(a1, a2){
+        let b = new Date(a1);
+        let c = new Date(a2);
+        return (b.getDate() === c.getDate()) &&
+               (b.getMonth() === c.getMonth())&&
+               (b.getYear() === c.getYear());
+    }
+
+    var timeline_start = null;
+    var timeline_end = null;
+
+    function random_bg_color(){
+        let color = ["bg-blue", "bg-red", "bg-aqua", "bg-yellow", "bg-purple",
+                 "bg-green", "bg-gray", "bg-maroon", "bg-teal", "bg-orange"];
+        return color[Math.floor(Math.random()*color.length)]
+    }
+
+    var timeline_icon = {
+        "patent": "fa-file-text-o",
+        "agent": "fa-suitcase",
+        "employee": "fa-group",
+        "client": "fa-gg-circle",
+    };
+
+    function createTimeLineLabel(dt){
+        dt = new Date(dt);
+        let date = dt.toDateString().split(" ");
+        let li = $('<li/>', {
+            class: "time-label"
+        }).append($('<span/>', {
+            class: random_bg_color(),
+            text:date[2]+ " " + date[1] + ", "+date[3]
+        }));
+        return li
+    }
+
+    function createTimeLineItem(data){
+        let _li = $('<li/>', {
+            timestamp: data.timestamp,
+            id: data.id===undefined ? "" : data.id,
+        });
+        let _icon = data.object_type === null? "fa-pencil" : timeline_icon[data.object_type] || "fa-pencil";
+        let icon = $('<i/>', {
+            class: "fa " + _icon + " " + random_bg_color()
+        });
+        let item = $('<div/>', {
+            class: "timeline-item"
+        });
+        let time = $('<span/>', {
+            class: "time"
+        }).append(
+            $('<i/>', {
+                class: "fa fa-clock-o"
+            })
+        ).append(data.timesince);
+
+        let header = $('<h5/>', {
+            class: "timeline-header"
+        }).append($('<a/>', {
+            href: data.actor_url,
+            text: data.actor,
+        })).append(" "+ data.verb + " ").append($('<a/>', {
+            href: data.object_url,
+            text: data.object
+        }));
+        item = $(item).append(time).append(header);
+        return $(_li).append(icon).append(item);
+    }
+
+    function appendTimeLineItem(st, ed, data){
+        let first=null;
+        let last=null;
+        let cur_item;
+        let start = st;
+        let end = ed;
+        $.each(data, function(index, av){
+            let tp = av.timestamp;
+            let item_ele = createTimeLineItem(av);
+            if(index===0) first = av.timestamp;
+            else if(index===data.length-1) last = av.timestamp;
+            if (start === null && end ===null){
+                $('.timeline').append(createTimeLineLabel(av.timestamp)).append(item_ele);
+                start = av.timestamp;
+            }
+            else if (start!==null && end===null){
+                if(!isSameDay(start, tp)){
+                    $('.timeline').append(createTimeLineLabel(av.timestamp));
+                }
+                $('.timeline').append(item_ele);
+                start = av.timestamp;
+            }
+            else if(start===null && end!==null){
+                if(!isSameDay(end, tp)){
+                    $('.timeline').prepend(createTimeLineLabel(av.timestamp))
+                }
+                $('ul.timeline li:first').after(item_ele);
+                cur_item = item_ele;
+                start = av.timestamp;
+            }
+            else{
+                if(!isSameDay(start, tp)){
+                    let label = createTimeLineLabel(av.timestamp);
+                    $(cur_item).after(label);
+                    $(label).after(item_ele);
+                }
+                else{
+                    $(cur_item).after(item_ele);
+                }
+                start = av.timestamp;
+                cur_item = item_ele;
+            }
+        });
+        if(st===null && ed===null){
+            timeline_start = first;
+            timeline_end = last;
+        }
+        else if(st===null && ed!==null){
+            timeline_start = first;
+        }
+        else if(st!==null && ed===null){
+            timeline_end = last;
+        }
+    }
+
+    function sendTimeLine(st, ed){
+        if (st===undefined) st = null;
+        if (ed===undefined) ed = null;
+        let send_data = {};
+        if(st!==null){
+            st = new Date(st);
+            st.setTime(st.getTime() - 2000);
+            send_data["start"] = st.getTime()/1000;
+        }
+        if(ed!==null){
+            ed = new Date(ed);
+            ed.setTime(ed.getTime() + 2000);
+            send_data["end"] = ed.getTime()/1000;
+        }
+        $.ajax({
+            url: "{% url "users:timeline" %}",
+            dataType: "json",
+            data: send_data,
+            success: function(data){
+                if(data.length===0){
+                    if($.trim($("ul.timeline").html())=='')
+                    {
+                        let data = {
+                            "actor_url": "#",
+                            "actor": "First Join? Try something to create new activity.",
+                            "object_url": "#",
+                            "object": "",
+                            "timesince": "Now",
+                            "verb": "",
+                            "id": "timeline-no-results"
+                        };
+
+                        $(".timeline").append(createTimeLineItem(data));
+                    }
+                }
+                else{
+                    appendTimeLineItem(st, ed, data);
+                    $('#timeline-no-results').remove();
+                }
+            },
+        });
+    }
+
+    function triggerTimeLine(){
+        sendTimeLine();
+        $("#timeline-loading").remove();
+        setInterval(routineUpdateTimeLine, 10000);
+    }
+
+    function loadMoreTimeLine(){
+        sendTimeLine(timeline_end, null);
+    }
+
+    function routineUpdateTimeLine(){
+        sendTimeLine(null, timeline_start);
+    }
+
+    $('#timeline-loadmore').on("click", function(){
+        loadMoreTimeLine();
+    });
+
+    // Start When page first loads
+    triggerTimeLine();
+    <!--End TimeLine-->
+
+
 
 
 });

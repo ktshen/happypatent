@@ -53,16 +53,19 @@
 <div class="col-md-8">
   <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-      <li class="{% block info_tab_active %}{% endblock %}"><a href="{% url 'users:detail' user.username %}">My Profile</a></li>
+      <li class="{% block info_tab_active %}{% endblock %}"><a href="{% url 'users:detail' user.username %}">Profile</a></li>
+      {% if request.user.username ==  user.username %}
       <li class="{% block update_tab_active %}{% endblock %}"><a href="{% url 'users:update' %}">Edit Profile</a></li>
       <li class="{% block email_tab_active %}{% endblock %}"><a href="{% url 'account_email' %}" >Manage My Email</a></li>
       <li class="{% block password_tab_active %}{% endblock %}"><a href="{% url 'account_change_password' %}">Change Password</a></li>
+      {% endif %}
     </ul>
     <div class="tab-content">
       <div class="{% block info_content_active %}{% endblock %} tab-pane" id="info">
         {% block info %}
         {% endblock %}
       </div>
+      {% if request.user.username ==  user.username %}
       <div class="{% block update_content_active %}{% endblock %} tab-pane" id="info">
         {% block update %}
         {% endblock %}
@@ -75,6 +78,7 @@
         {% block password %}
         {% endblock %}
       </div>
+      {% endif %}
     </div>
   </div>
 </div>

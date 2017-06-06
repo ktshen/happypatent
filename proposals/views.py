@@ -76,7 +76,7 @@ class Select2View(AutoResponseView):
         })
 
 
-class EmployeeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class EmployeeCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
     model = Employee
     template_name = 'proposals/employee_form.html'
     form_class = EmployeeModelForm
@@ -199,7 +199,7 @@ class ContactPersonListView(LoginRequiredMixin, ListView):
     template_name = "proposals/contact_person_list.html"
 
 
-class AgentCreateView(LoginRequiredMixin, AjaxableResponseMixin,
+class AgentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,
                       SuccessMessageMixin, CreateView):
     model = Agent
     template_name = "proposals/agent_create.html"
@@ -230,7 +230,7 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
     form_class = AgentModelForm
 
 
-class ClientCreateView(LoginRequiredMixin, AjaxableResponseMixin,
+class ClientCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,
                        SuccessMessageMixin, CreateView):
     model = Client
     template_name = "proposals/client_create.html"

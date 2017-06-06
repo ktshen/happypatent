@@ -1,6 +1,6 @@
 {% load static staticfiles i18n %}
-{% load static %}
 {% load compress %}
+{% load user_agents %}
 
 <!DOCTYPE html>
 <html>
@@ -42,7 +42,7 @@
     <![endif]-->
 
 </head>
-<body class="{% if user.is_authenticated %}fixed{% endif %} hold-transition skin-blue-light sidebar-mini">
+<body class="{% if request.user.is_authenticated %}fixed{% endif %} hold-transition skin-blue-light sidebar-mini">
 
 <!-- jQuery 2.2.3 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
@@ -90,12 +90,14 @@
     </a>
 
     <!-- Header Navbar -->
-    {% if user.is_authenticated %}
+    {% if request.user.is_authenticated %}
     <nav class="navbar navbar-static-top" role="navigation">
+      {% if request|is_mobile %}
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
+      {% endif %}
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -104,23 +106,23 @@
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="user-image" alt="User Image">
+              <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{ user.first_name }} {{ user.last_name }}</span>
+              <span class="hidden-xs">{{ request.user.first_name }} {{ request.user.last_name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="img-circle" alt="User Image">
+                <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="img-circle" alt="User Image">
                 <p>
-                  {{ user.username }}
+                  {{ request.user.username }}
                   <small>Last login at {{ user.last_login }}</small>
                 </p>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="{% url "users:detail" user.username %}" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{% url "users:detail" request.user.username %}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <a href="{% url 'account_logout' %}" class="btn btn-default btn-flat">Sign out</a>
@@ -151,7 +153,7 @@
     {% endif %}
   </header>
 
-    {% if user.is_authenticated %}
+    {% if request.user.is_authenticated %}
         <!-- Left side column. contains the logo and sidebar -->
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
@@ -274,7 +276,7 @@
 </div>
 <!-- ./wrapper -->
 
-{% if not user.is_authenticated %}
+{% if not request.user.is_authenticated %}
     {% if messages %}
             {% for message in messages %}
                 <div class="callout {% if message.tags %}callout-{{ message.tags }}{% endif %}">

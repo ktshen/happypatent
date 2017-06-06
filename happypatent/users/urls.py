@@ -46,6 +46,11 @@ urlpatterns = [
         name='calendar_event_delete'
     ),
     url(
+        regex=r'^timeline/$',
+        view=views.TimeLineAjaxView.as_view(),
+        name='timeline'
+    ),
+    url(
         regex=r'^$',
         view=views.home,
         name='home'

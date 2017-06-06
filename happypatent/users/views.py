@@ -7,7 +7,8 @@ from django.db.models import Q
 from datetime import datetime
 from .models import User, CalendarEvent
 from .forms import UserProfileModelForm
-from proposals.models import Patent
+from proposals.models import Patent, Agent, Client, Employee
+from django.utils.timezone import utc
 
 DATE_FMT = "%a, %d %b %Y %X GMT"
 
@@ -17,12 +18,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'username'
     # get parameter in url
     slug_url_kwarg = 'username'
-
-    def get(self, request, *args, **kwargs):
-        if self.request.user.username != self.kwargs.get(self.slug_url_kwarg):
-            raise Http404("You have no privilege to search other user's profile.")
-        else:
-            return super(UserDetailView, self).get(self, request, *args, **kwargs)
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
@@ -57,7 +52,6 @@ def home(request):
 
 class DashBoardView(LoginRequiredMixin, TemplateView):
     template_name = "users/dashboard.html"
-
 
 
 class RetrieveCalendarEvent(LoginRequiredMixin, View):
@@ -157,6 +151,55 @@ class CalendarEventRemoval(LoginRequiredMixin, View):
             return HttpResponse("Event does not exist.", status=400)
         ev.delete(keep_parents=True)
         return HttpResponse(status=200)
+
+
+def getClassName(obj):
+    if isinstance(obj, Client):
+        return "client"
+    elif isinstance(obj, Patent):
+        return "patent"
+    elif isinstance(obj, Employee):
+        return "employee"
+    elif isinstance(obj, Agent):
+        return "agent"
+    return None
+
+
+class TimeLineAjaxView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        if not request.is_ajax():
+            return HttpResponse(status=400)
+        user = request.user
+        start = request.GET.get("start", None)
+        end = request.GET.get("end", None)
+        activities = user.actor_actions.all()
+        if start:
+            start = datetime.fromtimestamp(float(start), tz=utc)
+            activities = activities.filter(timestamp__lt=start)
+        if end:
+            end = datetime.fromtimestamp(float(end), tz=utc)
+            activities = activities.filter(timestamp__gt=end)
+        if start or not end:
+            activities = activities[:10]
+        response = []
+        for activity in activities:
+            e = {
+                "timesince": activity.timesince(),
+                "timestamp": activity.timestamp.strftime(DATE_FMT),
+                "actor": str(activity.actor),
+                "actor_url": activity.actor.get_absolute_url(),
+                "verb": activity.verb,
+                "object": str(activity.action_object),
+                "object_url": str(activity.action_object.get_absolute_url()),
+                "object_type": getClassName(activity.action_object)
+            }
+            response.append(e)
+        return JsonResponse(response, safe=False)
+
+
+
+
 
 
 
