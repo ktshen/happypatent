@@ -406,7 +406,7 @@ $(document).ready(function() {
             let tp = av.timestamp;
             let item_ele = createTimeLineItem(av);
             if(index===0) first = av.timestamp;
-            else if(index===data.length-1) last = av.timestamp;
+            if(index===data.length-1) last = av.timestamp;
             if (start === null && end ===null){
                 $('.timeline').append(createTimeLineLabel(av.timestamp)).append(item_ele);
                 start = av.timestamp;
