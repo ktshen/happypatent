@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block content_title %}Employee{% endblock %}
+
 {% block content %}
 <div class="box box-info">
     <div class="box-header with-border">
@@ -11,64 +13,125 @@
     </div>
     <div class="box-body">
         <div class="row">
-            <div class="col-md-4">
-                <h4>Employee ID</h4>
-                <p>{{ object.employee_id }}</p>
-                <h4>Chinese Name</h4>
-                <p>{{ object.chinese_name }}</p>
-                <h4>English Name</h4>
-                <p>{{ object.english_name }}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Employee ID</strong></td>
+                        <td>{{ object.employee_id }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chinese Name</strong></td>
+                        <td>{{ object.chinese_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>English Name</strong></td>
+                        <td>{{ object.english_name }}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
-            <div class="col-md-4">
-                <h4>ID Number</h4>
-                <p>{% if object.id_number %}{{ object.id_number }}{% else %}None{% endif %}</p>
-                <h4>Gender</h4>
-                <p>{{ object.gender_template }}</p>
-                <h4>Email</h4>
-                <p>{% if object.status %}{{ object.status }}{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>ID Number</strong></td>
+                        <td>{% if object.id_number %}{{ object.id_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gender</strong></td>
+                        <td>{{ object.gender_template }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>{% if object.status %}{{ object.status }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
         </div>
         <hr>
         <div class="row">
-            <div class="col-md-4">
-                <h4>Home Phone Number</h4>
-                <p>{% if object.home_number %}{{ object.home_number }}{% else %}None{% endif %}</p>
-                <h4>Mobile Number</h4>
-                <p>{% if object.mobile_number %}{{ object.mobile_number }}{% else %}None{% endif %}</p>
-                <h4>Office Number</h4>
-                <p>{% if object.office_number %}{{ object.office_number }}{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Home Phone Number</strong></td>
+                        <td>{% if object.home_number %}{{ object.home_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mobile Number</strong></td>
+                        <td>{% if object.mobile_number %}{{ object.mobile_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Office Number</strong></td>
+                        <td>{% if object.office_number %}{{ object.office_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
-            <div class="col-md-4">
-                <h4>County/City</h4>
-                <p>{% if object.county %}{{ object.county }}{% else %}None{% endif %}</p>
-                <h4>Address</h4>
-                <p>{% if object.ddress %}{{ object.ddress }}{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>County/City</strong></td>
+                        <td>{% if object.county %}{{ object.county }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address</strong></td>
+                        <td>{% if object.ddress %}{{ object.ddress }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
-            <div class="col-md-4">
-                <h4>Engagement Date</h4>
-                <p>{{ object.engagement_date }}</p>
-                <h4>Title ID</h4>
-                <p>{% if object.title_id  %}{{ object.title_id }}{% else %}None{% endif %}</p>
-                <h4>Spouse Name</h4>
-                <p>{% if object.spouse_name %}{{ object.spouse_name }}{% else %}None{% endif %}</p>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Engagement Date</strong></td>
+                        <td>{{ object.engagement_date }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Title ID</strong></td>
+                        <td>{% if object.title_id  %}{{ object.title_id }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Spouse Name</strong></td>
+                        <td>{% if object.spouse_name %}{{ object.spouse_name }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Education</strong></div>
+                  <div class="panel-body">
+                     {{ object.education }}
+                  </div>
+                </div>
+            </div>
 
-            </div>
         </div>
         <hr>
         <div class="row">
-             <div class="col-md-4">
-                <h4>Education</h4>
-                <textarea rows="7" cols="40" readonly>{{ object.education }}</textarea>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Experience</strong></div>
+                  <div class="panel-body">
+                     {{ object.experience }}
+                  </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <h4>Experience</h4>
-                <textarea rows="7" cols="40" readonly>{{ object.experience }}</textarea>
-            </div>
-        </div>
-        <div class="row">
-             <div class="col-md-8">
-                <h4>Remarks</h4>
-                <textarea rows="10" cols="100" readonly>{{ object.remarks }}</textarea>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Remarks</strong></div>
+                  <div class="panel-body">
+                    {{ object.remarks }}
+                  </div>
+                </div>
             </div>
         </div>
     </div>

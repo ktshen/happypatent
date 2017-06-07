@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block content_title %}Contact Person{% endblock %}
+
 {% block content %}
 <div class="box box-info">
     <div class="box-header with-border">
@@ -10,22 +12,42 @@
     </div>
     <div class="box-body">
         <div class="row">
-            <div class="col-md-4">
-                <h4>Name</h4>
-                <p>{{ object.name }}</p>
-                <h4>Title</h4>
-                <p>{{ object.title }}</p>
-                <h4>Phone Number</h4>
-                <p>{% if object.phone_number %}{{ object.phone_number }}{% else %}None{% endif %}</p>
-                <h4>Email</h4>
-                <p>{% if object.email %}{{ object.email }}{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Name</strong></td>
+                        <td>{{ object.name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Title</strong></td>
+                        <td>{{ object.title }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>English Title</strong></td>
+                        <td>{{ object.english_title }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone Number</strong></td>
+                        <td>{% if object.phone_number %}{{ object.phone_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>{% if object.email %}{{ object.email }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
         </div>
         <hr>
         <div class="row">
-            <div class="col-md-12">
-                <h4>Remarks</h4>
-                <textarea rows="10" cols="100" readonly>{{ object.remarks }}</textarea>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Remarks</strong></div>
+                  <div class="panel-body">
+                    {{ object.remarks }}
+                  </div>
+                </div>
             </div>
         </div>
     </div>

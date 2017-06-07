@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block content_title %}Agent{% endblock %}
+
 {% block content %}
 <div class="box box-info">
     <div class="box-header with-border">
@@ -10,30 +12,56 @@
     </div>
     <div class="box-body">
         <div class="row">
-            <div class="col-md-4">
-                <h4>Agent's ID</h4>
-                <p>{{ object.agent_id }}</p>
-                <h4>Agent's title</h4>
-                <p>{{ object.agent_title }}</p>
-                <h4>Representative</h4>
-                <p>{{ object.representative }}</p>
-                <h4>Office Number(ext. personal)</h4>
-                <p>{{ object.office_number }}</p>
-                <h4>Country</h4>
-                <p>{{ object.country }}</p>
-                <h4>Email</h4>
-                <p>{% if object.email %}{{ object.email }}{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Agent's ID</strong></td>
+                        <td>{{ object.agent_id }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Agent's title</strong></td>
+                        <td>{{ object.agent_title }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Representative</strong></td>
+                        <td>{{ object.representative }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>{% if object.email %}{{ object.email }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
-            <div class="col-md-4">
-                <h4>Contact Person</h4>
-                <p>{% if object.contact_person %}<a href="{{ object.contact_person.get_absolute_url }}">{{ object.contact_person.name }}</a>{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Office Number(ext. personal)</strong></td>
+                        <td>{{ object.office_number }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Country</strong></td>
+                        <td>{{ object.country }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contact Person</strong></td>
+                        <td>{% if object.contact_person %}<a href="{{ object.contact_person.get_absolute_url }}">{{ object.contact_person.name }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
         </div>
         <hr>
         <div class="row">
-            <div class="col-md-12">
-                <h4>Remarks</h4>
-                <textarea rows="10" cols="100" readonly>{{ object.remarks }}</textarea>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Remarks</strong></div>
+                  <div class="panel-body">
+                    {{ object.remarks }}
+                  </div>
+                </div>
             </div>
         </div>
     </div>
@@ -47,7 +75,4 @@
     </div>
     <!-- /.box-footer-->
 </div>
-
-
-
 {% endblock content %}

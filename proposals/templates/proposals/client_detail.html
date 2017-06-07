@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block content_title %}Client{% endblock %}
+
 {% block content %}
 <div class="box box-info">
     <div class="box-header with-border">
@@ -11,64 +13,125 @@
     </div>
     <div class="box-body">
         <div class="row">
-            <div class="col-md-4">
-                <h4>Client ID</h4>
-                <p>{{ object.client_id }}</p>
-                <h4>Client name in abbreviated form</h4>
-                <p>{{ object.abbr_client }}</p>
-                <h4>Client Chinese name</h4>
-                <p>{{ object.client_ch_name }}</p>
-                <h4>Client English name</h4>
-                <p>{{ object.client_en_name }}</p>
-                <h4>Country</h4>
-                <p>{{ object.country }}</p>
-                <h4>Status</h4>
-                <p>{% if object.status %}{{ object.status }}{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Client ID</strong></td>
+                        <td>{{ object.client_id }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Client name in abbreviated form</strong></td>
+                        <td>{{ object.abbr_client }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Client Chinese name</strong></td>
+                        <td>{{ object.client_ch_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Client English name</strong></td>
+                        <td>{{ object.client_en_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Country</strong></td>
+                        <td>{{ object.country }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Status</strong></td>
+                        <td>{% if object.status %}{{ object.status }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
-            <div class="col-md-4">
-                <h4>Post Office Address</h4>
-                <p>{{ object.post_address }}</p>
-                <h4>English Address</h4>
-                <p>{% if object.english_address %}{{ object.english_address }}{% else %}None{% endif %}</p>
-                <h4>Invoice(Application form) address</h4>
-                <p>{% if object.invoice_address %}{{ object.invoice_address }}{% else %}None{% endif %}</p>
-                <h4>Phone Number</h4>
-                <p>{{ object.phone_number }}</p>
-                <h4>Fax Number</h4>
-                <p>{% if object.fax_number %}{{ object.fax_number }}{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Post Office Address</strong></td>
+                        <td>{{ object.post_address }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>English Address</strong></td>
+                        <td>{% if object.english_address %}{{ object.english_address }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Invoice(Application form) address</strong></td>
+                        <td>{% if object.invoice_address %}{{ object.invoice_address }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone Number</strong></td>
+                        <td>{{ object.phone_number }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fax Number</strong></td>
+                        <td>{% if object.fax_number %}{{ object.fax_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>VAT No.</strong></td>
+                        <td>{{ object.vat_no }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Number of employees</strong></td>
+                        <td>{{ object.number_employee }}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
         </div>
         <hr>
-
         <div class="row">
-            <div class="col-md-4">
-                <h4>Contact Person #1</h4>
-                <p><a href="{{ object.contact_person1.get_absolute_url }}">{{ object.contact_person1.name }}</a></p>
-                <h4>Contact Person #2</h4>
-                <p>{% if object.contact_person2 %}<a href="{{ object.contact_person2.get_absolute_url }}">{{ object.contact_person2 }}</a>{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Contact Person #1</strong></td>
+                        <td><a href="{{ object.contact_person1.get_absolute_url }}">{{ object.contact_person1.name }}</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contact Person #2</strong></td>
+                        <td>{% if object.contact_person2 %}<a href="{{ object.contact_person2.get_absolute_url }}">{{ object.contact_person2 }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
-            <div class="col-md-4">
-                <h4>Representative's Chinese name</h4>
-                <p>{{ object.repr_chinese_name }}</p>
-                <h4>Representative's English name</h4>
-                <p>{{ object.repr_english_name }}</p>
-                <h4>VAT No.</h4>
-                <p>{{ object.vat_no }}</p>
-                <h4>Number of employees</h4>
-                <p>{{ object.number_employee }}</p>
-            </div>
-            <div class="col-md-4">
-                <h4>Primary owner</h4>
-                <p>{{ object.primary_owner }}</p>
-                <h4>Secondary owner</h4>
-                <p>{% if object.secondary_owner %}{{ object.secondary_owner }}{% else %}None{% endif %}</p>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Representative's Chinese name</strong></td>
+                        <td>{{ object.repr_chinese_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Representative's English name</strong></td>
+                        <td>{{ object.repr_english_name }}</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
         </div>
         <hr>
         <div class="row">
-            <div class="col-md-12">
-                <h4>Remarks</h4>
-                <textarea rows="10" cols="100" readonly>{{ object.remarks }}</textarea>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Primary owner</strong></td>
+                        <td>{{ object.primary_owner }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Secondary owner</strong></td>
+                        <td>{% if object.secondary_owner %}{{ object.secondary_owner }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Remarks</strong></div>
+                  <div class="panel-body">
+                    {{ object.remarks }}
+                  </div>
+                </div>
             </div>
         </div>
     </div>
