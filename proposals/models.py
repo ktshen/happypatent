@@ -94,7 +94,7 @@ class Employee(BaseProfileModel, _BaseModel):
         ('2', _('Director')),
         ('3', _('Manager')),
         ('4', _('Senior Engineer')),
-        ('4', _('Engineer')),
+        ('5', _('Engineer')),
     )
 
     chinese_name = models.CharField(_("Chinese Name"),
