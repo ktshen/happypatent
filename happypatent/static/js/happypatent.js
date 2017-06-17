@@ -11,6 +11,9 @@ $(document).ready(function(){
         else if (loc[1] === "proposals"){
             $('#sidebar-' + loc[2]).addClass('active');
         }
+        else if (loc[1] === "billboard"){
+            $('#sidebar-' + "billboard").addClass('active');
+        }
     });
 
     // Datatable initialize

@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     'compressor',
     'actstream',
     'django_user_agents',
+    'ckeditor',
 ]
 
 # Apps specific for this project go here.
@@ -63,6 +64,8 @@ LOCAL_APPS = [
     'happypatent.users.apps.UsersConfig',
     # Your stuff: custom apps go here
     'proposals',
+    'billboard',
+
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -280,6 +283,21 @@ AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
 ADMIN_URL = r'^admin/'
 
+# CKEDITOR SETTINGS
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['TextColor', 'BGColor', 'RemoveFormat', 'Font', 'FontSize', 'Styles'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Table', 'Link', 'Unlink'],
+        ],
+        'width': "auto",
+        "height": "auto",
+        'font_names': 'Arial;Arial Black;Comic Sans MS;Courier New;Georgia;Lucida Sans Unicode;Tahoma;Times New Roman;Verdana;新細明體;細明體;標楷體;微軟正體',
+    }
+}
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
@@ -291,6 +309,7 @@ IMAGE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png']
 
 # django-user_agents settings
 USER_AGENTS_CACHE = 'default'
+
 
 
 

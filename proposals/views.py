@@ -46,7 +46,7 @@ class UserAppendCreateViewMixin(object):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.created_by = User.objects.get(username=self.request.user.username)
-        form.save()
+        self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
 

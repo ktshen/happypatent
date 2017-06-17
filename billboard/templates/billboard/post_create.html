@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create New Post{% endblock %}
+{% block content_title %}New Post{% endblock %}
+
+{% block content %}
+<form action="{% url "billboard:create" %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.title }}
+    </div>
+    <div class="form-group">
+        {{ form.text }}
+    </div>
+    <div class="form-group">
+        <input class="btn btn-info" type="submit" value="Submit">
+    </div>
+    {{ form.media }}
+</form>
+{% endblock %}

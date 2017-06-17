@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ object.title }}{% endblock %}
+{% block content_title %}Billboard{% endblock %}
+
+{% block css %}
+<style>
+.blog-post-title {
+  margin-bottom: 5px;
+  font-size: 40px;
+  overflow-wrap:break-word;
+}
+.blog-post {
+  margin-bottom: 60px;
+  overflow-wrap:break-word;
+}
+.blog-main {
+  font-size: 18px;
+  line-height: 1.5;
+}
+hr {
+    background-color: #cbdadb;
+    border: 0 none;
+    color: #cbdadb;
+    height: 1px;
+}
+.thumbnail {
+    padding:0px;
+}
+.panel {
+	position:relative;
+}
+.panel>.panel-heading:after,.panel>.panel-heading:before{
+	position:absolute;
+	top:11px;left:-16px;
+	right:100%;
+	width:0;
+	height:0;
+	display:block;
+	content:" ";
+	border-color:transparent;
+	border-style:solid solid outset;
+	pointer-events:none;
+}
+.panel>.panel-heading:after{
+	border-width:7px;
+	border-right-color:#f7f7f7;
+	margin-top:1px;
+	margin-left:2px;
+}
+.panel>.panel-heading:before{
+	border-right-color:#ddd;
+	border-width:8px;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <!-- Blog Post Content Column -->
+    <div class="col-md-10 col-md-offset-1 blog-main">
+    <div class="box box-info">
+    <div class="box-header with-border">
+
+        <h1 class="blog-post-title">{{ object.title }}</h1>
+    </div>
+    <div class="box-body">
+        <div class="blog-post">
+            <div >
+                {{ object.text | safe }}
+            </div>
+        </div>
+    </div>
+    <div id="comment"></div>
+    <div class="box-footer">
+        <h5><small>Posted on {{ object.update }} by <a href="{% url "users:detail" object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a></small></h5>
+        {% if request.user == object.author %}
+        <div class="pull-right">
+            <div class="row">
+                <div class="col-md-6"><a class="btn btn-block btn-warning" href="{% url "billboard:update" object.slug %}" role="button">Update</a></div>
+                <div class="col-md-6">
+                    <form action="{% url "billboard:remove" %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="slug" value="{{ object.slug }}">
+                        <input class="btn btn-block btn-danger" type="submit" value="Remove">
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+    <div class="box box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title text-blue">Comments ({{ comments|length }})</h3>
+        </div>
+        <div class="box-body">
+
+        {% for comment in comments %}
+        <div class="row">
+            <div class="col-sm-1">
+                <div class="thumbnail">
+                    <a href="{{ comment.created_by.get_absolute_url }}"><img class="img-responsive user-photo" src="{% if comment.created_by.profile_pic %}{{ comment.created_by.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}"></a>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><a href="{{ comment.created_by.get_absolute_url }}">{{ comment.created_by.first_name }} {{ comment.created_by.last_name }}</a></strong>
+                    <span class="text-muted"><small>commented at {{ comment.created }}</small></span>
+                </div>
+                <div class="panel-body">
+                    {{ comment.text }}
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <h4>Leave a Comment:</h4>
+        <form action="{% url "billboard:comment" object.slug %}" method="post" role="form">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea cols="60" id="id_text" maxlength="150" name="text" rows="5" required=""></textarea>
+            </div>
+            <button type="submit" class="btn btn-info">Submit</button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

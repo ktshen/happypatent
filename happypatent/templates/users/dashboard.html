@@ -349,6 +349,8 @@ $(document).ready(function() {
         "agent": "fa-suitcase",
         "employee": "fa-group",
         "client": "fa-gg-circle",
+        "post": "glyphicon glyphicon-bullhorn",
+        "comment": "glyphicon glyphicon-comment",
     };
 
     function createTimeLineLabel(dt){
@@ -364,6 +366,7 @@ $(document).ready(function() {
     }
 
     function createTimeLineItem(data){
+        var username = "{{ request.user.username }}";
         let _li = $('<li/>', {
             timestamp: data.timestamp,
             id: data.id===undefined ? "" : data.id,
@@ -387,7 +390,7 @@ $(document).ready(function() {
             class: "timeline-header"
         }).append($('<a/>', {
             href: data.actor_url,
-            text: data.actor,
+            text: data.actor === username ? "You" : data.actor,
         })).append(" "+ data.verb + " ").append($('<a/>', {
             href: data.object_url,
             text: data.object

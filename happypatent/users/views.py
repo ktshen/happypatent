@@ -8,6 +8,7 @@ from datetime import datetime
 from .models import User, CalendarEvent
 from .forms import UserProfileModelForm
 from proposals.models import Patent, Agent, Client, Employee
+from billboard.models import Post, Comment
 from django.utils.timezone import utc
 
 DATE_FMT = "%a, %d %b %Y %X GMT"
@@ -154,6 +155,10 @@ class CalendarEventRemoval(LoginRequiredMixin, View):
 
 
 def getClassName(obj):
+    """
+    Use for timeline display icon.
+    You should also add corresponding icon tag at js (var timeline_icon)
+    """
     if isinstance(obj, Client):
         return "client"
     elif isinstance(obj, Patent):
@@ -162,6 +167,10 @@ def getClassName(obj):
         return "employee"
     elif isinstance(obj, Agent):
         return "agent"
+    elif isinstance(obj, Comment):
+        return "comment"
+    elif isinstance(obj, Post):
+        return "post"
     return None
 
 

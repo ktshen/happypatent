@@ -17,10 +17,10 @@ class _BaseModel(models.Model):
                                    null=True)
 
     created = models.DateTimeField(_('Created Time'),
-                                   auto_now=True)
+                                   auto_now_add=True)
 
     update = models.DateTimeField(_('Latest Update'),
-                                  auto_now_add=True,
+                                  auto_now=True,
                                   null=True)
 
     class Meta:
@@ -40,10 +40,18 @@ class Employee(BaseProfileModel, _BaseModel):
     english_name = models.CharField(_('English Name'),
                                     max_length=30)
 
+    employee_id = models.CharField(_('Employee_ID'),
+                                   max_length=30,
+                                   blank=True)
     email = models.EmailField()
 
     engagement_date = models.DateField(_('Engagement Date'),
                                        default=timezone.now)
+
+    # employer = models.ForeignKey(_('Employer'),
+    #                              to=Client,
+    #                              on_delete=models.SET_NULL,
+    #                              null=True)
 
     title_id = models.CharField(_('Title ID'),
                                 max_length=30,
@@ -59,7 +67,7 @@ class Employee(BaseProfileModel, _BaseModel):
     def employee_id(self):
         """
         Employee ID format: E0001, E1211, E29931 ....
-        :return: 
+        :return:
         """
         e_id = str(self.pk)
         if len(e_id) < 4:

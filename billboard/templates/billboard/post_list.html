@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Billboard{% endblock %}
+{% block content_title %}Billboard{% endblock %}
+
+{% block css %}
+<style>
+.pager {
+  padding-left: 0;
+  margin: 20px 0;
+  text-align: center;
+  list-style: none;
+}
+.pager li {
+  display: inline;
+}
+.pager li > a,
+.pager li > span {
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+}
+.pager li > a:hover,
+.pager li > a:focus {
+  text-decoration: none;
+  background-color: #eee;
+}
+.pager .next > a,
+.pager .next > span {
+  float: right;
+}
+.pager .previous > a,
+.pager .previous > span {
+  float: left;
+}
+.pager .disabled > a,
+.pager .disabled > a:hover,
+.pager .disabled > a:focus,
+.pager .disabled > span {
+  color: #777;
+  cursor: not-allowed;
+  background-color: #fff;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+{% if object_list|length_is:'0' %}
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<div class="box box-info">
+<div class="box-body">
+    <h2>No post hasn't been submitted yet.</h2>
+    <p>Go to <a href="{% url "billboard:create" %}">Post Create</a> to create a new post.</p>
+</div>
+</div>
+</div>
+</div>
+{% else %}
+
+{% for post in object_list %}
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<div class="box box-info">
+<div class="box-body">
+    <h2>
+        <a href="{% url "billboard:detail" post.slug %}">{{ post.title }}</a>
+    </h2>
+    <hr>
+    {{ post.text|truncatechars_html:200|safe }}
+</div>
+<div class="box-footer">
+    <h5><small>Posted on {{ post.update }} by <a href="{% url "users:detail" post.author.username %}">{{ post.author.first_name }} {{ post.author.last_name }}</a></small></h5>
+</div>
+</div>
+</div>
+</div>
+{% endfor %}
+<!-- Pager -->
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<ul class="pager">
+    {% if page_obj.has_previous %}
+    <li class="previous">
+        <a href="?page={{ page_obj.previous_page_number }}">&larr; Previous</a>
+    </li>
+    {% endif %}
+    <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+    {% if page_obj.has_next %}
+    <li class="next">
+        <a href="?page={{ page_obj.next_page_number }}">Next &rarr;</a>
+    </li>
+    {% endif %}
+</ul>
+</div>
+</div>
+{% endif %}
+
+{% endblock %}

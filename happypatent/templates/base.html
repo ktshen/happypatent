@@ -32,13 +32,15 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{% static "dist/css/skins/skin-blue-light.css" %}">
+    {% block css %}
+    {% endblock %}
     {% endcompress %}
     <style>
         table {
             table-layout: fixed;
             word-wrap: break-word;
         }
-        .panel-body {
+        .panel-body, .box-body, .box-header {
             overflow-wrap:break-word;
         }
     </style>
@@ -101,12 +103,10 @@
     <!-- Header Navbar -->
     {% if request.user.is_authenticated %}
     <nav class="navbar navbar-static-top" role="navigation">
-      {% if request|is_mobile %}
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
-      {% endif %}
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -177,6 +177,18 @@
                     <span>Dashboard</span>
                 </a>
             </li>
+            <li class="treeview" id="sidebar-billboard">
+                <a href="#"><i class="glyphicon glyphicon-bullhorn"></i> <span>Billboard</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                  </a>
+
+                  <ul class="treeview-menu">
+                    <li><a href="{% url "billboard:create" %}"><i class="fa fa-circle-o"></i> Create New Post</a></li>
+                    <li><a href="{% url "billboard:list" %}"><i class="fa fa-circle-o"></i> See All Posts</a></li>
+                  </ul>
+            </li>
             <li id="sidebar-patent">
               <a href="#">
                 <i class="fa fa-file-text-o"></i>
@@ -187,7 +199,7 @@
               </a>
 
               <ul class="treeview-menu">
-                <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Create New Patent</a></li>
+                <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Patent Application</a></li>
                 <li><a href="{% url "proposals:patent-list" %}"><i class="fa fa-circle-o"></i> All Your Patents</a></li>
               </ul>
             </li>
@@ -214,7 +226,7 @@
                     <li><a href="{% url "proposals:client-create" %}"><i class="fa fa-circle-o"></i> Create New Client</a></li>
                     <li><a href="{% url "proposals:client-list" %}"><i class="fa fa-circle-o"></i> See All Clients</a></li>
                   </ul>
-                </li>
+            </li>
             <li class="treeview" id="sidebar-agent">
                 <a href="#"><i class="fa fa-suitcase"></i> <span>Agent</span>
                     <span class="pull-right-container">
@@ -226,7 +238,7 @@
                     <li><a href="{% url "proposals:agent-create" %}"><i class="fa fa-circle-o"></i> Create New Agent</a></li>
                     <li><a href="{% url "proposals:agent-list" %}"><i class="fa fa-circle-o"></i> See All Agents</a></li>
                   </ul>
-                </li>
+            </li>
             <li class="treeview" id="sidebar-others">
               <a href="#">
                 <i class="fa fa-th-list"></i> <span>Others</span>
@@ -284,7 +296,6 @@
     {% endif %}
 </div>
 <!-- ./wrapper -->
-
 {% if not request.user.is_authenticated %}
     {% if messages %}
             {% for message in messages %}
@@ -301,9 +312,5 @@
         </div>
     </div>
 {% endif %}
-
-
-
-
 </body>
 </html>
