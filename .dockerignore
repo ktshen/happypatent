@@ -1,0 +1,10 @@
+.*
+!.coveragerc
+!.env
+!.pylintrc
+
+postgres_data/
+postgres_backup/
+media/
+static/
+docs/
