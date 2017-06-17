@@ -31,7 +31,7 @@
                     </tr>
                     <tr>
                         <td><strong>Application Type</strong></td>
-                        <td>{{ object.application_type }}</td>
+                        <td>{{ object.application_type_template }}</td>
                     </tr>
                     <tr>
                         <td><strong>Country</strong></td>
@@ -205,15 +205,15 @@
                 <tbody>
                     <tr>
                         <td><strong>Owner</strong></td>
-                        <td>{{ object.owner }}</td>
+                        <td>{% if object.owner %}{{ object.owner }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Local Agent</strong></td>
-                        <td><a href="{{ object.local_agent.get_absolute_url }}">{{ object.local_agent.agent_title }}</a></td>
+                        <td>{% if object.local_agent%}<a href="{{ object.local_agent.get_absolute_url }}">{{ object.local_agent.agent_title }}</a>{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Foreign Agent</strong></td>
-                        <td><a href="{{ object.foreign_agent.get_absolute_url }}">{{ object.foreign_agent.agent_title }}</a></td>
+                        <td>{% if object.foreign_agent %}<a href="{{ object.foreign_agent.get_absolute_url }}">{{ object.foreign_agent.agent_title }}</a>{% else %}None{% endif %}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -226,6 +226,10 @@
                     {% for person in object.inventor.all %}
                         <li>
                             <p><a href="{{ person.get_absolute_url }}">{{ person.chinese_name }}</a></p>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <p>Sorry, no inventor in this list.</p>
                         </li>
                     {%endfor %}
                     </ul>
@@ -242,15 +246,15 @@
                     <ul>
                       <li>
                           <h5>Client's ref. No.</h5>
-                          <p><a href="{{ object.client.get_absolute_url }}">{{ object.client.client_id }}</a></p>
+                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_id }}</a>{% else %}None{% endif %}</p>
                       </li>
                       <li>
                           <h5>Client name in abbreviated form</h5>
-                          <p><a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a></p>
+                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</p>
                       </li>
                       <li>
                           <h5>Client Chinese Name</h5>
-                          <p><a href="{{ object.client.get_absolute_url }}">{{ object.client.client_ch_name }}</a></p>
+                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_ch_name }}</a>{% else %}None{% endif %}</p>
                       </li>
                     </ul>
                   </div>

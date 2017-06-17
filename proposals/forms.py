@@ -29,52 +29,12 @@ class AgentModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AgentModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.layout = Layout(
-            Fieldset(
-                '',
-                Div(
-                    Field(
-                        'agent_title',
-                        size="32"
-
-                    ),
-                    Field(
-                        'email',
-                        size="32"
-                    ),
-                    css_class="form-inline"
-                ),
-                Div(
-                    Field(
-                        'representative',
-                        size="32"
-                    ),
-                    Field(
-                        'office_number',
-                        size="32"
-                    ),
-                    css_class="form-inline"
-                ),
-                'country',
-                'address',
-                'beneficiary_name',
-                'remittance_bank',
-                'beneficiary_no',
-                'contact_person_name',
-                'contact_person_title',
-                'contact_person_phone_number',
-                'contact_person_email',
-                'remarks',
-            )
-
-        )
         self.helper.layout.append(Submit('save', 'save'))
 
     class Meta:
         model = Agent
-        fields = ('agent_title', 'country', 'address', 'email', 'contact_person_name',
-                  'contact_person_title', 'contact_person_phone_number', 'contact_person_email',
-                  'beneficiary_name', 'remittance_bank', 'beneficiary_no', 'office_number', 'remarks')
+        fields = ('agent_title', 'country', 'address', 'contact_person_name', 'contact_person_phone_number',
+                  'contact_person_email', 'beneficiary_name', 'remittance_bank', 'beneficiary_no', 'remarks')
 
     class Media:
         js = []

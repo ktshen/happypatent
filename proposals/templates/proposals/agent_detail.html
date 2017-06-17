@@ -24,12 +24,12 @@
                         <td>{{ object.agent_title }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Representative</strong></td>
-                        <td>{{ object.representative }}</td>
+                        <td><strong>Country</strong></td>
+                        <td>{{ object.country }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Email</strong></td>
-                        <td>{% if object.email %}{{ object.email }}{% else %}None{% endif %}</td>
+                        <td><strong>Address</strong></td>
+                        <td>{% if object.address %}{{ object.address }}{% else %}None{% endif %}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -38,16 +38,16 @@
                 <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <td><strong>Office Number(ext. personal)</strong></td>
-                        <td>{{ object.office_number }}</td>
+                        <td><strong>Beneficiary Name</strong></td>
+                        <td>{% if object.beneficiary_name %}{{ object.beneficiary_name }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
-                        <td><strong>Country</strong></td>
-                        <td>{{ object.country }}</td>
+                        <td><strong>Remittance Bank</strong></td>
+                        <td>{% if object.remittance_bank %}{{ object.remittance_bank }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
-                        <td><strong>Contact Person</strong></td>
-                        <td>{% if object.contact_person %}<a href="{{ object.contact_person.get_absolute_url }}">{{ object.contact_person.name }}</a>{% else %}None{% endif %}</td>
+                        <td><strong>Beneficiary A/C No.</strong></td>
+                        <td>{% if object.beneficiary_no %}{{ object.beneficiary_no }}{% else %}None{% endif %}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -55,6 +55,24 @@
         </div>
         <hr>
         <div class="row">
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Contact Person's Name</strong></td>
+                        <td>{% if object.contact_person_name %}{{ object.contact_person_name }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contact Person's Phone Number</strong></td>
+                        <td>{% if object.contact_person_phone_number %}{{ object.contact_person_phone_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contact Person's Email</strong></td>
+                        <td>{% if object.contact_person_email %}{{ object.contact_person_email }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
             <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Remarks</strong></div>
@@ -65,7 +83,6 @@
             </div>
         </div>
     </div>
-    <!-- /.box-body -->
     <div class="box-footer">
       <div class="row" >
           <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
@@ -73,6 +90,5 @@
       </div>
       <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
     </div>
-    <!-- /.box-footer-->
 </div>
 {% endblock content %}

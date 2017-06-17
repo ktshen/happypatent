@@ -52,7 +52,7 @@ class CaseIDGenerator(object):
         qs = Patent.objects.filter(case_id__startswith=self.current_year)
         max_num = 0
         for p in qs:
-            s = int(p.case_id.split("P")[1]) + 1
+            s = int(p.case_id.split("P")[1].split("-")[0]) + 1
             if s > max_num:
                 max_num = s
         latest_id = self.build_case_id(self.current_year, max_num)

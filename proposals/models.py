@@ -78,6 +78,9 @@ class Client(_BaseModel):
     def pk(self):
         return self.client_id
 
+    def number_employee_template(self):
+        return dict(Client.EMPLOYEE_AMOUNT)[self.number_employee]
+
 
 @python_2_unicode_compatible
 class Employee(BaseProfileModel, _BaseModel):
@@ -132,6 +135,8 @@ class Employee(BaseProfileModel, _BaseModel):
             e_id = '0' * (3 - len(e_id)) + e_id
         return "E" + e_id
 
+    def title_id_template(self):
+        return dict(Employee.TITLE_ID)[self.title_id]
 
 @python_2_unicode_compatible
 class Agent(_BaseModel):
@@ -139,15 +144,12 @@ class Agent(_BaseModel):
     agent_title = models.CharField(_('Agent\'s title'), max_length=50, unique=True)
     country = models.CharField(_('Country'), max_length=50)
     address = models.CharField(_("Address"), max_length=50, blank=True)
-    email = models.EmailField(blank=True)
     beneficiary_name = models.CharField(_("Beneficiary Name"), max_length=50, blank=True)
     remittance_bank = models.CharField(_("Remittance Bank"), max_length=50, blank=True)
     beneficiary_no = models.CharField(_("Beneficiary A/C No."), max_length=50, blank=True)
     contact_person_name = models.CharField(_('Contact Person\'s Name'), max_length=30, blank=True)
-    contact_person_title = models.CharField(_('Contact Person\'s Title'), max_length=30, blank=True)
     contact_person_phone_number = models.CharField(_('Contact Person\'s Phone Number'), max_length=50, blank=True)
     contact_person_email = models.EmailField(_('Contact Person\'s Email'), blank=True)
-    office_number = models.CharField(_('Office Number(ext. personal)'), max_length=50)
 
     def __str__(self):
         return str(self.agent_title)
@@ -278,6 +280,10 @@ class Patent(_BaseModel):
 
     def control_item_template(self):
         return dict(Patent.CONTROL_ITEM_CHOICES)[self.control_item]
+
+    def application_type_template(self):
+        return dict(Patent.APPLICATION_TYPE_CHOICES)[self.application_type]
+
 
 
 @python_2_unicode_compatible

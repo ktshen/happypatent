@@ -129,18 +129,12 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMes
                 ])
         return context
 
-    # def post(self, request, *args, **kwargs):
-    #     if request.POST["case_id"] != CaseIDGenerator().get_latest_id():
-    #         post = request.POST.copy()
-    #         post["case_id"] = CaseIDGenerator().get_latest_id()
-    #         self.request.POST = post
-    #     return super(PatentCreateView, self).post(request, *args, **kwargs)
-
-    # def form_valid(self, form):
-    #     response = super(PatentCreateView, self).form_valid(form)
-    #     case_id = self.request.POST["case_id"]
-    #     CaseIDGenerator().update_latest_id(case_id)
-    #     return response
+    def post(self, request, *args, **kwargs):
+        post = request.POST.copy()
+        if "-" not in post["case_id"]:
+            post["case_id"] = post["case_id"] + "-" + post["country"]
+            self.request.POST = post
+        return super(PatentCreateView, self).post(request, *args, **kwargs)
 
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
