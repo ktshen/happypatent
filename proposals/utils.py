@@ -6,8 +6,8 @@ from .models import Patent
 
 class CaseIDGenerator(object):
     """
-    - Class that helps model 'Patent' to process latest case id, which could get or set a latest 
-      case id from and to the cache. 
+    - Class that helps model 'Patent' to process latest case id, which could get or set a latest
+      case id from and to the cache.
     - Case ID Format: <year> P <case no.>.  Example: '17P010', '18P1101'
     """
     def __init__(self):
@@ -18,13 +18,13 @@ class CaseIDGenerator(object):
         return timezone.now().strftime("%Y")[-2:]
 
     def get_latest_id(self):
-        latest_id = cache.get(self.cache_key)
-        if latest_id is None:
-            latest_id = self.search_latest_id()
-        else:
-            if self.current_year != latest_id[:2]:
-                latest_id = self.search_latest_id()
-        return latest_id
+        # latest_id = cache.get(self.cache_key)
+        # if latest_id is None:
+        #     latest_id = self.search_latest_id()
+        # else:
+        #     if self.current_year != latest_id[:2]:
+        #         latest_id = self.search_latest_id()
+        return self.search_latest_id()
 
     def update_latest_id(self, case_id):
         if case_id != cache.get(self.cache_key):

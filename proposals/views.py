@@ -6,9 +6,8 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.messages.views import SuccessMessageMixin
 from django_select2.views import AutoResponseView
 
-from .models import Employee, Patent, Agent, Client, ContactPerson, User
-from .forms import EmployeeModelForm, PatentModelForm, ContactPersonModelForm, \
-                   ClientModelForm, AgentModelForm
+from .models import Employee, Patent, Agent, Client, User
+from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, AgentModelForm
 from .utils import CaseIDGenerator
 
 def get_model_fields_data(obj):
@@ -130,18 +129,18 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMes
                 ])
         return context
 
-    def post(self, request, *args, **kwargs):
-        if request.POST["case_id"] != CaseIDGenerator().get_latest_id():
-            post = request.POST.copy()
-            post["case_id"] = CaseIDGenerator().get_latest_id()
-            self.request.POST = post
-        return super(PatentCreateView, self).post(request, *args, **kwargs)
+    # def post(self, request, *args, **kwargs):
+    #     if request.POST["case_id"] != CaseIDGenerator().get_latest_id():
+    #         post = request.POST.copy()
+    #         post["case_id"] = CaseIDGenerator().get_latest_id()
+    #         self.request.POST = post
+    #     return super(PatentCreateView, self).post(request, *args, **kwargs)
 
-    def form_valid(self, form):
-        response = super(PatentCreateView, self).form_valid(form)
-        case_id = self.request.POST["case_id"]
-        CaseIDGenerator().update_latest_id(case_id)
-        return response
+    # def form_valid(self, form):
+    #     response = super(PatentCreateView, self).form_valid(form)
+    #     case_id = self.request.POST["case_id"]
+    #     CaseIDGenerator().update_latest_id(case_id)
+    #     return response
 
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
@@ -168,35 +167,6 @@ class PatentListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return self.model.objects.filter(created_by__username=self.request.user.username).order_by('-update', '-created')
-
-
-class ContactPersonCreateView(LoginRequiredMixin, UserAppendCreateViewMixin,
-                              AjaxableResponseMixin, SuccessMessageMixin, CreateView):
-    model = ContactPerson
-    template_name = "proposals/contact_person_create.html"
-    form_class = ContactPersonModelForm
-    success_message = "%(name)s was created successfully."
-
-    def get_success_message(self, cleaned_data):
-        return self.success_message % dict(
-            name=self.object.name,
-        )
-
-
-class ContactPersonDetailView(LoginRequiredMixin, DetailView):
-    model = ContactPerson
-    template_name = "proposals/contact_person_detail.html"
-
-
-class ContactPersonUpdateView(LoginRequiredMixin, UpdateView):
-    model = ContactPerson
-    template_name = "proposals/contact_person_create.html"
-    form_class = ContactPersonModelForm
-
-
-class ContactPersonListView(LoginRequiredMixin, ListView):
-    model = ContactPerson
-    template_name = "proposals/contact_person_list.html"
 
 
 class AgentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,

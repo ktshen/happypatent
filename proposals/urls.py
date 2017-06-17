@@ -34,10 +34,5 @@ urlpatterns = [
         name='patent-update'),
     url(r'^patent/list/$', views.PatentListView.as_view(), name='patent-list'),
 
-    url(r'^contact_person/create/$', views.ContactPersonCreateView.as_view(), name='contact_person-create'),
-    url(r'^contact_person/(?P<pk>\d+)/detail/$', views.ContactPersonDetailView.as_view(), name='contact_person-detail'),
-    url(r'^contact_person/(?P<pk>\d+)/update/$', views.ContactPersonUpdateView.as_view(), name='contact_person-update'),
-    url(r'^contact_person/list/$', views.ContactPersonListView.as_view(), name='contact_person-list'),
-
     url(r"^fields/auto.json$", views.Select2View.as_view(), name="select2-json"),
 ]

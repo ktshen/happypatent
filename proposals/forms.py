@@ -5,25 +5,8 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Div,Field
 
-from .models import Employee, Patent, Agent, ContactPerson, Client
+from .models import Employee, Patent, Agent, Client
 from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
-
-
-class ContactPersonModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ContactPersonModelForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.layout.append(Submit('save', 'save'))
-
-    class Meta:
-        model = ContactPerson
-        fields = ('name', 'title', 'phone_number', 'email', 'remarks')
-
-
-class AjaxContactPersonModelForm(ContactPersonModelForm):
-    def __init__(self, *args, **kwargs):
-        super(AjaxContactPersonModelForm, self).__init__(*args, **kwargs)
-        self.helper.form_action = reverse("proposals:contact_person-create")
 
 
 class EmployeeModelForm(forms.ModelForm):
@@ -72,8 +55,10 @@ class AgentModelForm(forms.ModelForm):
                     ),
                     css_class="form-inline"
                 ),
-                'contact_person',
-
+                'contact_person_name',
+                'contact_person_title',
+                'contact_person_phone_number',
+                'contact_person_email',
                 'email',
                 'remarks',
             )
@@ -83,11 +68,9 @@ class AgentModelForm(forms.ModelForm):
 
     class Meta:
         model = Agent
-        fields = ('agent_title', 'country', 'representative', 'email', 'contact_person',
+        fields = ('agent_title', 'country', 'representative', 'email', 'contact_person_name',
+                'contact_person_title', 'contact_person_phone_number', 'contact_person_email',
                   'office_number', 'remarks')
-        widgets = {
-            'contact_person': AjaxSelect2Widget(search_fields=["name__icontains"]),
-        }
 
     class Media:
         js = []
@@ -101,11 +84,6 @@ class AjaxAgentModelForm(AgentModelForm):
         super(AjaxAgentModelForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse("proposals:agent-create")
 
-    class Meta(AgentModelForm.Meta):
-        widgets = {
-            'contact_person': MySelect2Widget(),
-        }
-
 
 class ClientModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -117,30 +95,16 @@ class ClientModelForm(forms.ModelForm):
         model = Client
         fields = ('abbr_client', 'client_ch_name', 'client_en_name', 'country',
                   'post_address', 'english_address', 'invoice_address', 'phone_number',
-                  'fax_number', 'contact_person1', 'contact_person2', 'repr_chinese_name',
+                  'fax_number', 'contact_person_name', 'contact_person_title',
+                  'contact_person_phone_number', 'contact_person_email', 'repr_chinese_name',
                   'repr_english_name', 'vat_no', 'number_employee', 'primary_owner',
                   'secondary_owner', 'status', 'remarks')
-
-        widgets = {
-            'contact_person1': AjaxSelect2Widget(search_fields=["name__icontains"],
-                                                 able_ajax_create=True,
-                                                 modelform=ContactPersonModelForm),
-            'contact_person2': AjaxSelect2Widget(search_fields=["name__icontains"],
-                                                 able_ajax_create=True,
-                                                 modelform=ContactPersonModelForm),
-        }
 
 
 class AjaxClientModelForm(ClientModelForm):
     def __init__(self, *args, **kwargs):
         super(AjaxClientModelForm, self).__init__(*args, **kwargs)
         self.helper.form_action = reverse("proposals:client-create")
-
-    class Meta(ClientModelForm.Meta):
-        widgets = {
-            'contact_person1': AjaxSelect2Widget(search_fields=["name__icontains"]),
-            'contact_person2': AjaxSelect2Widget(search_fields=["name__icontains"]),
-        }
 
 
 class PatentModelForm(forms.ModelForm):
@@ -161,7 +125,7 @@ class PatentModelForm(forms.ModelForm):
                   'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks')
 
         widgets = {
-            'case_id': forms.TextInput(attrs={"readonly": True}),
+            # 'case_id': forms.TextInput(attrs={"readonly": True}),
             'client': AjaxSelect2Widget(search_fields=["client_en_name__icontains", "client_ch_name__icontains"],
                                         able_ajax_create=True,
                                         modelform=AjaxClientModelForm),

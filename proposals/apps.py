@@ -10,5 +10,4 @@ class ProposalsConfig(AppConfig):
         registry.register(self.get_model('Patent'),
                           self.get_model('Client'),
                           self.get_model('Employee'),
-                          self.get_model('Agent'),
-                          self.get_model('ContactPerson'))
+                          self.get_model('Agent'))

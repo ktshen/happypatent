@@ -60,4 +60,5 @@ $(document).ready(function(){
     $('.dateinput').datepicker({
         format: 'yyyy-mm-dd',
     });
+    $('.dateinput').attr("placeholder", "yyyy-mm-dd");
 });

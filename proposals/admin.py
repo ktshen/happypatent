@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Employee, Agent, ContactPerson, Client,  Patent, Work
+from .models import Employee, Agent, Client,  Patent, Work
 # Register your models here.
 
 
@@ -8,10 +8,6 @@ from .models import Employee, Agent, ContactPerson, Client,  Patent, Work
 class AgentModelAdmin(admin.ModelAdmin):
     pass
 
-
-@admin.register(ContactPerson)
-class ContactPersonModelAdmin(admin.ModelAdmin):
-    pass
 
 
 @admin.register(Client)
