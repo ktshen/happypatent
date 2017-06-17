@@ -21,13 +21,7 @@
                   <th>English name</th>
                   {% endif %}
                   <th>Country</th>
-                  {% if request|is_pc %}
-                  <th>Phone Number</th>
-                  {% endif %}
-                  <th>Contact Person #1</th>
-                  {% if request|is_pc %}
-                  <th>Contact Person #2</th>
-                  {% endif %}
+                  <th>Contact Person Name</th>
                   <th>Status</th>
                 </tr>
                 </thead>
@@ -40,13 +34,7 @@
                   <td><a href="{{ client.get_absolute_url }}">{{ client.client_en_name }}</a></td>
                   {% endif %}
                   <td>{{ client.country }}</td>
-                  {% if request|is_pc %}
-                  <td>{{ client.phone_number}}</td>
-                  {% endif %}
-                  <td><a href="{{ client.contact_person1.get_absolute_url }}">{{ client.contact_person1.name }}</a></td>
-                  {% if request|is_pc %}
-                  <td>{{ client.contact_person2.name }}</td>
-                  {% endif %}
+                  <td>{{ client.contact_person_name }}</td>
                   <td>{{ client.status }}</td>
                 </tr>
                 {% endfor %}

@@ -84,13 +84,22 @@
                 <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <td><strong>Contact Person #1</strong></td>
-                        <td><a href="{{ object.contact_person1.get_absolute_url }}">{{ object.contact_person1.name }}</a></td>
+                        <td><strong>Contact Person's Name</strong></td>
+                        <td>{% if object.contact_person_name %}{{ object.contact_person_name }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
-                        <td><strong>Contact Person #2</strong></td>
-                        <td>{% if object.contact_person2 %}<a href="{{ object.contact_person2.get_absolute_url }}">{{ object.contact_person2 }}</a>{% else %}None{% endif %}</td>
+                        <td><strong>Contact Person's Title</strong></td>
+                        <td>{% if object.scontact_person_title %}{{ object.contact_person_title }}{% else %}None{% endif %}</td>
                     </tr>
+                    <tr>
+                        <td><strong>Contact Person's Phone Number</strong></td>
+                        <td>{% if object.contact_person_phone_number %}{{ object.contact_person_phone_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contact Person's Email</strong></td>
+                        <td>{% if object.contact_person_email %}{{ object.contact_person_email }}{% else %}None{% endif %}</td>
+                    </tr>
+
                 </tbody>
                 </table>
             </div>

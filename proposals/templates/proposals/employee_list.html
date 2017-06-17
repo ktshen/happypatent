@@ -20,8 +20,6 @@
                   <th>Employee ID</th>
                   <th>Address</th>
                   {% if request|is_pc %}
-                  <th>Mobile Number</th>
-                  <th>Office Number</th>
                   <th>Email</th>
                   {% endif %}
                 </tr>
@@ -34,8 +32,6 @@
                   <td>{{ object.employee_id }}</td>
                   <td>{% if object.address %}{{ object.address }}{% else %}None{% endif %}</td>
                   {% if request|is_pc %}
-                  <td>{% if object.mobile_number %}{{ object.mobile_number }}{% else %}None{% endif %}</td>
-                  <td>{% if object.office_number %}{{ object.office_number }}{% else %}None{% endif %}</td>
                   <td>{{ object.email }}</td>
                   {% endif %}
                 </tr>
