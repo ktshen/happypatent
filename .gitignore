@@ -78,6 +78,9 @@ documents/
 # Virtualenv
 myenv/
 
+postgres_backup/
+postgres_data/
+
 .idea/happypatent.iml
 
 # Reactjs
