@@ -9,6 +9,7 @@
     <div class="box-header with-border">
       <h3 class="box-title text-blue">{{ object.case_id }}</h3>
       <div class="pull-right">
+          <a class="btn btn-default" href="{% url "proposals:patent-create" %}?other_country=true&case_id={{ object.case_id }}" role="button">Apply for other country</a>
           <a class="btn btn-warning" href="{% url "proposals:patent-update" object.case_id %}" role="button">Update</a>
       </div>
     </div>

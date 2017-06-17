@@ -1,8 +1,9 @@
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.messages.views import SuccessMessageMixin
 from django_select2.views import AutoResponseView
 
@@ -112,7 +113,16 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMes
     success_message = "%(case_id)s was created successfully"
 
     def get_initial(self):
-        return {"case_id": CaseIDGenerator().get_latest_id()}
+        if self.other_country:
+            patent = get_object_or_404(Patent, case_id=self.case_id)
+            init = {
+                "case_id": self.case_id.split("-")[0],
+                "chinese_title": patent.chinese_title,
+                "english_title": patent.english_title,
+            }
+        else:
+            init = {"case_id": CaseIDGenerator().get_latest_id()}
+        return init
 
     def get_context_data(self, **kwargs):
         context = super(PatentCreateView, self).get_context_data(**kwargs)
@@ -128,6 +138,17 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMes
                     model_instance,
                 ])
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.GET["other_country"] == "true":
+            self.other_country = True
+            try:
+                self.case_id = request.GET["case_id"]
+            except KeyError:
+                return HttpResponseBadRequest()
+        else:
+            self.other_country = False
+        return super(PatentCreateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         post = request.POST.copy()
