@@ -140,7 +140,7 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMes
         return context
 
     def get(self, request, *args, **kwargs):
-        if request.GET["other_country"] == "true":
+        if "other_country" in request.GET and request.GET["other_country"] == "true":
             self.other_country = True
             try:
                 self.case_id = request.GET["case_id"]
