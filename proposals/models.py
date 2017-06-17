@@ -143,7 +143,7 @@ class Agent(_BaseModel):
     agent_id = models.AutoField(_('Agent\'s ID'), primary_key=True, editable=False)
     agent_title = models.CharField(_('Agent\'s title'), max_length=50, unique=True)
     country = models.CharField(_('Country'), max_length=50)
-    address = models.CharField(_("Address"), max_length=50, blank=True)
+    address = models.CharField(_("Address"), max_length=100, blank=True)
     beneficiary_name = models.CharField(_("Beneficiary Name"), max_length=50, blank=True)
     remittance_bank = models.CharField(_("Remittance Bank"), max_length=50, blank=True)
     beneficiary_no = models.CharField(_("Beneficiary A/C No."), max_length=50, blank=True)

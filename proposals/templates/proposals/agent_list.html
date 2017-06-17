@@ -16,6 +16,7 @@
                 <thead>
                 <tr>
                   <th>Agent's title</th>
+                  <th>Contact Person's Name</th>
                   <th>Country</th>
                   <th>Email</th>
                 </tr>
@@ -24,6 +25,7 @@
                 {% for agent in object_list %}
                 <tr>
                   <td><a href="{{ agent.get_absolute_url }}">{{ agent.agent_title }}</a></td>
+                  <td>{{ agent.contact_person_name }}</td>
                   <td>{{ agent.country }}</td>
                   <td>{% if agent.email %}{{ agent.email }}{% else %}None{% endif %}</td>
                 </tr>

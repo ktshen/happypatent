@@ -205,6 +205,7 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
 
 class AgentListView(LoginRequiredMixin, ListView):
     model = Agent
+    queryset = Agent.objects.all().order_by("country", "-created")
 
 
 class AgentUpdateView(LoginRequiredMixin, UpdateView):
