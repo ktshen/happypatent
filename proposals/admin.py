@@ -9,7 +9,6 @@ class AgentModelAdmin(admin.ModelAdmin):
     pass
 
 
-
 @admin.register(Client)
 class ClientModelAdmin(admin.ModelAdmin):
     date_hierarchy  = 'update'

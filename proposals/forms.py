@@ -1,9 +1,8 @@
 from django import forms
 from django.urls import reverse
 
-
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, Div,Field
+from crispy_forms.layout import Submit, Layout, Fieldset, Div, Field
 
 from .models import Employee, Patent, Agent, Client
 from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
@@ -22,6 +21,7 @@ class EmployeeModelForm(forms.ModelForm):
                   'spouse_name', 'education', 'experience', 'remarks')
         widgets = {
             "gender": MySelect2Widget(),
+            "title_id": MySelect2Widget(),
         }
 
 
@@ -39,7 +39,7 @@ class AgentModelForm(forms.ModelForm):
 
                     ),
                     Field(
-                        'country',
+                        'email',
                         size="32"
                     ),
                     css_class="form-inline"
@@ -55,11 +55,15 @@ class AgentModelForm(forms.ModelForm):
                     ),
                     css_class="form-inline"
                 ),
+                'country',
+                'address',
+                'beneficiary_name',
+                'remittance_bank',
+                'beneficiary_no',
                 'contact_person_name',
                 'contact_person_title',
                 'contact_person_phone_number',
                 'contact_person_email',
-                'email',
                 'remarks',
             )
 
@@ -68,14 +72,14 @@ class AgentModelForm(forms.ModelForm):
 
     class Meta:
         model = Agent
-        fields = ('agent_title', 'country', 'representative', 'email', 'contact_person_name',
-                'contact_person_title', 'contact_person_phone_number', 'contact_person_email',
-                  'office_number', 'remarks')
+        fields = ('agent_title', 'country', 'address', 'email', 'contact_person_name',
+                  'contact_person_title', 'contact_person_phone_number', 'contact_person_email',
+                  'beneficiary_name', 'remittance_bank', 'beneficiary_no', 'office_number', 'remarks')
 
     class Media:
         js = []
         css = {
-            'all':( 'css/agent_create.css',)
+            'all': ('css/agent_create.css',)
         }
 
 
@@ -99,6 +103,9 @@ class ClientModelForm(forms.ModelForm):
                   'contact_person_phone_number', 'contact_person_email', 'repr_chinese_name',
                   'repr_english_name', 'vat_no', 'number_employee', 'primary_owner',
                   'secondary_owner', 'status', 'remarks')
+        widgets = {
+            "number_employee": MySelect2Widget(),
+        }
 
 
 class AjaxClientModelForm(ClientModelForm):
@@ -137,6 +144,7 @@ class PatentModelForm(forms.ModelForm):
                                                modelform=AjaxAgentModelForm),
             'inventor': AjaxSelect2MultipleWidget(search_fields=['chinese_name__icontains', 'english_name__icontains']),
             'application_type': MySelect2Widget(),
+            'number_employee': MySelect2Widget(),
             'country': MySelect2Widget(),
             'request_examination': MySelect2Widget(),
             'case_status': MySelect2Widget(),

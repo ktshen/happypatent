@@ -29,6 +29,11 @@ class _BaseModel(models.Model):
 
 @python_2_unicode_compatible
 class Client(_BaseModel):
+    EMPLOYEE_AMOUNT = (
+        ('0', _('----------')),
+        ('above', _('Above 500 employees')),
+        ('under', _('Under 500 employees')),
+    )
     client_id = models.AutoField(_('Client\'s ID'), primary_key=True, editable=False)
     abbr_client = models.CharField(_('Client\'s name in abbreviated form'), max_length=30)
     client_ch_name = models.CharField(_('Client Chinese name'), max_length=50)
@@ -46,7 +51,11 @@ class Client(_BaseModel):
     repr_chinese_name = models.CharField(_('Representative\'s Chinese name'), max_length=50)
     repr_english_name = models.CharField(_('Representative\'s English name'), max_length=50)
     vat_no = models.CharField(_('VAT No.'), max_length=30)
-    number_employee = models.IntegerField(_('Number of employees'))
+    number_employee = models.CharField(_('Number of employees'),
+                                       max_length=30,
+                                       choices=EMPLOYEE_AMOUNT,
+                                       default="0",
+                                       blank=True)
     primary_owner = models.CharField(_('Primary owner'), max_length=50)
     secondary_owner = models.CharField(_('Secondary owner'), max_length=50, blank=True)
     status = models.CharField(_('Status'), max_length=30, blank=True)
@@ -76,6 +85,14 @@ class Employee(BaseProfileModel, _BaseModel):
         ('m', _('Male')),
         ('f', _('Female'))
     )
+    TITLE_ID = (
+        ('0',  _('---------')),
+        ('1', _('CEO')),
+        ('2', _('Director')),
+        ('3', _('Manager')),
+        ('4', _('Senior Engineer')),
+        ('4', _('Engineer')),
+    )
 
     chinese_name = models.CharField(_("Chinese Name"),
                                     max_length=30)
@@ -96,9 +113,7 @@ class Employee(BaseProfileModel, _BaseModel):
                                  on_delete=models.SET_NULL,
                                  null=True)
 
-    title_id = models.CharField(_('Title ID'),
-                                max_length=30,
-                                blank=True)
+    title_id = models.CharField(_('Title ID'), max_length=30, choices=TITLE_ID, default='0', blank=True)
 
     def __str__(self):
         return self.chinese_name
@@ -123,8 +138,11 @@ class Agent(_BaseModel):
     agent_id = models.AutoField(_('Agent\'s ID'), primary_key=True, editable=False)
     agent_title = models.CharField(_('Agent\'s title'), max_length=50, unique=True)
     country = models.CharField(_('Country'), max_length=50)
-    representative = models.CharField(_('Representative'), max_length=50)
+    address = models.CharField(_("Address"), max_length=50, blank=True)
     email = models.EmailField(blank=True)
+    beneficiary_name = models.CharField(_("Beneficiary Name"), max_length=50, blank=True)
+    remittance_bank = models.CharField(_("Remittance Bank"), max_length=50, blank=True)
+    beneficiary_no = models.CharField(_("Beneficiary A/C No."), max_length=50, blank=True)
     contact_person_name = models.CharField(_('Contact Person\'s Name'), max_length=30, blank=True)
     contact_person_title = models.CharField(_('Contact Person\'s Title'), max_length=30, blank=True)
     contact_person_phone_number = models.CharField(_('Contact Person\'s Phone Number'), max_length=50, blank=True)
@@ -145,7 +163,7 @@ class Agent(_BaseModel):
 @python_2_unicode_compatible
 class Patent(_BaseModel):
     APPLICATION_TYPE_CHOICES = (
-        ('', _('---------')),
+        ('0', _('---------')),
         ('invention', _('Invention')),
         ('utility', _('Utility')),
         ('design', _('Design')),
@@ -166,7 +184,7 @@ class Patent(_BaseModel):
         ('no', 'No')
     )
     CASE_STATUS_CHOICES = (
-        ('', _('---------')),
+        ('0', _('---------')),
         ('1', _('Draft/Translation')),
         ('2', _('Preliminary examination')),
         ('3', _('Response/Amendment-1')),
@@ -183,7 +201,7 @@ class Patent(_BaseModel):
         ('14', _('Invalidation examination')),
     )
     CONTROL_ITEM_CHOICES = (
-        ('', _('---------')),
+        ('0', _('---------')),
         ('1', _('File new application')),
         ('2', _('File Chinese description')),
         ('3', _('Request examination')),
@@ -205,7 +223,7 @@ class Patent(_BaseModel):
     english_title = models.CharField(_('English Title'), max_length=100)
     client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True, blank=True)
     application_type = models.CharField(_('Type'), max_length=30,
-                                   choices=APPLICATION_TYPE_CHOICES, default='')
+                                   choices=APPLICATION_TYPE_CHOICES, default='0', blank=True)
     country = models.CharField(_('Country'), max_length=30,
                                choices=COUNTRY_CHOICES)
     request_examination = models.CharField(_('Request Examination'), max_length=30,
@@ -213,7 +231,7 @@ class Patent(_BaseModel):
     examination_date = models.DateField(_('Date of request examination'), blank=True, null=True)
     inventor = models.ManyToManyField(verbose_name=_('Inventor'), to=Employee, blank=True)
     case_status = models.CharField(_('Status'), max_length=30,
-                                   choices=CASE_STATUS_CHOICES, default='')
+                                   choices=CASE_STATUS_CHOICES, default='0', blank=True)
     filing_date = models.DateField(_('Filing Date'), blank=True, null=True)
     application_no = models.CharField(_('Application No.'), max_length=30, blank=True)
     publication_date = models.DateField(_('Publication Date'), blank=True, null=True)
@@ -232,7 +250,7 @@ class Patent(_BaseModel):
     re_examine_date = models.DateField(_('Date of re-examination'), blank=True, null=True)
 
     control_item = models.CharField(_('Control Item'), max_length=30,
-                                    choices=CONTROL_ITEM_CHOICES, default='')
+                                    choices=CONTROL_ITEM_CHOICES, default='0', blank=True)
     control_date = models.DateField(_('Control Date'), null=True, blank=True)
     deadline = models.DateField(_('Deadline'), null=True, blank=True)
 

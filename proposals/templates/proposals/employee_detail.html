@@ -44,7 +44,7 @@
                     </tr>
                     <tr>
                         <td><strong>Email</strong></td>
-                        <td>{% if object.status %}{{ object.status }}{% else %}None{% endif %}</td>
+                        <td>{{ object.email }}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -79,7 +79,7 @@
                     </tr>
                     <tr>
                         <td><strong>Address</strong></td>
-                        <td>{% if object.ddress %}{{ object.ddress }}{% else %}None{% endif %}</td>
+                        <td>{% if object.address %}{{ object.address }}{% else %}None{% endif %}</td>
                     </tr>
                 </tbody>
                 </table>
