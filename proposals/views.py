@@ -7,8 +7,9 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.contrib.messages.views import SuccessMessageMixin
 from django_select2.views import AutoResponseView
 
-from .models import Employee, Patent, Agent, Client, User, FileAttachment
-from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, AgentModelForm
+from .models import Employee, Patent, Agent, Client, User, FileAttachment, Inventor
+from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
+                   AgentModelForm, InventorModelForm
 from .utils import CaseIDGenerator
 
 def get_model_fields_data(obj):
@@ -247,6 +248,11 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     slug_field = "client_id"
     slug_url_kwarg = "client_id"
 
+    def get_context_data(self, **kwargs):
+        context = super(ClientDetailView, self).get_context_data(**kwargs)
+        context["inventor_list"] = Inventor.objects.filter(client=self.object).order_by("country")
+        return context
+
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
@@ -258,3 +264,41 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
 
 class ClientListView(LoginRequiredMixin, ListView):
     model = Client
+
+
+class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
+    model = Inventor
+    template_name = "proposals/inventor_create.html"
+    form_class = InventorModelForm
+    success_message = "%(chinese_name)s was created successfully."
+
+    def get_initial(self):
+        try:
+            client = Client.objects.get(client_id=self.request.GET["client_id"])
+        except Client.DoesNotExist:
+            return HttpResponseBadRequest("Client specified doesn't not exist.")
+        return {"client": client}
+
+    def get(self, request, *args, **kwargs):
+        if not "client_id" in request.GET:
+            return HttpResponseBadRequest("No Client specified to create new inventor.")
+        return super(InventorCreateView, self).get(request, *args, **kwargs)
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            chinese_name=self.object.chinese_name,
+        )
+
+
+class InventorDetailView(LoginRequiredMixin, DetailView):
+    model = Inventor
+
+
+class InventorUpdateView(LoginRequiredMixin, UpdateView):
+    model = Inventor
+    template_name = "proposals/inventor_create.html"
+    form_class = InventorModelForm
+
+
+class InventorListView(LoginRequiredMixin, ListView):
+    model = Inventor

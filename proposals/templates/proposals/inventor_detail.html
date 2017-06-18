@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content_title %}Inventor{% endblock %}
+
+{% block content %}
+<div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title text-blue">{{ object.chinese_name }}</h3>
+      <div class="pull-right">
+          <a class="btn btn-warning" href="{% url "proposals:inventor-update" object.pk %}" role="button">Update</a>
+      </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Chinese name</strong></td>
+                        <td>{{ object.chinese_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>English name</strong></td>
+                        <td>{{ object.english_name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Client</strong></td>
+                        <td><a href="{{ object.client.get_absolute_url }}">{{ object.client }}</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>ID Number</strong></td>
+                        <td>{% if object.id_number %}{{ object.id_number }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>{% if object.email %}{{ object.email }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Country/City</strong></td>
+                        <td>{{ object.country }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Post Office Address</strong></td>
+                        <td>{{ object.post_address }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>English Address</strong></td>
+                        <td>{{ object.english_address }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone Number</strong></td>
+                        <td>{{ object.phone_number }}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Remarks</strong></div>
+                  <div class="panel-body">
+                    {{ object.remarks }}
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+      <div class="row" >
+          <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
+          <div class="col-sm-4"><h5>Last update at {{ object.update }}</h5></div>
+      </div>
+      <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
+    </div>
+</div>
+
+
+{% endblock content %}

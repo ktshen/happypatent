@@ -34,5 +34,12 @@ urlpatterns = [
         name='patent-update'),
     url(r'^patent/list/$', views.PatentListView.as_view(), name='patent-list'),
 
+    url(r'^inventor/create/$', views.InventorCreateView.as_view(), name='inventor-create'),
+    url(r'^inventor/(?P<pk>[-\w]+)/detail/$', views.InventorDetailView.as_view(),
+        name='inventor-detail'),
+    url(r'^inventor/(?P<pk>[-\w]+)/update/$', views.InventorUpdateView.as_view(),
+        name='inventor-update'),
+    url(r'^inventor/list/$', views.InventorListView.as_view(), name='inventor-list'),
+
     url(r"^fields/auto.json$", views.Select2View.as_view(), name="select2-json"),
 ]

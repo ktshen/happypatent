@@ -8,6 +8,7 @@
     <div class="box-header with-border">
       <h3 class="box-title text-blue">{{ object.client_ch_name }}</h3>
       <div class="pull-right">
+          <a class="btn btn-default" href="{% url "proposals:inventor-create" %}?client_id={{ object.client_id }}" role="button">Create Inventor</a>
           <a class="btn btn-warning" href="{% url "proposals:client-update" object.client_id %}" role="button">Update</a>
       </div>
     </div>
@@ -143,8 +144,32 @@
                 </div>
             </div>
         </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <h3> <small>Inventor</small></h3>
+                <hr>
+                <table id="list_table" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Chinese name</th>
+                  <th>English name</th>
+                  <th>Country</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for inventor in inventor_list %}
+                <tr>
+                  <td><a href="{{ inventor.get_absolute_url }}">{{ inventor.chinese_name }}</a></td>
+                  <td><a href="{{ inventor.get_absolute_url }}">{{ inventor.english_name }}</a></td>
+                  <td>{{ client.country }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
     </div>
-    <!-- /.box-body -->
     <div class="box-footer">
       <div class="row" >
           <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
@@ -152,8 +177,5 @@
       </div>
       <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
     </div>
-    <!-- /.box-footer-->
 </div>
-
-
 {% endblock content %}

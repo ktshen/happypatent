@@ -4,7 +4,7 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
-from .models import Employee, Patent, Agent, Client
+from .models import Employee, Patent, Agent, Client, Inventor
 from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
 from .utils import file_validate
 
@@ -117,4 +117,20 @@ class PatentModelForm(forms.ModelForm):
             'control_item': MySelect2Widget(),
             'priority': MySelect2Widget(),
             'prio_country': MySelect2Widget(),
+        }
+
+
+class InventorModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(InventorModelForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout.append(Submit('save', 'save'))
+
+    class Meta:
+        model = Inventor
+        fields = ('chinese_name', 'english_name', 'client', 'country', 'post_address',
+                  'english_address', 'phone_number', 'id_number', 'email', 'remarks')
+
+        widgets = {
+            'client': MySelect2Widget(),
         }

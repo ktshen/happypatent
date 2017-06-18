@@ -93,7 +93,29 @@ class Client(_BaseModel):
         return self.client_id
 
     def number_employee_template(self):
-        return dict(Client.EMPLOYEE_AMOUNT)[self.number_employee]
+        if self.number_employee:
+            return dict(Client.EMPLOYEE_AMOUNT)[self.number_employee]
+        else:
+            return self.number_employee
+
+
+@python_2_unicode_compatible
+class Inventor(_BaseModel):
+    chinese_name = models.CharField(_('Chinese name'), max_length=50)
+    english_name = models.CharField(_('English name'), max_length=50)
+    country = models.CharField(_('Country/City'), max_length=50)
+    post_address = models.CharField(_('Post Office Address'), max_length=100)
+    english_address = models.CharField(_('English Address'), max_length=100)
+    phone_number = models.CharField(_('Phone Number'), max_length=50)
+    id_number = models.CharField(_('ID Number'), max_length=20, blank=True)
+    email = models.EmailField(blank=True)
+    client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.chinese_name
+
+    def get_absolute_url(self):
+        return reverse("proposals:inventor-detail", args=[self.pk])
 
 
 @python_2_unicode_compatible
@@ -103,7 +125,6 @@ class Employee(BaseProfileModel, _BaseModel):
         ('f', _('Female'))
     )
     TITLE_ID = (
-        ('0',  _('---------')),
         ('1', _('CEO')),
         ('2', _('Director')),
         ('3', _('Manager')),
@@ -130,7 +151,7 @@ class Employee(BaseProfileModel, _BaseModel):
                                  on_delete=models.SET_NULL,
                                  null=True)
 
-    title_id = models.CharField(_('Title ID'), max_length=30, choices=TITLE_ID, default='0', blank=True)
+    title_id = models.CharField(_('Title ID'), max_length=30, choices=TITLE_ID, blank=True)
 
     def __str__(self):
         return self.chinese_name
@@ -150,7 +171,11 @@ class Employee(BaseProfileModel, _BaseModel):
         return "E" + e_id
 
     def title_id_template(self):
-        return dict(Employee.TITLE_ID)[self.title_id]
+        if self.title_id:
+            return dict(Employee.TITLE_ID)[self.title_id]
+        else:
+            return self.title_id
+
 
 @python_2_unicode_compatible
 class Agent(_BaseModel):
@@ -179,7 +204,6 @@ class Agent(_BaseModel):
 @python_2_unicode_compatible
 class Patent(_BaseModel):
     APPLICATION_TYPE_CHOICES = (
-        ('0', _('---------')),
         ('invention', _('Invention')),
         ('utility', _('Utility')),
         ('design', _('Design')),
@@ -200,7 +224,6 @@ class Patent(_BaseModel):
         ('no', 'No')
     )
     CASE_STATUS_CHOICES = (
-        ('0', _('---------')),
         ('1', _('Draft/Translation')),
         ('2', _('Preliminary examination')),
         ('3', _('Response/Amendment-1')),
@@ -217,7 +240,6 @@ class Patent(_BaseModel):
         ('14', _('Invalidation examination')),
     )
     CONTROL_ITEM_CHOICES = (
-        ('0', _('---------')),
         ('1', _('File new application')),
         ('2', _('File Chinese description')),
         ('3', _('Request examination')),
@@ -239,15 +261,15 @@ class Patent(_BaseModel):
     english_title = models.CharField(_('English Title'), max_length=100)
     client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True, blank=True)
     application_type = models.CharField(_('Type'), max_length=30,
-                                   choices=APPLICATION_TYPE_CHOICES, default='0', blank=True)
+                                   choices=APPLICATION_TYPE_CHOICES, blank=True)
     country = models.CharField(_('Country'), max_length=30,
                                choices=COUNTRY_CHOICES)
     request_examination = models.CharField(_('Request Examination'), max_length=30,
                                            choices=YES_OR_NO, blank=True)
     examination_date = models.DateField(_('Date of request examination'), blank=True, null=True)
-    inventor = models.ManyToManyField(verbose_name=_('Inventor'), to=Employee, blank=True)
+    inventor = models.ManyToManyField(verbose_name=_('Inventor'), to=Inventor, blank=True)
     case_status = models.CharField(_('Status'), max_length=30,
-                                   choices=CASE_STATUS_CHOICES, default='0', blank=True)
+                                   choices=CASE_STATUS_CHOICES, blank=True)
     filing_date = models.DateField(_('Filing Date'), blank=True, null=True)
     application_no = models.CharField(_('Application No.'), max_length=30, blank=True)
     publication_date = models.DateField(_('Publication Date'), blank=True, null=True)
@@ -266,7 +288,7 @@ class Patent(_BaseModel):
     re_examine_date = models.DateField(_('Date of re-examination'), blank=True, null=True)
 
     control_item = models.CharField(_('Control Item'), max_length=30,
-                                    choices=CONTROL_ITEM_CHOICES, default='0', blank=True)
+                                    choices=CONTROL_ITEM_CHOICES, blank=True)
     control_date = models.DateField(_('Control Date'), null=True, blank=True)
     deadline = models.DateField(_('Deadline'), null=True, blank=True)
 
@@ -291,14 +313,21 @@ class Patent(_BaseModel):
         return reverse("proposals:patent-detail", args=[self.case_id])
 
     def case_status_template(self):
-        return dict(Patent.CASE_STATUS_CHOICES)[self.case_status]
+        if self.case_status:
+            return dict(Patent.CASE_STATUS_CHOICES)[self.case_status]
+        else:
+            return self.case_status
 
     def control_item_template(self):
-        return dict(Patent.CONTROL_ITEM_CHOICES)[self.control_item]
-
+        if self.control_item:
+            return dict(Patent.CONTROL_ITEM_CHOICES)[self.control_item]
+        else:
+            return self.control_item
     def application_type_template(self):
-        return dict(Patent.APPLICATION_TYPE_CHOICES)[self.application_type]
-
+        if self.application_type:
+         return dict(Patent.APPLICATION_TYPE_CHOICES)[self.application_type]
+        else:
+            return self.application_type
 
 @python_2_unicode_compatible
 class Work(_BaseModel):
