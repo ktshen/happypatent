@@ -263,6 +263,21 @@
             </div>
             <div class="col-md-6">
                 <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Files</strong></div>
+                  <div class="panel-body">
+                    <ul>
+                        {% for file in object.files.all %}
+                        <li><h5><small><a href="{{ file.file.url }}" download>{{ file.filename }}</a></small></h5></li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
                   <div class="panel-heading"><strong>Remarks</strong></div>
                   <div class="panel-body">
                     {{ object.remarks }}

@@ -2,10 +2,11 @@ from django import forms
 from django.urls import reverse
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, Div, Field
+from crispy_forms.layout import Submit
 
 from .models import Employee, Patent, Agent, Client
 from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
+from .utils import file_validate
 
 
 class EmployeeModelForm(forms.ModelForm):
@@ -75,10 +76,15 @@ class AjaxClientModelForm(ClientModelForm):
 
 
 class PatentModelForm(forms.ModelForm):
+    file = forms.FileField(label="Files",
+                           widget=forms.ClearableFileInput(attrs={'multiple': True}),
+                           validators=[file_validate],
+                           required=False)
+
     def __init__(self, *args, **kwargs):
         super(PatentModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.layout.append(Submit('save', 'save'))
+        self.helper.layout.append(Submit('save', 'Submit'))
 
     class Meta:
         model = Patent
@@ -89,7 +95,7 @@ class PatentModelForm(forms.ModelForm):
                   'local_agent', 'foreign_agent', 'pre_decision_date', 'pre_decision_no',
                   're_examine_date', 'control_item', 'control_date', 'deadline', 'description_pages',
                   'drawing_pages', 'figures_number', 'owner', 'priority', 'prio_country', 'prio_application_no',
-                  'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks')
+                  'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks', 'file')
 
         widgets = {
             # 'case_id': forms.TextInput(attrs={"readonly": True}),

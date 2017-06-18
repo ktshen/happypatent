@@ -1,7 +1,9 @@
 from django.utils import timezone
 from django.core.cache import cache
+from django.conf import settings
+from django.core.exceptions import ValidationError
 
-from .models import Patent
+from proposals import models
 
 
 class CaseIDGenerator(object):
@@ -49,7 +51,7 @@ class CaseIDGenerator(object):
         return year + "P" + num
 
     def search_latest_id(self):
-        qs = Patent.objects.filter(case_id__startswith=self.current_year)
+        qs = models.Patent.objects.filter(case_id__startswith=self.current_year)
         max_num = 0
         for p in qs:
             s = int(p.case_id.split("P")[1].split("-")[0]) + 1
@@ -58,4 +60,30 @@ class CaseIDGenerator(object):
         latest_id = self.build_case_id(self.current_year, max_num)
         cache.set(self.cache_key, latest_id, None)
         return latest_id
+
+
+def get_upload_path(instance, filename):
+    return 'files/%s/%s' % (timezone.now().strftime("%Y-%m-%d"), filename)
+
+
+def file_validate(value):
+    if value.size > settings.FILE_SIZE_LIMITATION:
+        raise ValidationError('File too large. Size should not exceed 10 MiB.')
+    file_ext = value.name.split('.')
+    if len(file_ext) > 2:
+        raise ValidationError('File\'s name should not contain more than 2 \'.\' (dots).')
+    file_ext = file_ext[1].lower()
+    allowed = settings.FILE_ALLOWED_EXTENSION
+    if file_ext not in allowed:
+        msg = 'File\'s extension should be'
+        for i in range(len(allowed)):
+            if i == 0:
+                msg = msg + " " + allowed[i]
+            elif i == len(allowed)-1:
+                msg = msg + " or " + allowed[i]
+            else:
+                msg = msg + ", " + allowed[i]
+        msg = msg + '.'
+        raise ValidationError(msg)
+
 

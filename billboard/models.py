@@ -5,9 +5,10 @@ from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.urls.base import reverse
+from django.contrib.contenttypes.fields import GenericRelation
 
 from ckeditor.fields import RichTextField
-
+from proposals.models import FileAttachment
 from happypatent.users.models import User
 
 
@@ -20,7 +21,7 @@ class Post(models.Model):
                                to=User,
                                on_delete=models.SET_NULL,
                                null=True)
-
+    files = GenericRelation(FileAttachment, related_query_name='post')
     created = models.DateTimeField(_('Created Time'),
                                    auto_now_add=True)
 
@@ -55,4 +56,3 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return reverse("billboard:detail", args=[self.post.slug,])+"#comment"
-

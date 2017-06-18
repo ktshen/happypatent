@@ -7,6 +7,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
+from proposals.views import FileAttachmentViewMixin
 
 from .models import Post, User, Comment
 from .forms import PostModelForm, CommentModelForm
@@ -24,7 +25,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         return kwargs
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, FileAttachmentViewMixin, CreateView):
     model = Post
     template_name = "billboard/post_create.html"
     form_class = PostModelForm
@@ -35,10 +36,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.author = User.objects.get(username=self.request.user.username)
         self.object.save()
+        super(PostCreateView, self).form_valid(form)
         return HttpResponseRedirect(self.get_success_url())
 
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, FileAttachmentViewMixin, UpdateView):
     model = Post
     template_name = "billboard/post_update.html"
     form_class = PostModelForm
@@ -54,7 +56,6 @@ class PostListView(LoginRequiredMixin, ListView):
 @login_required
 def post_remove(request):
     if request.method == "POST":
-        print(request.POST)
         post_slug = request.POST["slug"]
         try:
             obj = Post.objects.get(slug=post_slug)

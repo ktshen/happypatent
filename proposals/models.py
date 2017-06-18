@@ -1,10 +1,26 @@
 from __future__ import unicode_literals
+import os
 from django.db import models
 from django.urls.base import reverse
-from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from happypatent.users.models import BaseProfileModel, User
+from django.utils import timezone
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
+
+
+@python_2_unicode_compatible
+class FileAttachment(models.Model):
+    from .utils import get_upload_path
+    file = models.FileField(upload_to=get_upload_path)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def filename(self):
+        return os.path.basename(self.file.name)
 
 
 @python_2_unicode_compatible
@@ -268,6 +284,7 @@ class Patent(_BaseModel):
 
     file_holder_position = models.CharField(_("File-holder position"), max_length=100, blank=True)
     IDS_infomation = models.CharField(_('IDS Information'), max_length=100, blank=True)
+    files = GenericRelation(FileAttachment, related_query_name='patent')
 
     def __str__(self):
         return self.case_id
@@ -283,7 +300,6 @@ class Patent(_BaseModel):
 
     def application_type_template(self):
         return dict(Patent.APPLICATION_TYPE_CHOICES)[self.application_type]
-
 
 
 @python_2_unicode_compatible

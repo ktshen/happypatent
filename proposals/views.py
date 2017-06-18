@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.contrib.messages.views import SuccessMessageMixin
 from django_select2.views import AutoResponseView
 
-from .models import Employee, Patent, Agent, Client, User
+from .models import Employee, Patent, Agent, Client, User, FileAttachment
 from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, AgentModelForm
 from .utils import CaseIDGenerator
 
@@ -47,6 +47,16 @@ class UserAppendCreateViewMixin(object):
         self.object = form.save(commit=False)
         self.object.created_by = User.objects.get(username=self.request.user.username)
         self.object.save()
+        super(UserAppendCreateViewMixin, self).form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class FileAttachmentViewMixin(object):
+    def form_valid(self, form):
+        super(FileAttachmentViewMixin, self)
+        for file in self.request.FILES.getlist('file'):
+            instance = FileAttachment(file=file, content_object=self.object)
+            instance.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -106,7 +116,8 @@ class EmployeeListView(LoginRequiredMixin, ListView):
     model = Employee
 
 
-class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
+class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, UserAppendCreateViewMixin,
+                       FileAttachmentViewMixin, CreateView):
     model = Patent
     template_name = 'proposals/patent_create.html'
     form_class = PatentModelForm
@@ -137,6 +148,7 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMes
                     modelform_id,
                     model_instance,
                 ])
+        context["files"] = FileAttachment.objects.filter()
         return context
 
     def get(self, request, *args, **kwargs):
@@ -151,6 +163,7 @@ class PatentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMes
         return super(PatentCreateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        self.other_country = None
         post = request.POST.copy()
         if "-" not in post["case_id"]:
             post["case_id"] = post["case_id"] + "-" + post["country"]

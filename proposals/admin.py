@@ -1,7 +1,11 @@
 from django.contrib import admin
 
-from .models import Employee, Agent, Client,  Patent, Work
-# Register your models here.
+from .models import Employee, Agent, Client,  Patent, Work, FileAttachment
+
+
+@admin.register(FileAttachment)
+class FileAttachmentModelAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Agent)

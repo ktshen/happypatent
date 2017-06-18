@@ -1,7 +1,4 @@
-/* Project specific Javascript goes here. */
-
 $(document).ready(function(){
-
     // Add class "active" to sidebar menu's option, based on current url
     $(function() {
         var loc = location.pathname.split("/");
@@ -25,7 +22,6 @@ $(document).ready(function(){
       "info": true,
       "autoWidth": true
     });
-
 
     $('.django-select2').on('select2:select',function(e){
         if (e.params.data.id >= 0) return false;
@@ -61,4 +57,7 @@ $(document).ready(function(){
         format: 'yyyy-mm-dd',
     });
     $('.dateinput').attr("placeholder", "yyyy-mm-dd");
+
+    $(".has-danger").addClass("has-error");
+
 });

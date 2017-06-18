@@ -70,14 +70,21 @@ hr {
     </div>
     <div class="box-body">
         <div class="blog-post">
-            <div >
+            <div>
                 {{ object.text | safe }}
             </div>
+            <ul>
+                {% for file in object.files.all %}
+                <li><h5><small><a href="{{ file.file.url }}" download>{{ file.filename }}</a></small></h5></li>
+                {% endfor %}
+            </ul>
+
         </div>
     </div>
     <div id="comment"></div>
     <div class="box-footer">
-        <h5><small>Posted on {{ object.update }} by <a href="{% url "users:detail" object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a></small></h5>
+        <h5>
+            <small>Posted on {{ object.update }} by <a href="{% url "users:detail" object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a></small>
         {% if request.user == object.author %}
         <div class="pull-right">
             <div class="row">
@@ -92,6 +99,7 @@ hr {
             </div>
         </div>
         {% endif %}
+        </h5>
     </div>
 
     </div>

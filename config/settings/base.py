@@ -307,6 +307,11 @@ SELECT2_CSS = "css/empty.css"
 IMAGE_SIZE_LIMITATION = 5242880
 IMAGE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png']
 
+#Upload File Limitation
+FILE_SIZE_LIMITATION = 10485760
+FILE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png', "doc", "docx", "pdf", "ppt", "txt", "wps", "tar", "zip",
+                           "xml", "xlsx", "xltx", "rar", "gzip"]
+
 # django-user_agents settings
 USER_AGENTS_CACHE = 'default'
 
