@@ -72,7 +72,7 @@ $(document).ready(function(){
                 autoOpen: true,
                 modal: true,
                 buttons: {
-                    "Delete all items": function() {
+                    "Delete": function() {
                        $("form#remove-form").submit();
                     },
                     Cancel: function() {

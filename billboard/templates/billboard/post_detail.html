@@ -60,13 +60,21 @@ hr {
 {% block content %}
 
 <div class="row">
-
     <!-- Blog Post Content Column -->
     <div class="col-md-10 col-md-offset-1 blog-main">
     <div class="box box-info">
     <div class="box-header with-border">
-
-        <h1 class="blog-post-title">{{ object.title }}</h1>
+    <div class="pull-right">
+        {% if request.user == object.author %}
+        <a class="btn btn-warning" href="{% url "billboard:update" object.slug %}" role="button">Update</a>
+        <a class="btn btn-danger" id="remove-object">Remove</a>
+        <form action="{% url "billboard:remove" %}" method="post" id="remove-form">
+            {% csrf_token %}
+            <input type="hidden" name="slug" value="{{ object.slug }}">
+        </form>
+        {% endif %}
+    </div>
+    <h3 class="blog-post-title">{{ object.title }}</h3>
     </div>
     <div class="box-body">
         <div class="blog-post">
@@ -85,20 +93,6 @@ hr {
     <div class="box-footer">
         <h5>
             <small>Posted on {{ object.update }} by <a href="{% url "users:detail" object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a></small>
-        {% if request.user == object.author %}
-        <div class="pull-right">
-            <div class="row">
-                <div class="col-md-6"><a class="btn btn-block btn-warning" href="{% url "billboard:update" object.slug %}" role="button">Update</a></div>
-                <div class="col-md-6">
-                    <form action="{% url "billboard:remove" %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="slug" value="{{ object.slug }}">
-                        <input class="btn btn-block btn-danger" type="submit" value="Remove">
-                    </form>
-                </div>
-            </div>
-        </div>
-        {% endif %}
         </h5>
     </div>
 
