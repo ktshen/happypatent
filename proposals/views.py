@@ -1,7 +1,8 @@
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.messages.views import SuccessMessageMixin
@@ -12,8 +13,36 @@ from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
                    AgentModelForm, InventorModelForm
 from .utils import CaseIDGenerator
 
+
 def get_model_fields_data(obj):
     return [(field.name, getattr(obj,field.name)) for field in obj._meta.fields]
+
+
+class _DeleteView(LoginRequiredMixin, DeleteView):
+    http_method_names = [u'post']
+    success_message = "%(field)s was deleted successfully."
+
+    def post(self, request, *args, **kwargs):
+        try:
+            self.kwargs[self.slug_url_kwarg] = request.POST["slug_field"]
+        except KeyError:
+            return HttpResponseBadRequest()
+        return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not request.user == self.object.created_by:
+            return HttpResponseBadRequest("You have no privilege to delete this item")
+        success_url = self.get_success_url()
+        self.object_name = str(self.object)
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
+
+    def get_success_message(self, cleaned_data):
+        if self.object_name:
+            return self.success_message % dict(field=self.object_name)
+        else:
+            return "Delete Successfully."
 
 
 class AjaxableResponseMixin(object):
@@ -117,6 +146,13 @@ class EmployeeListView(LoginRequiredMixin, ListView):
     model = Employee
 
 
+class EmployeeDeleteView(_DeleteView):
+    model = Employee
+    slug_field = 'pk'
+    slug_url_kwarg = 'pk'
+    success_url = reverse_lazy("proposals:employee-list")
+
+
 class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, UserAppendCreateViewMixin,
                        FileAttachmentViewMixin, CreateView):
     model = Patent
@@ -132,6 +168,8 @@ class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, UserAppendCreate
                 "chinese_title": patent.chinese_title,
                 "english_title": patent.english_title,
             }
+            if patent.client:
+                init["client"] = patent.client
         else:
             init = {"case_id": CaseIDGenerator().get_latest_id()}
         return init
@@ -198,6 +236,13 @@ class PatentListView(LoginRequiredMixin, ListView):
         return self.model.objects.filter(created_by__username=self.request.user.username).order_by('-update', '-created')
 
 
+class PatentDeleteView(_DeleteView):
+    model = Patent
+    slug_field = "case_id"
+    slug_url_kwarg = "case_id"
+    success_url = reverse_lazy("proposals:patent-list")
+
+
 class AgentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,
                       SuccessMessageMixin, CreateView):
     model = Agent
@@ -220,6 +265,13 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
 class AgentListView(LoginRequiredMixin, ListView):
     model = Agent
     queryset = Agent.objects.all().order_by("country", "-created")
+
+
+class AgentDeleteView(_DeleteView):
+    model = Agent
+    slug_field = 'agent_id'
+    slug_url_kwarg = 'agent_id'
+    success_url = reverse_lazy("proposals:agent-list")
 
 
 class AgentUpdateView(LoginRequiredMixin, UpdateView):
@@ -266,6 +318,13 @@ class ClientListView(LoginRequiredMixin, ListView):
     model = Client
 
 
+class ClientDeleteView(_DeleteView):
+    model = Client
+    slug_field = "client_id"
+    slug_url_kwarg = "client_id"
+    success_url = reverse_lazy("proposals:client-list")
+
+
 class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
     model = Inventor
     template_name = "proposals/inventor_create.html"
@@ -304,3 +363,10 @@ class InventorUpdateView(LoginRequiredMixin, UpdateView):
 
 class InventorListView(LoginRequiredMixin, ListView):
     model = Inventor
+
+
+class InventorDeleteView(_DeleteView):
+    model = Inventor
+    slug_field = 'pk'
+    slug_url_kwarg = 'pk'
+    success_url = reverse_lazy("proposals:agent-list")

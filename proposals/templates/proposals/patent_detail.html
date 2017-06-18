@@ -11,6 +11,11 @@
       <div class="pull-right">
           <a class="btn btn-default" href="{% url "proposals:patent-create" %}?other_country=true&case_id={{ object.case_id }}" role="button">Apply for other country</a>
           <a class="btn btn-warning" href="{% url "proposals:patent-update" object.case_id %}" role="button">Update</a>
+          <button class="btn btn-danger" id="remove-object">Remove</button>
+          <form action="{% url "proposals:patent-delete" %}" id="remove-form" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="slug_field" value="{{ object.case_id }}">
+          </form>
       </div>
     </div>
     <div class="box-body">
@@ -32,7 +37,7 @@
                     </tr>
                     <tr>
                         <td><strong>Application Type</strong></td>
-                        <td>{{ object.application_type_template }}</td>
+                        <td>{% if object.application_type_template %}{{ object.application_type_template }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Country</strong></td>
@@ -45,6 +50,10 @@
                 <table class="table table-striped">
                 <tbody>
                     <tr>
+                        <td><strong>Case Status</strong></td>
+                        <td>{% if object.case_status %}{{ object.case_status_template }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
                         <td><strong>Control Date</strong></td>
                         <td>{{ object.control_date }}</td>
                     </tr>
@@ -53,16 +62,8 @@
                         <td>{{ object.deadline }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Filing Date</strong></td>
-                        <td>{{ object.filing_date }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Case Status</strong></td>
-                        <td>{{ object.case_status_template }}</td>
-                    </tr>
-                    <tr>
                         <td><strong>Control Item</strong></td>
-                        <td>{{ object.control_item_template }}</td>
+                        <td>{% if object.case_status %}{{ object.control_item_template }}{% else %}None{% endif %}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -76,6 +77,10 @@
                     <tr>
                         <td><strong>Application No.</strong></td>
                         <td>{% if object.application_no %}{{ object.application_no }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Filing Date</strong></td>
+                        <td>{{ object.filing_date }}</td>
                     </tr>
                     <tr>
                         <td><strong>Publication Date</strong></td>
@@ -246,15 +251,15 @@
                   <div class="panel-body">
                     <ul>
                       <li>
-                          <h5>Client's ref. No.</h5>
+                          <h5><strong>Client's ref. No.</strong></h5>
                           <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_id }}</a>{% else %}None{% endif %}</p>
                       </li>
                       <li>
-                          <h5>Client name in abbreviated form</h5>
+                          <h5><strong>Client name in abbreviated form</strong></h5>
                           <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</p>
                       </li>
                       <li>
-                          <h5>Client Chinese Name</h5>
+                          <h5><strong>Client Chinese Name</strong></h5>
                           <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_ch_name }}</a>{% else %}None{% endif %}</p>
                       </li>
                     </ul>

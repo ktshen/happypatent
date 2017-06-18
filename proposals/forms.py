@@ -98,7 +98,6 @@ class PatentModelForm(forms.ModelForm):
                   'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks', 'file')
 
         widgets = {
-            # 'case_id': forms.TextInput(attrs={"readonly": True}),
             'client': AjaxSelect2Widget(search_fields=["client_en_name__icontains", "client_ch_name__icontains"],
                                         able_ajax_create=True,
                                         modelform=AjaxClientModelForm),

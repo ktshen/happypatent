@@ -10,6 +10,13 @@
       <div class="pull-right">
           <a class="btn btn-default" href="{% url "proposals:inventor-create" %}?client_id={{ object.client_id }}" role="button">Create Inventor</a>
           <a class="btn btn-warning" href="{% url "proposals:client-update" object.client_id %}" role="button">Update</a>
+          {% if request.user == object.created_by  %}
+          <button class="btn btn-danger" id="remove-object">Remove</button>
+          <form action="{% url "proposals:client-delete" %}" id="remove-form" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="slug_field" value="{{ object.client_id }}">
+          </form>
+          {% endif %}
       </div>
     </div>
     <div class="box-body">
@@ -90,7 +97,7 @@
                     </tr>
                     <tr>
                         <td><strong>Contact Person's Title</strong></td>
-                        <td>{% if object.scontact_person_title %}{{ object.contact_person_title }}{% else %}None{% endif %}</td>
+                        <td>{% if object.contact_person_title %}{{ object.contact_person_title }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Contact Person's Phone Number</strong></td>

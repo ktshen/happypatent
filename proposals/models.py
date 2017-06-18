@@ -103,7 +103,7 @@ class Client(_BaseModel):
 class Inventor(_BaseModel):
     chinese_name = models.CharField(_('Chinese name'), max_length=50)
     english_name = models.CharField(_('English name'), max_length=50)
-    country = models.CharField(_('Country/City'), max_length=50)
+    country = models.CharField(_('Country'), max_length=50)
     post_address = models.CharField(_('Post Office Address'), max_length=100)
     english_address = models.CharField(_('English Address'), max_length=100)
     phone_number = models.CharField(_('Phone Number'), max_length=50)

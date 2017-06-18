@@ -60,4 +60,27 @@ $(document).ready(function(){
 
     $(".has-danger").addClass("has-error");
 
+    $("#remove-object").on("click", function() {
+        $('<div></div>').appendTo('section.content')
+            .html('<div><p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>This item will be permanently deleted and cannot be recovered. Are you sure?</p></div>')
+            .dialog({
+                resizable: false,
+                height: "auto",
+                title: 'Warning',
+                width: 400,
+                zIndex: 10000,
+                autoOpen: true,
+                modal: true,
+                buttons: {
+                    "Delete all items": function() {
+                       $("form#remove-form").submit();
+                    },
+                    Cancel: function() {
+                      $(this).remove();
+                    }
+                }
+            });
+    });
+
+
 });
