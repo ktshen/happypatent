@@ -277,7 +277,9 @@ class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessM
             client = Client.objects.get(client_id=self.request.GET["client_id"])
         except Client.DoesNotExist:
             return HttpResponseBadRequest("Client specified doesn't not exist.")
-        return {"client": client}
+        return {"client": client,
+                "post_address": client.post_address,
+                "english_address": client.english_address}
 
     def get(self, request, *args, **kwargs):
         if not "client_id" in request.GET:

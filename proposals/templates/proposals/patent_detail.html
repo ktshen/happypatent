@@ -267,7 +267,7 @@
                   <div class="panel-body">
                     <ul>
                         {% for file in object.files.all %}
-                        <li><h5><small><a href="{{ file.file.url }}" download>{{ file.filename }}</a></small></h5></li>
+                        <li><h5><a href="{{ file.file.url }}" download>{{ file.filename }}</a></h5></li>
                         {% endfor %}
                     </ul>
                   </div>
