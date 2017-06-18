@@ -15,27 +15,25 @@
               <table id="list_table" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Client ID</th>
                   <th>Chinese name</th>
-                  {% if request|is_pc %}
                   <th>English name</th>
-                  {% endif %}
                   <th>Country</th>
                   <th>Contact Person Name</th>
-                  <th>Status</th>
+                  {% if request|is_pc %}
+                  <th>Contact Person Email</th>
+                  {% endif %}
                 </tr>
                 </thead>
                 <tbody>
                 {% for client in object_list %}
                 <tr>
-                  <td><a href="{{ client.get_absolute_url }}">{{ client.client_id }}</a></td>
                   <td><a href="{{ client.get_absolute_url }}">{{ client.client_ch_name }}</a></td>
-                  {% if request|is_pc %}
                   <td><a href="{{ client.get_absolute_url }}">{{ client.client_en_name }}</a></td>
-                  {% endif %}
                   <td>{{ client.country }}</td>
-                  <td>{{ client.contact_person_name }}</td>
-                  <td>{{ client.status }}</td>
+                  <td>{% if client.contact_person_name %}{{ client.contact_person_name }}{% else %}None{% endif %}</td>
+                  {% if request|is_pc %}
+                  <td>{% if client.contact_person_email %}{{ client.contact_person_email  }}{% else %}None{% endif %}</td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
                 </tbody>

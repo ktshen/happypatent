@@ -46,7 +46,6 @@ class _BaseModel(models.Model):
 @python_2_unicode_compatible
 class Client(_BaseModel):
     EMPLOYEE_AMOUNT = (
-        ('0', _('----------')),
         ('above', _('Above 500 employees')),
         ('under', _('Under 500 employees')),
     )
@@ -66,11 +65,10 @@ class Client(_BaseModel):
     contact_person_email = models.EmailField(_('Contact Person\'s Email'), blank=True)
     repr_chinese_name = models.CharField(_('Representative\'s Chinese name'), max_length=50)
     repr_english_name = models.CharField(_('Representative\'s English name'), max_length=50)
-    vat_no = models.CharField(_('VAT No.'), max_length=30)
+    vat_no = models.CharField(_('VAT No.'), max_length=30, blank=True)
     number_employee = models.CharField(_('Number of employees'),
                                        max_length=30,
                                        choices=EMPLOYEE_AMOUNT,
-                                       default="0",
                                        blank=True)
     primary_owner = models.CharField(_('Primary owner'), max_length=50)
     secondary_owner = models.CharField(_('Secondary owner'), max_length=50, blank=True)
