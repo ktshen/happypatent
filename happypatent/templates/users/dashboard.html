@@ -92,6 +92,9 @@
   </div>
 </div>
 </div>
+{% endblock %}
+
+{% block javascript %}
 <script>
 
 $(document).ready(function() {
@@ -136,6 +139,10 @@ $(document).ready(function() {
                 success: function(params) {
                     var events = [];
                     params.forEach(function(entry){
+                        let ev = $('#calendar').fullCalendar('clientEvents', entry["id"]);
+                        if (ev.length > 0){
+                            return true;
+                        }
                         if("case_id" in entry){
                             if ("control_date" in entry){
                                 events.push({
@@ -183,7 +190,6 @@ $(document).ready(function() {
         drop: function (date, allDay) { // this function is called when something is dropped
             // retrieve the dropped element's stored Event Object
             var originalEventObject = $(this).data('eventObject');
-
             // we need to copy it, so that multiple events don't have a reference to the same object
             var copiedEventObject = $.extend({}, originalEventObject);
             // assign it the date that was reported
