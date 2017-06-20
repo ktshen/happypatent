@@ -1,15 +1,12 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
-{#<link type="text/css" href="{% static "agent_create.css" %}"  rel="stylesheet">#}
+{% block title %}Agent{% endblock %}
+{% block content_title %}Create New Agent{% endblock %}
 {% block content %}
-
-   <div class="container">
-
+<div class="row">
     <div class="col-md-6">
     {% crispy form %}
     </div>
-   </div>
-
-
+</div>
 {% endblock content %}
