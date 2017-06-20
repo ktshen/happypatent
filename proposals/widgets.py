@@ -7,14 +7,14 @@ class AjaxSelect2Widget(Select):
         attrs["class"] = "form-control ajax-select2"
         attrs["style"] = "width: 100%"
         attrs["data-url"] = reverse_lazy(data_view)
-        attrs["able-create-new"] = create_new
-        attrs["create-new-url"] = create_new_url
+        if create_new:
+            attrs["able-create-new"] = "true"
+            attrs["create-new-url"] = reverse_lazy(create_new_url)
+        else:
+            attrs["able-create-new"] = "false"
         if multiple:
             attrs["multiple"] = True
         super(AjaxSelect2Widget, self).__init__(attrs, choices)
-
-    class Media:
-        js = ["js/ajax-select2.js"]
 
 
 class MySelect2Widget(Select):

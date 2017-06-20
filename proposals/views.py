@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured
+from django.template.loader import render_to_string
 
 from .models import Employee, Patent, Agent, Client, User, FileAttachment, Inventor
 from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
@@ -70,7 +71,7 @@ class AjaxSelect2View(LoginRequiredMixin, BaseListView):
                 }
                 for obj in self.object_list
             ]
-        else:
+        elif "able_create_new" in request.GET and request.GET["able_create_new"] == "true":
             results.append({
                     'id': -1,
                     'text': "Create %s" % q
@@ -89,6 +90,17 @@ class AjaxableResponseMixin(object):
     Mixin to add AJAX support to a form.
     Must be used with an object-based FormView (e.g. CreateView)
     """
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            self.object = None
+            context = self.get_context_data()
+            s = render_to_string("proposals/ajax_modal.html",
+                                 context={"form": context["form"]},
+                                 request=request)
+            return JsonResponse({"html": s})
+        else:
+            return super(AjaxableResponseMixin, self).get(request, *args, **kwargs)
+
     def form_invalid(self, form):
         response = super(AjaxableResponseMixin, self).form_invalid(form)
         if self.request.is_ajax():
@@ -116,8 +128,8 @@ class UserAppendCreateViewMixin(object):
         self.object = form.save(commit=False)
         self.object.created_by = User.objects.get(username=self.request.user.username)
         self.object.save()
-        super(UserAppendCreateViewMixin, self).form_valid(form)
-        return HttpResponseRedirect(self.get_success_url())
+        response = super(UserAppendCreateViewMixin, self).form_valid(form)
+        return response
 
 
 class FileAttachmentViewMixin(object):

@@ -1,4 +1,4 @@
-$(document).ready(function(){
+;$(document).ready(function(){
     // Add class "active" to sidebar menu's option, based on current url
     $(function() {
         var loc = location.pathname.split("/");
@@ -62,19 +62,15 @@ $(document).ready(function(){
                 data: function (params) {
                     d = {
                         q: params.term, // search term
-                        page: params.page
+                        page: params.page,
+                        able_create_new: $(this).attr("able-create-new")
                     };
                     if ($(this).attr("id")=="id_inventor"){
                         d.client_id = $("#id_client").select2('data')[0].id;
                     }
-                    console.log(d);
                     return d;
                 },
                 processResults: function (data, params) {
-                  // parse the results into the format expected by Select2
-                  // since we are using custom formatting functions we do not need to
-                  // alter the remote JSON data, except to indicate that infinite
-                  // scrolling can be used
                   params.page = params.page || 1;
                   return {
                     results: data.items,
@@ -92,37 +88,71 @@ $(document).ready(function(){
     });
 
 
-    // $('.ajax-select2').on('select2:select',function(e){
-    //     if (e.params.data.id >= 0) return false;
-    //     var $target = $(e.target);
-    //     var $modal = $("#"+$target.attr("modelform_id"));
-    //     $target.children("option").last().remove();
-    //     $modal.modal();
-    //     $modal.find(".django-select2").djangoSelect2().on('select2:select', function(e){
-    //         var newOption = new Option(e.params.data.text, e.params.data.id, false, true);
-    //         $(e.target).append(newOption);
-    //     });
-    //     $modal.find("form").on("submit", function (e) {
-    //         e.preventDefault();
-    //         $(e.target).ajaxSubmit({
-    //             url: $(this).attr("action"),
-    //             method: "POST",
-    //             dataType: 'json',
-    //             success: function (data) {
-    //                 $('.close').click();
-    //                 var newOption = new Option(data.text, data.id, false, true);
-    //                 $target.append(newOption);
-    //             },
-    //             error: function (data) {
-    //                 alert("Something goes wrong. Check the form again");
-    //                 console.log(data);
-    //             }
-    //         });
-    //     });
-    // });
-
+    $('.ajax-select2').on('select2:select',function(e){
+        var $target = $(e.target);
+        if (e.params.data.id >= 0 || $target.attr("able-create-new")==="false") return false;
+        e.preventDefault();
+        $(this).find('option[value="-1"]').remove();
+        var feedback_array = [];
+        var parent_div = [];
+        $.ajax({
+            url: $target.attr("create-new-url"),
+            success: function (data) {
+                var new_modal = $("<div></div>").appendTo("section.content").html(data.html);
+                new_modal.dialog({
+                    resizable: false,
+                    height: "auto",
+                    title: 'Create New '+ $target.attr("name"),
+                    zIndex: 10000,
+                    autoOpen: true,
+                    modal: true,
+                    width: "50%",
+                    position:{ my: "center center", at: "center center", of: $("section.content") },
+                    buttons: {
+                        "Submit": function() {
+                            while(feedback_array.length>0){
+                                let ele = feedback_array.pop();
+                                ele.remove();
+                            }
+                            while(parent_div.length>0){
+                                let ele = parent_div.pop();
+                                ele.removeClass("has-error");
+                            }
+                            var error = false;
+                            $("#ajax-modal").find("form").ajaxSubmit({
+                                url: $target.attr("create-new-url"),
+                                dataType:"json",
+                                method: "POST",
+                                success: function (data) {
+                                    let newOption = new Option(data.text, data.id, false, true);
+                                    $target.append(newOption);
+                                    new_modal.remove();
+                                },
+                                error: function (data) {
+                                    error = true;
+                                    for (key in data.responseJSON){
+                                        let $feedback = $('<span class="help-block">'+ data.responseJSON[key] +'</span>');
+                                        let $parent = $('input[name='+ key +']').parents(".form-group").first() ;
+                                        $parent.addClass("has-error").append($feedback);
+                                        parent_div.push($parent);
+                                        feedback_array.push($feedback);
+                                    }
+                                }
+                            });
+                        },
+                        Cancel: function() {
+                          $(this).remove();
+                        }
+                    }
+                });
+                $(new_modal).find('input[type ="submit"]').remove();
+            },
+            error: function(e){
+                alert("Something goes wrong.")
+            }
+        });
+    });
     $("#id_inventor").prop("disabled", true);
-
     $("#id_client").on("select2:select", function(e){
         $("#id_inventor").prop("disabled", false);
     });

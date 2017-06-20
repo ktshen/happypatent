@@ -98,9 +98,15 @@ class PatentModelForm(forms.ModelForm):
                   'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks', 'file')
 
         widgets = {
-            'client': AjaxSelect2Widget("proposals:client-select2"),
-            'local_agent': AjaxSelect2Widget("proposals:agent-select2"),
-            'foreign_agent': AjaxSelect2Widget("proposals:agent-select2"),
+            'client': AjaxSelect2Widget("proposals:client-select2",
+                                        create_new=True,
+                                        create_new_url="proposals:client-create"),
+            'local_agent': AjaxSelect2Widget("proposals:agent-select2",
+                                             create_new=True,
+                                             create_new_url="proposals:agent-create"),
+            'foreign_agent': AjaxSelect2Widget("proposals:agent-select2",
+                                               create_new=True,
+                                               create_new_url="proposals:agent-create"),
             'inventor': AjaxSelect2Widget("proposals:inventor-select2", multiple=True),
             'application_type': MySelect2Widget(),
             'number_employee': MySelect2Widget(),
