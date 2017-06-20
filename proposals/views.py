@@ -9,6 +9,7 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 from .models import Employee, Patent, Agent, Client, User, FileAttachment, Inventor
 from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
@@ -56,7 +57,10 @@ class AjaxSelect2View(LoginRequiredMixin, BaseListView):
             q = request.GET["q"]
         except KeyError:
             return HttpResponseBadRequest("No q in GET.")
-        filter_query = {i : q for i in self.search_fields}
+        qs = [Q(**{i:q}) for i in self.search_fields]
+        filter_query = qs.pop()
+        for q in qs:
+            filter_query |= q
         if not self.model:
             raise ImproperlyConfigured("Model parameter is missing. Please define it.")
         self.object_list = self.get_queryset(filter_query=filter_query)
@@ -82,7 +86,7 @@ class AjaxSelect2View(LoginRequiredMixin, BaseListView):
         }, safe=False)
 
     def get_queryset(self, *args, **kwargs):
-        return self.model.objects.filter(**kwargs["filter_query"])
+        return self.model.objects.filter(kwargs["filter_query"])
 
 
 class AjaxableResponseMixin(object):
@@ -241,10 +245,6 @@ class PatentUpdateView(LoginRequiredMixin, UpdateView):
     slug_url_kwarg = "case_id"
     form_class = PatentModelForm
     template_name = "proposals/patent_create.html"
-
-    def post(self, request, *args, **kwargs):
-        print(request.POST)
-        return super(PatentUpdateView, self).post(request, *args, **kwargs)
 
 
 class PatentListView(LoginRequiredMixin, ListView):
@@ -406,5 +406,5 @@ class InventorSelect2View(AjaxSelect2View):
 
     def get_queryset(self, *args, **kwargs):
         return self.model.objects.filter(client__client_id=self.request.GET["client_id"])\
-                                 .filter(**kwargs["filter_query"])
+                                 .filter(kwargs["filter_query"])
 

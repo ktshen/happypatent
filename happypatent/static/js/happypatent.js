@@ -59,7 +59,11 @@
                 url: $(this).attr("data-url"),
                 dataType: 'json',
                 delay: 250,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                 data: function (params) {
+                    if (params.term===undefined){
+                        params.term = ""
+                    }
                     d = {
                         q: params.term, // search term
                         page: params.page,

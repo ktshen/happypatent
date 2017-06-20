@@ -280,10 +280,8 @@ class Patent(_BaseModel):
     patent_term = models.DateField(_('Patent Term.'), blank=True, null=True)
     certificate_no = models.CharField(_('Certificate No.'), max_length=30, blank=True)
 
-    local_agent = models.ForeignKey(to=Agent, related_name='patent_local_agent',
-                                    on_delete=models.SET_NULL, null=True, blank=True)
-    foreign_agent = models.ForeignKey(to=Agent, related_name='patent_foreign_agent',
-                                      on_delete=models.SET_NULL, null=True, blank=True)
+    agent = models.ForeignKey(verbose_name=_("Agent"), to=Agent, related_name='patent_agent',
+                              on_delete=models.SET_NULL, null=True, blank=True)
     agent_ref_no = models.CharField(_("Agent Ref. No."), max_length=15, blank=True)
     pre_decision_date = models.DateField(_('Date of preliminary decision'), blank=True, null=True)
     pre_decision_no = models.CharField(_('Preliminary decision No.'), max_length=30, blank=True)
