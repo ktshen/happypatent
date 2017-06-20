@@ -1,8 +1,31 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block content_title %}Inventor{% endblock %}
+{% block content_title %}Inventor Form{% endblock %}
+{% block css %}
+    <style>
+    .form-group{
+     margin-bottom:10px;
+ }
 
+ input.form-control{
+    background-color: #ffffff;
+ }
+ .box{
+      width: 75%;
+      margin: 0 auto;
+
+      background: #ffffff;
+      padding: 15px;
+      border-top-color: #2DA4A4;
+  }
+
+    </style>
+{% endblock css %}
 {% block content %}
+    <div class="box">
     {% crispy form %}
+
+    </div>
+
 {% endblock content %}

@@ -2,12 +2,77 @@
 {% load static %}
 
 {% block content_title %}Patent{% endblock %}
+{% block css %}
+    <style>
+        #patent-title{
+             color: #2BB4B4;
+             margin-top:0.8%;
+             margin-bottom: 0;
+        }
+        #patent-box{
+             border-top-color: #2DA4A4;
+             width: 87%;
+             margin: 0 auto;
+        }
+      .table.table-striped{
+        border: 2px solid #f9f9f9;
+        }
 
+        .table-striped > tbody > tr:first-child >td{
+            border-top: 2px solid #f9f9f9
+        }
+     .box-footer > h5:first-child{
+            float:left;
+            color: #777;
+        }
+
+        .box-footer > h5:first-child >a{
+            color: #2BB4B4;
+        }
+        .box-footer > h5:first-child >a:hover{
+            color: #2DA4A4;
+        }
+        .box-footer > h5:nth-child(2){
+            float:right;
+            color: #777;
+        }
+
+        .box-footer > h5:last-child{
+            float:right;
+            padding-right:3%;
+            color: #777;
+        }
+    .panel-default{
+      border: 2px solid #f9f9f9;
+      border-radius: 0px;
+      -webkit-box-shadow: none;
+              box-shadow: none;
+  }
+  .panel-default .panel-body{
+      border-top-color: #f9f9f9;
+      border-top-width: 2px;
+      padding:8px;
+      min-height: 36px;
+  }
+  .panel-default .panel-body >ul{
+      margin-bottom:0px;
+
+  }
+  .panel-default > .panel-heading {
+      background-color: #f9f9f9;
+      padding: 8px;
+      border-bottom: 1px solid #f9f9f9;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+
+   }
+    </style>
+{% endblock css %}
 
 {% block content %}
-<div class="box box-info">
+<div id="patent-box" class="box box-info">
     <div class="box-header with-border">
-      <h3 class="box-title text-blue">{{ object.case_id }}</h3>
+      <h3 id="patent-title" class="box-title ">{{ object.case_id }}</h3>
       <div class="pull-right">
           <a class="btn btn-default" href="{% url "proposals:patent-create" %}?other_country=true&case_id={{ object.case_id }}" role="button">Apply for other country</a>
           <a class="btn btn-warning" href="{% url "proposals:patent-update" object.case_id %}" role="button">Update</a>
@@ -246,15 +311,15 @@
                   <div class="panel-body">
                     <ul>
                       <li>
-                          <h5>Client's ref. No.</h5>
+                          <h5>Client's ref. number: </h5>
                           <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_id }}</a>{% else %}None{% endif %}</p>
                       </li>
                       <li>
-                          <h5>Client name in abbreviated form</h5>
+                          <h5>Client name in abbreviated form:</h5>
                           <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</p>
                       </li>
                       <li>
-                          <h5>Client Chinese Name</h5>
+                          <h5>Client Chinese Name:</h5>
                           <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_ch_name }}</a>{% else %}None{% endif %}</p>
                       </li>
                     </ul>
@@ -267,7 +332,7 @@
                   <div class="panel-body">
                     <ul>
                         {% for file in object.files.all %}
-                        <li><h5><a href="{{ file.file.url }}" download>{{ file.filename }}</a></h5></li>
+                        <li><h5><a href="{{ file.file.url }}"download > download {{ file.filename }}</a></h5></li>
                         {% endfor %}
                     </ul>
                   </div>
@@ -288,11 +353,9 @@
     </div>
     <!-- /.box-body -->
     <div class="box-footer">
-      <div class="row" >
-          <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
-          <div class="col-sm-4"><h5>Last update at {{ object.update }}</h5></div>
-      </div>
-      <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
+        <h5><br/>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
+        <h5>Created:<br/>{{ object.created }}</h5>
+        <h5>Last updated<br/> {{ object.update }}</h5>
     </div>
     <!-- /.box-footer-->
 </div>

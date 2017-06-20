@@ -1,15 +1,51 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
-{#<link type="text/css" href="{% static "agent_create.css" %}"  rel="stylesheet">#}
+
+{% block content_title %}Agent Form{% endblock %}
+{% block css %}
+    <style>
+    .form-group{
+        margin-bottom:10px;
+        width:46%;
+
+
+    }
+
+{#    .form-wrap > .form-group:first-child{#}
+{#       #}
+{#    }#}
+
+    .form-wrap > .form-group:nth-child(2){
+        margin-left:5%;
+    }
+
+{#    .except .form-group{#}
+{#        width:100%;#}
+{#    }#}
+    input.form-control{
+        background-color: #ffffff;
+    }
+    .box{
+        width: 75%;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px;
+        border-top-color: #2DA4A4;
+    }
+
+    </style>
+{% endblock css%}
 {% block content %}
 
-   <div class="container">
-
-    <div class="col-md-6">
+   <div class="box">
     {% crispy form %}
-    </div>
    </div>
+
+
+
+
+
 
 
 {% endblock content %}

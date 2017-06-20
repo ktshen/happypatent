@@ -2,7 +2,7 @@ from django import forms
 from django.urls import reverse
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit,Layout,Div,Fieldset
 
 from .models import Employee, Patent, Agent, Client, Inventor
 from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
@@ -30,6 +30,55 @@ class AgentModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AgentModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
+        self.helper.layout=Layout(
+            Fieldset(
+                "",
+                Div(
+
+                   'agent_title',
+                    'country',
+
+
+                    style="display:flex;flex-direction:row",
+                    css_class="form-wrap"
+                ),
+                Div(
+
+                    'address',
+                    'contact_person_name',
+
+                    style="display:flex;flex-direction:row",
+                    css_class="form-wrap"
+                ),
+                Div(
+
+                    'contact_person_phone_number',
+                    'contact_person_email',
+                    style="display:flex;flex-direction:row",
+                    css_class="form-wrap"
+
+                ),
+
+
+                Div(
+
+                    'beneficiary_name',
+                    'remittance_bank',
+                    style="display:flex;flex-direction:row",
+                    css_class="form-wrap"
+                ),
+                Div(
+
+                    'beneficiary_no',
+                    style="display:flex;flex-direction:row",
+                    css_class="form-wrap"
+                ),
+                Div(
+                    'remarks',
+                    css_class="except"
+                )
+            )
+        )
         self.helper.layout.append(Submit('save', 'save'))
 
     class Meta:

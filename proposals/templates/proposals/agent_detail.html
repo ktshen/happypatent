@@ -1,11 +1,84 @@
 {% extends "base.html" %}
 
 {% block content_title %}Agent{% endblock %}
+{% block css %}
+  <style>
+  #agent-title{
+  color: #2BB4B4;
+  margin-top:0.8%;
+  margin-bottom: 0;
+}
+
+  #agent-box{
+      border-top-color: #2DA4A4;
+      width: 87%;
+      margin: 0 auto;
+  }
+  .table.table-striped{
+      border: 2px solid #f9f9f9;
+  }
+
+ .table-striped > tbody > tr:first-child >td{
+     border-top: 2px solid #f9f9f9
+ }
+
+  .box-footer > h5:first-child{
+      float:left;
+      color: #777;
+  }
+
+  .box-footer > h5:first-child >a{
+      color: #2BB4B4;
+  }
+  .box-footer > h5:first-child >a:hover{
+      color: #2DA4A4;
+  }
+  .box-footer > h5:nth-child(2){
+      float:right;
+      color: #777;
+  }
+
+  .box-footer > h5:last-child{
+      float:right;
+      padding-right:3%;
+      color: #777;
+  }
+
+  .panel-default{
+      border: 2px solid #f9f9f9;
+      border-radius: 0px;
+      -webkit-box-shadow: none;
+              box-shadow: none;
+  }
+  .panel-default .panel-body{
+      border-top-color: #f9f9f9;
+      border-top-width: 2px;
+      padding:8px;
+      min-height: 36px;
+  }
+  .panel-default .panel-body >ul{
+      margin-bottom:0px;
+
+  }
+  .panel-default > .panel-heading {
+      background-color: #f9f9f9;
+      padding: 8px;
+      border-bottom: 1px solid #f9f9f9;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+
+   }
+</style>
+{% endblock css %}
+
+
 
 {% block content %}
-<div class="box box-info">
+
+
+<div id="agent-box" class="box box-info " style="border-top-color: #2DA4A4">
     <div class="box-header with-border">
-      <h3 class="box-title text-blue">{{ object.agent_title }}</h3>
+      <h3 id="agent-title" class="box-title ">{{ object.agent_title }}</h3>
       <div class="pull-right">
           <a class="btn btn-warning" href="{% url "proposals:agent-update" object.agent_id %}" role="button">Update</a>
       </div>
@@ -84,11 +157,9 @@
         </div>
     </div>
     <div class="box-footer">
-      <div class="row" >
-          <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
-          <div class="col-sm-4"><h5>Last update at {{ object.update }}</h5></div>
-      </div>
-      <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
+         <h5 ><br/>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
+         <h5 >Created:<br>{{ object.created }}</h5>
+         <h5 >Last updated:<br>{{ object.update }}</h5>
     </div>
 </div>
 {% endblock content %}
