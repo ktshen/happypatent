@@ -92,6 +92,7 @@
   </div>
 </div>
 </div>
+
 <script>
 
 $(document).ready(function() {
@@ -134,8 +135,12 @@ $(document).ready(function() {
                     end: end.unix()
                 },
                 success: function(params) {
-                    var events = [];
+                    let events = [];
                     params.forEach(function(entry){
+                        let ev = $('#calendar').fullCalendar('clientEvents', entry["id"]);
+                        if (ev.length > 0){
+                            return true;
+                        }
                         if("case_id" in entry){
                             if ("control_date" in entry){
                                 events.push({
@@ -163,7 +168,7 @@ $(document).ready(function() {
                             }
                         }
                         else if("title" in entry){
-                            var e = {
+                            let e = {
                                 id: entry["id"],
                                 title: entry["title"],
                                 start: new Date(entry["start"]),
@@ -183,7 +188,6 @@ $(document).ready(function() {
         drop: function (date, allDay) { // this function is called when something is dropped
             // retrieve the dropped element's stored Event Object
             var originalEventObject = $(this).data('eventObject');
-
             // we need to copy it, so that multiple events don't have a reference to the same object
             var copiedEventObject = $.extend({}, originalEventObject);
             // assign it the date that was reported
@@ -192,7 +196,7 @@ $(document).ready(function() {
             copiedEventObject.backgroundColor = $(this).css("background-color");
             copiedEventObject.borderColor = $(this).css("border-color");
             if(originalEventObject === undefined){
-                return false
+                return false;
             }
             $.ajax({
                 url: "{% url "users:calendar_event_create" %}",
@@ -519,9 +523,7 @@ $(document).ready(function() {
     triggerTimeLine();
     <!--End TimeLine-->
 
-
-
-
 });
 </script>
 {% endblock %}
+

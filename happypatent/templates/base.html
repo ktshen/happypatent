@@ -7,10 +7,10 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}Happypatent{% endblock %}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-
+    <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css">
     <!-- Jquery datetable-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css"/>
+    <!-- JQUERY UI -->
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
     {% compress css %}
     <!-- fullcalender -->
     <link rel="stylesheet" href="{% static "plugins/fullcalendar/fullcalendar.min.css" %}" />
@@ -43,6 +45,9 @@
         .panel-body, .box-body, .box-header {
             overflow-wrap:break-word;
         }
+        .ui-dialog-titlebar-close {
+            visibility: hidden;
+        }
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -59,8 +64,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 <!-- date-range-picker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<!-- jQuery UI 1.12.1 -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <!-- bootstrap datepicker -->
@@ -75,15 +80,17 @@
 <script src="{% static "plugins/fullcalendar/fullcalendar.min.js" %}"></script>
 <!-- Select2 -->
 <script src="{% static "plugins/select2/select2.full.min.js" %}"></script>
+<!-- JQUERY AJAX FORM -->
+<script src="{% static "js/jquery.form.min.js" %}"></script>
 <!-- SlimScroll 1.3.0 -->
 <script src="{% static "plugins/slimScroll/jquery.slimscroll.min.js" %}"></script>
 <!-- AdminLTE App -->
-<script src="{% static "dist/js/app.min.js" %}"></script>
+<script src="{% static "dist/js/app.js" %}"></script>
 <!-- Happypatent Project Specific -->
 <script src="{% static "js/happypatent.js" %}"></script>
+{% endcompress %}
 {% block javascript %}
 {% endblock %}
-{% endcompress %}
 
 
 

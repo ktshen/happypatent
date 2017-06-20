@@ -57,7 +57,10 @@ class BaseProfileModel(models.Model):
                                     blank=True)
 
     def gender_template(self):
-        return dict(BaseProfileModel.GENDER_CHOICE)[self.gender]
+        if self.gender:
+            return dict(BaseProfileModel.GENDER_CHOICE)[self.gender]
+        else:
+            return self.gender
 
     class Meta:
         abstract = True

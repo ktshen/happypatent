@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit,Layout,Div,Fieldset
 
 from .models import Employee, Patent, Agent, Client, Inventor
-from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
+from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
 from .utils import file_validate
 
 
@@ -137,27 +137,23 @@ class PatentModelForm(forms.ModelForm):
 
     class Meta:
         model = Patent
-        fields = ('case_id', 'chinese_title', 'english_title', 'client', 'application_type',
-                  'country', 'request_examination', 'examination_date',
+        fields = ('case_id', 'chinese_title', 'english_title', 'client', 'client_ref_no',
+                  'application_type', 'country', 'request_examination', 'examination_date',
                   'inventor', 'case_status', 'filing_date', 'application_no', 'publication_date',
                   'publication_no', 'patent_date', 'patent_no', 'patent_term', 'certificate_no',
-                  'local_agent', 'foreign_agent', 'pre_decision_date', 'pre_decision_no',
+                  'agent', 'agent_ref_no', 'pre_decision_date', 'pre_decision_no',
                   're_examine_date', 'control_item', 'control_date', 'deadline', 'description_pages',
                   'drawing_pages', 'figures_number', 'owner', 'priority', 'prio_country', 'prio_application_no',
                   'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks', 'file')
 
         widgets = {
-            # 'case_id': forms.TextInput(attrs={"readonly": True}),
-            'client': AjaxSelect2Widget(search_fields=["client_en_name__icontains", "client_ch_name__icontains"],
-                                        able_ajax_create=True,
-                                        modelform=AjaxClientModelForm),
-            'local_agent': AjaxSelect2Widget(search_fields=["agent_title__icontains"],
-                                             able_ajax_create=True,
-                                             modelform=AjaxAgentModelForm),
-            'foreign_agent': AjaxSelect2Widget(search_fields=["agent_title__icontains", ],
-                                               able_ajax_create=True,
-                                               modelform=AjaxAgentModelForm),
-            'inventor': AjaxSelect2MultipleWidget(search_fields=['chinese_name__icontains', 'english_name__icontains']),
+            'client': AjaxSelect2Widget("proposals:client-select2",
+                                        create_new=True,
+                                        create_new_url="proposals:client-create"),
+            'agent': AjaxSelect2Widget("proposals:agent-select2",
+                                       create_new=True,
+                                       create_new_url="proposals:agent-create"),
+            'inventor': AjaxSelect2MultipleWidget("proposals:inventor-select2"),
             'application_type': MySelect2Widget(),
             'number_employee': MySelect2Widget(),
             'country': MySelect2Widget(),

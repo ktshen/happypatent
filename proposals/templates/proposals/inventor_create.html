@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block content_title %}Inventor Form{% endblock %}
+{% block title %}Inventor{% endblock %}
+{% block content_title %}Create New Inventor{% endblock %}
+
 {% block css %}
-    <style>
+<style>
     .form-group{
      margin-bottom:10px;
  }
+
 
  input.form-control{
     background-color: #ffffff;
@@ -19,8 +22,7 @@
       padding: 15px;
       border-top-color: #2DA4A4;
   }
-
-    </style>
+</style>
 {% endblock css %}
 {% block content %}
     <div class="box">

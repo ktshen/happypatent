@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% block title %}Agent{% endblock %}
+{% block content_title %}Create New Agent{% endblock %}
 
-{% block content_title %}Agent Form{% endblock %}
 {% block css %}
     <style>
     .form-group{
@@ -41,11 +42,5 @@
    <div class="box">
     {% crispy form %}
    </div>
-
-
-
-
-
-
 
 {% endblock content %}

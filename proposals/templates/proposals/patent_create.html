@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% block title %}Patent{% endblock %}
+{% block content_title %}Create New Application{% endblock %}
 
-{% block content_title %}Patent Form{% endblock %}
 {% block css %}
  <style>
  .form-group{
@@ -23,14 +24,13 @@
 
  </style>
 {% endblock css %}
+
+
+
 {% block content %}
 
     <div class="box">
         {% crispy form %}
-        {% for id, form in modal_form %}
-            {% include "proposals/ajax_modal.html" with id=id form=form %}
-        {% endfor %}
-
     </div>
 
 
@@ -40,4 +40,15 @@
 {% block javascript %}
 <script src="{% static "js/patent-create.js" %}"></script>
 <script src="{% static "js/render-select2.js" %}"></script>
+<script>
+$(document).ready(function(){
+    var s = $("#id_client").find('option[selected="selected"]').attr("value");
+    if(s===undefined || s==="-1"){
+        $("#id_inventor").prop("disabled", true);
+    }
+    $("#id_client").on("select2:select", function(e){
+        $("#id_inventor").prop("disabled", false);
+    });
+})
+</script>
 {% endblock %}

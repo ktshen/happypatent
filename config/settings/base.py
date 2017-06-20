@@ -51,7 +51,6 @@ THIRD_PARTY_APPS = [
     'crispy_forms',  # Form layouts
     'allauth',  # registration
     'allauth.account',  # registration
-    'django_select2',
     'compressor',
     'actstream',
     'django_user_agents',

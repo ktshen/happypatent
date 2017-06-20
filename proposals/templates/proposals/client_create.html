@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-
-
-{% block content_title %}Client Form{% endblock %}
+{% block title %}Client{% endblock %}
+{% block content_title %}Create New Client{% endblock %}
 {% block css %}
  <style>
  .form-group{
@@ -21,17 +20,14 @@
       border-top-color: #2DA4A4;
   }
 
-
-
  </style>
 
 {% endblock css %}
+
 {% block content %}
 
-        <div  class="box ">
-            {% crispy form %}
-        </div>
-
-
+<div  class="box ">
+    {% crispy form %}
+</div>
 
 {% endblock content %}

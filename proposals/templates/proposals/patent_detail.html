@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}Patent{% endblock %}
 {% block content_title %}Patent{% endblock %}
 {% block css %}
     <style>
@@ -76,6 +77,11 @@
       <div class="pull-right">
           <a class="btn btn-default" href="{% url "proposals:patent-create" %}?other_country=true&case_id={{ object.case_id }}" role="button">Apply for other country</a>
           <a class="btn btn-warning" href="{% url "proposals:patent-update" object.case_id %}" role="button">Update</a>
+          <button class="btn btn-danger" id="remove-object">Remove</button>
+          <form action="{% url "proposals:patent-delete" %}" id="remove-form" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="slug_field" value="{{ object.case_id }}">
+          </form>
       </div>
     </div>
     <div class="box-body">
@@ -97,7 +103,7 @@
                     </tr>
                     <tr>
                         <td><strong>Application Type</strong></td>
-                        <td>{{ object.application_type_template }}</td>
+                        <td>{% if object.application_type_template %}{{ object.application_type_template }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Country</strong></td>
@@ -110,6 +116,37 @@
                 <table class="table table-striped">
                 <tbody>
                     <tr>
+                        <td><strong>Applicant</strong></td>
+                        <td>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Client Ref. No.</strong></td>
+                        <td>{% if object.client_ref_no %}{{ object.client_ref_no}}{% else %}None{% endif %}</td>
+                    </tr>
+                    {% for person in object.inventor.all %}
+                        <tr>
+                            <td><strong>Inventor({{ forloop.counter }})</strong></td>
+                            <td><a href="{{ person.get_absolute_url }}">{{ person.chinese_name }}</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td><strong>No inventor in this list.</strong></td>
+                        </tr>
+                    {%endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Case Status</strong></td>
+                        <td>{% if object.case_status %}{{ object.case_status_template }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
                         <td><strong>Control Date</strong></td>
                         <td>{{ object.control_date }}</td>
                     </tr>
@@ -118,16 +155,26 @@
                         <td>{{ object.deadline }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Filing Date</strong></td>
-                        <td>{{ object.filing_date }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Case Status</strong></td>
-                        <td>{{ object.case_status_template }}</td>
-                    </tr>
-                    <tr>
                         <td><strong>Control Item</strong></td>
-                        <td>{{ object.control_item_template }}</td>
+                        <td>{% if object.case_status %}{{ object.control_item_template }}{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+             <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Owner</strong></td>
+                        <td>{% if object.owner %}{{ object.owner }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Agent</strong></td>
+                        <td>{% if object.agent %}<a href="{{ object.agent.get_absolute_url }}">{{ object.agent.agent_title }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Agent Ref. No.</strong></td>
+                        <td>{% if object.agent_ref_no %}{{ object.agent_ref_no }}{% else %}None{% endif %}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -141,6 +188,10 @@
                     <tr>
                         <td><strong>Application No.</strong></td>
                         <td>{% if object.application_no %}{{ object.application_no }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Filing Date</strong></td>
+                        <td>{{ object.filing_date }}</td>
                     </tr>
                     <tr>
                         <td><strong>Publication Date</strong></td>
@@ -222,6 +273,8 @@
                 </tbody>
                 </table>
             </div>
+
+
         </div>
         <hr>
         <div class="row">
@@ -267,66 +320,6 @@
         <hr>
         <div class="row">
             <div class="col-md-6">
-                <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td><strong>Owner</strong></td>
-                        <td>{% if object.owner %}{{ object.owner }}{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Local Agent</strong></td>
-                        <td>{% if object.local_agent%}<a href="{{ object.local_agent.get_absolute_url }}">{{ object.local_agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Foreign Agent</strong></td>
-                        <td>{% if object.foreign_agent %}<a href="{{ object.foreign_agent.get_absolute_url }}">{{ object.foreign_agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-heading"><strong>Inventor</strong></div>
-                  <div class="panel-body">
-                    <ul>
-                    {% for person in object.inventor.all %}
-                        <li>
-                            <p><a href="{{ person.get_absolute_url }}">{{ person.chinese_name }}</a></p>
-                        </li>
-                        {% empty %}
-                        <li>
-                            <p>Sorry, no inventor in this list.</p>
-                        </li>
-                    {%endfor %}
-                    </ul>
-                  </div>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-heading"><strong>Client Info</strong></div>
-                  <div class="panel-body">
-                    <ul>
-                      <li>
-                          <h5>Client's ref. number: </h5>
-                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_id }}</a>{% else %}None{% endif %}</p>
-                      </li>
-                      <li>
-                          <h5>Client name in abbreviated form:</h5>
-                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</p>
-                      </li>
-                      <li>
-                          <h5>Client Chinese Name:</h5>
-                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_ch_name }}</a>{% else %}None{% endif %}</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-            </div>
-            <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Files</strong></div>
                   <div class="panel-body">
@@ -338,9 +331,6 @@
                   </div>
                 </div>
             </div>
-        </div>
-        <hr>
-        <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Remarks</strong></div>
@@ -351,14 +341,10 @@
             </div>
         </div>
     </div>
-    <!-- /.box-body -->
     <div class="box-footer">
         <h5><br/>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
         <h5>Created:<br/>{{ object.created }}</h5>
         <h5>Last updated<br/> {{ object.update }}</h5>
     </div>
-    <!-- /.box-footer-->
 </div>
-
-
 {% endblock content %}
