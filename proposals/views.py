@@ -242,6 +242,10 @@ class PatentUpdateView(LoginRequiredMixin, UpdateView):
     form_class = PatentModelForm
     template_name = "proposals/patent_create.html"
 
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        return super(PatentUpdateView, self).post(request, *args, **kwargs)
+
 
 class PatentListView(LoginRequiredMixin, ListView):
     model = Patent

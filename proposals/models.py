@@ -260,6 +260,7 @@ class Patent(_BaseModel):
     chinese_title = models.CharField(_('Chinese Title'), max_length=100)
     english_title = models.CharField(_('English Title'), max_length=100)
     client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True, blank=True)
+    client_ref_no = models.CharField(_("Client Ref. No."), max_length=15, blank=True)
     application_type = models.CharField(_('Type'), max_length=30,
                                    choices=APPLICATION_TYPE_CHOICES, blank=True)
     country = models.CharField(_('Country'), max_length=30,
@@ -283,6 +284,7 @@ class Patent(_BaseModel):
                                     on_delete=models.SET_NULL, null=True, blank=True)
     foreign_agent = models.ForeignKey(to=Agent, related_name='patent_foreign_agent',
                                       on_delete=models.SET_NULL, null=True, blank=True)
+    agent_ref_no = models.CharField(_("Agent Ref. No."), max_length=15, blank=True)
     pre_decision_date = models.DateField(_('Date of preliminary decision'), blank=True, null=True)
     pre_decision_no = models.CharField(_('Preliminary decision No.'), max_length=30, blank=True)
     re_examine_date = models.DateField(_('Date of re-examination'), blank=True, null=True)
@@ -323,11 +325,13 @@ class Patent(_BaseModel):
             return dict(Patent.CONTROL_ITEM_CHOICES)[self.control_item]
         else:
             return self.control_item
+
     def application_type_template(self):
         if self.application_type:
-         return dict(Patent.APPLICATION_TYPE_CHOICES)[self.application_type]
+            return dict(Patent.APPLICATION_TYPE_CHOICES)[self.application_type]
         else:
             return self.application_type
+
 
 @python_2_unicode_compatible
 class Work(_BaseModel):

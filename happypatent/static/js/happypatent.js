@@ -82,7 +82,7 @@
                 cache: true
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 1,
+            minimumInputLength: 0,
             placeholder: "Type to search..."
         });
     });
@@ -151,9 +151,5 @@
                 alert("Something goes wrong.")
             }
         });
-    });
-    $("#id_inventor").prop("disabled", true);
-    $("#id_client").on("select2:select", function(e){
-        $("#id_inventor").prop("disabled", false);
     });
 });

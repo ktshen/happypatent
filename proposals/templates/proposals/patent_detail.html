@@ -50,24 +50,30 @@
                 <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <td><strong>Owner</strong></td>
-                        <td>{% if object.owner %}{{ object.owner }}{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Local Agent</strong></td>
-                        <td>{% if object.local_agent%}<a href="{{ object.local_agent.get_absolute_url }}">{{ object.local_agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Foreign Agent</strong></td>
-                        <td>{% if object.foreign_agent %}<a href="{{ object.foreign_agent.get_absolute_url }}">{{ object.foreign_agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Client name in abbreviated form</strong></td>
+                        <td><strong>Applicant</strong></td>
                         <td>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</td>
                     </tr>
+                    <tr>
+                        <td><strong>Agent Ref. No.</strong></td>
+                        <td>{% if object.agent_ref_no %}{{ object.agent_ref_no}}{% else %}None{% endif %}</td>
+                    </tr>
+                    {% for person in object.inventor.all %}
+                        <tr>
+                            <td><strong>Inventor({{ forloop.counter }})</strong></td>
+                            <td><a href="{{ person.get_absolute_url }}">{{ person.chinese_name }}</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td><strong>No inventor in this list.</strong></td>
+                        </tr>
+                    {%endfor %}
                 </tbody>
                 </table>
+                <ul>
+
+                </ul>
             </div>
+
 
         </div>
         <hr>
@@ -94,23 +100,28 @@
                 </tbody>
                 </table>
             </div>
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-heading"><strong>Inventor</strong></div>
-                  <div class="panel-body">
-                    <ul>
-                    {% for person in object.inventor.all %}
-                        <li>
-                            <p><a href="{{ person.get_absolute_url }}">{{ person.chinese_name }}</a></p>
-                        </li>
-                        {% empty %}
-                        <li>
-                            <p>Sorry, no inventor in this list.</p>
-                        </li>
-                    {%endfor %}
-                    </ul>
-                  </div>
-                </div>
+             <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td><strong>Owner</strong></td>
+                        <td>{% if object.owner %}{{ object.owner }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Local Agent</strong></td>
+                        <td>{% if object.local_agent%}<a href="{{ object.local_agent.get_absolute_url }}">{{ object.local_agent.agent_title }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Foreign Agent</strong></td>
+                        <td>{% if object.foreign_agent %}<a href="{{ object.foreign_agent.get_absolute_url }}">{{ object.foreign_agent.agent_title }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Agent Ref. No.</strong></td>
+                        <td>{% if object.agent_ref_no %}{{ object.agent_ref_no }}{% else %}None{% endif %}</td>
+                    </tr>
+
+                </tbody>
+                </table>
             </div>
         </div>
         <hr>
@@ -274,7 +285,6 @@
             </div>
         </div>
     </div>
-    <!-- /.box-body -->
     <div class="box-footer">
       <div class="row" >
           <div class="col-sm-4"><h5>Created at {{ object.created }}</h5></div>
@@ -282,8 +292,5 @@
       </div>
       <h5>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
     </div>
-    <!-- /.box-footer-->
 </div>
-
-
 {% endblock content %}

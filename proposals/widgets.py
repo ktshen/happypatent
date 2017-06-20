@@ -1,9 +1,9 @@
 from django.urls import reverse_lazy
-from django.forms import Select
+from django.forms import Select, SelectMultiple
 
 
-class AjaxSelect2Widget(Select):
-    def __init__(self, data_view, attrs={}, choices=(), multiple=False, create_new=False, create_new_url=""):
+class AjaxSelect2Mixin(object):
+    def __init__(self, data_view, attrs={}, choices=(), create_new=False, create_new_url=""):
         attrs["class"] = "form-control ajax-select2"
         attrs["style"] = "width: 100%"
         attrs["data-url"] = reverse_lazy(data_view)
@@ -12,9 +12,18 @@ class AjaxSelect2Widget(Select):
             attrs["create-new-url"] = reverse_lazy(create_new_url)
         else:
             attrs["able-create-new"] = "false"
-        if multiple:
-            attrs["multiple"] = True
-        super(AjaxSelect2Widget, self).__init__(attrs, choices)
+        super(AjaxSelect2Mixin, self).__init__(attrs, choices)
+
+
+class AjaxSelect2Widget(AjaxSelect2Mixin, Select):
+    pass
+
+
+class AjaxSelect2MultipleWidget(AjaxSelect2Mixin, SelectMultiple):
+    pass
+
+
+
 
 
 class MySelect2Widget(Select):
