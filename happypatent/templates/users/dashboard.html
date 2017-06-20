@@ -92,9 +92,7 @@
   </div>
 </div>
 </div>
-{% endblock %}
 
-{% block javascript %}
 <script>
 
 $(document).ready(function() {
@@ -137,7 +135,7 @@ $(document).ready(function() {
                     end: end.unix()
                 },
                 success: function(params) {
-                    var events = [];
+                    let events = [];
                     params.forEach(function(entry){
                         let ev = $('#calendar').fullCalendar('clientEvents', entry["id"]);
                         if (ev.length > 0){
@@ -170,7 +168,7 @@ $(document).ready(function() {
                             }
                         }
                         else if("title" in entry){
-                            var e = {
+                            let e = {
                                 id: entry["id"],
                                 title: entry["title"],
                                 start: new Date(entry["start"]),
@@ -198,7 +196,7 @@ $(document).ready(function() {
             copiedEventObject.backgroundColor = $(this).css("background-color");
             copiedEventObject.borderColor = $(this).css("border-color");
             if(originalEventObject === undefined){
-                return false
+                return false;
             }
             $.ajax({
                 url: "{% url "users:calendar_event_create" %}",
@@ -525,9 +523,7 @@ $(document).ready(function() {
     triggerTimeLine();
     <!--End TimeLine-->
 
-
-
-
 });
 </script>
 {% endblock %}
+
