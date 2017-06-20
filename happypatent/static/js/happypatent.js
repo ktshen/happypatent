@@ -43,12 +43,16 @@
                 autoOpen: true,
                 modal: true,
                 buttons: {
-                    "Delete": function() {
-                       $("form#remove-form").submit();
+                    "Delete": {
+                        click: function() { $("form#remove-form").submit();},
+                        class: "btn btn-danger",
+                        text: "Delete"
                     },
-                    Cancel: function() {
-                      $(this).remove();
-                    }
+                    Cancel: {
+                        click: function() { $(this).remove();},
+                        class: "btn btn-default",
+                        text: "Cancel"
+                    },
                 }
             });
     });
