@@ -1,12 +1,13 @@
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
+from django.views.generic.list import BaseListView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.messages.views import SuccessMessageMixin
-from django_select2.views import AutoResponseView
+from django.core.exceptions import ImproperlyConfigured
 
 from .models import Employee, Patent, Agent, Client, User, FileAttachment, Inventor
 from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
@@ -43,6 +44,44 @@ class _DeleteView(LoginRequiredMixin, DeleteView):
             return self.success_message % dict(field=self.object_name)
         else:
             return "Delete Successfully."
+
+
+class AjaxSelect2View(LoginRequiredMixin, BaseListView):
+    search_fields = []
+    paginate_by = 10
+
+    def get(self, request, *args, **kwargs):
+        try:
+            q = request.GET["q"]
+        except KeyError:
+            return HttpResponseBadRequest("No q in GET.")
+        filter_query = {i : q for i in self.search_fields}
+        if not self.model:
+            raise ImproperlyConfigured("Model parameter is missing. Please define it.")
+        self.object_list = self.get_queryset(filter_query=filter_query)
+        allow_empty = self.get_allow_empty()
+        context = self.get_context_data(object_list=self.object_list)
+        results = []
+        if len(self.object_list):
+            results = [
+                {
+                    'id': obj.pk,
+                    'text': str(obj),
+                }
+                for obj in self.object_list
+            ]
+        else:
+            results.append({
+                    'id': -1,
+                    'text': "Create %s" % q
+                })
+        return JsonResponse({
+            'items': results,
+            'page': context['page_obj'].number
+        }, safe=False)
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(**kwargs["filter_query"])
 
 
 class AjaxableResponseMixin(object):
@@ -88,32 +127,6 @@ class FileAttachmentViewMixin(object):
             instance = FileAttachment(file=file, content_object=self.object)
             instance.save()
         return HttpResponseRedirect(self.get_success_url())
-
-
-class Select2View(AutoResponseView):
-    def get(self, request, *args, **kwargs):
-        self.widget = self.get_widget_or_404()
-        self.term = kwargs.get('term', request.GET.get('term', ''))
-        self.object_list = self.get_queryset()
-        context = self.get_context_data()
-        results = []
-        if len(self.object_list):
-            results = [
-                {
-                    'id': obj.pk,
-                    'text': self.widget.label_from_instance(obj),
-                }
-                for obj in context['object_list']
-            ]
-        elif self.widget.able_ajax_create and self.term:
-            results.append({
-                    'id': -1,
-                    'text': "Create %s" % self.term
-                })
-        return JsonResponse({
-            'results': results,
-            'more': context['page_obj'].has_next()
-        })
 
 
 class EmployeeCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
@@ -176,17 +189,6 @@ class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, UserAppendCreate
 
     def get_context_data(self, **kwargs):
         context = super(PatentCreateView, self).get_context_data(**kwargs)
-        context["modal_form"] = []
-        widgets = self.get_form_class().Meta.widgets
-        for f in widgets.keys():
-            if getattr(widgets[f], "able_ajax_create", None):
-                model_instance = widgets[f].modelform()
-                model_instance.helper.form_id = widgets[f].attrs["modelform_id"]
-                modelform_id = widgets[f].attrs["modelform_id"]
-                context['modal_form'].append([
-                    modelform_id,
-                    model_instance,
-                ])
         context["files"] = FileAttachment.objects.filter()
         return context
 
@@ -282,6 +284,11 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
     form_class = AgentModelForm
 
 
+class AgentSelect2View(AjaxSelect2View):
+    model = Agent
+    search_fields = ["agent_title__icontains"]
+
+
 class ClientCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,
                        SuccessMessageMixin, CreateView):
     model = Client
@@ -323,6 +330,11 @@ class ClientDeleteView(_DeleteView):
     slug_field = "client_id"
     slug_url_kwarg = "client_id"
     success_url = reverse_lazy("proposals:client-list")
+
+
+class ClientSelect2View(AjaxSelect2View):
+    model = Client
+    search_fields = ["client_en_name__icontains", "client_ch_name__icontains"]
 
 
 class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
@@ -370,3 +382,13 @@ class InventorDeleteView(_DeleteView):
     slug_field = 'pk'
     slug_url_kwarg = 'pk'
     success_url = reverse_lazy("proposals:agent-list")
+
+
+class InventorSelect2View(AjaxSelect2View):
+    model = Inventor
+    search_fields = ["chinese_name__istartswith", "english_name__istartswith"]
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(client__client_id=self.request.GET["client_id"])\
+                                 .filter(**kwargs["filter_query"])
+

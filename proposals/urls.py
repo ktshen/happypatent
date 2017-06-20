@@ -13,6 +13,7 @@ urlpatterns = [
                                         name='agent-update'),
     url(r'^agent/list/$', views.AgentListView.as_view(), name='agent-list'),
     url(r'^agent/delete/$', views.AgentDeleteView.as_view(), name='agent-delete'),
+    url(r'^agent/select2/$', views.AgentSelect2View.as_view(), name='agent-select2'),
 
     url(r'^client/create/$', views.ClientCreateView.as_view(), name='client-create'),
     url(r'^client/(?P<client_id>\d+)/detail/$', views.ClientDetailView.as_view(),
@@ -21,6 +22,7 @@ urlpatterns = [
                                              name='client-update'),
     url(r'^client/list/$', views.ClientListView.as_view(), name='client-list'),
     url(r'^client/delete/$', views.ClientDeleteView.as_view(), name='client-delete'),
+    url(r'^client/select2/$', views.ClientSelect2View.as_view(), name='client-select2'),
 
     url(r'^employee/create/$', views.EmployeeCreateView.as_view(), name='employee-create'),
     url(r'^employee/(?P<pk>\d+)/detail/$', views.EmployeeDetailView.as_view(),
@@ -45,6 +47,7 @@ urlpatterns = [
         name='inventor-update'),
     url(r'^inventor/list/$', views.InventorListView.as_view(), name='inventor-list'),
     url(r'^inventor/delete/$', views.InventorDeleteView.as_view(), name='inventor-delete'),
+    url(r'^inventor/select2/$', views.InventorSelect2View.as_view(), name='inventor-select2'),
 
-    url(r"^fields/auto.json$", views.Select2View.as_view(), name="select2-json"),
+    # url(r"^fields/auto.json$", views.Select2View.as_view(), name="select2-json"),
 ]

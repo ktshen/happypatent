@@ -50,6 +50,32 @@
                 <table class="table table-striped">
                 <tbody>
                     <tr>
+                        <td><strong>Owner</strong></td>
+                        <td>{% if object.owner %}{{ object.owner }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Local Agent</strong></td>
+                        <td>{% if object.local_agent%}<a href="{{ object.local_agent.get_absolute_url }}">{{ object.local_agent.agent_title }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Foreign Agent</strong></td>
+                        <td>{% if object.foreign_agent %}<a href="{{ object.foreign_agent.get_absolute_url }}">{{ object.foreign_agent.agent_title }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Client name in abbreviated form</strong></td>
+                        <td>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
+                    <tr>
                         <td><strong>Case Status</strong></td>
                         <td>{% if object.case_status %}{{ object.case_status_template }}{% else %}None{% endif %}</td>
                     </tr>
@@ -67,6 +93,24 @@
                     </tr>
                 </tbody>
                 </table>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Inventor</strong></div>
+                  <div class="panel-body">
+                    <ul>
+                    {% for person in object.inventor.all %}
+                        <li>
+                            <p><a href="{{ person.get_absolute_url }}">{{ person.chinese_name }}</a></p>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <p>Sorry, no inventor in this list.</p>
+                        </li>
+                    {%endfor %}
+                    </ul>
+                  </div>
+                </div>
             </div>
         </div>
         <hr>
@@ -162,6 +206,8 @@
                 </tbody>
                 </table>
             </div>
+
+
         </div>
         <hr>
         <div class="row">
@@ -207,66 +253,6 @@
         <hr>
         <div class="row">
             <div class="col-md-6">
-                <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td><strong>Owner</strong></td>
-                        <td>{% if object.owner %}{{ object.owner }}{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Local Agent</strong></td>
-                        <td>{% if object.local_agent%}<a href="{{ object.local_agent.get_absolute_url }}">{{ object.local_agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Foreign Agent</strong></td>
-                        <td>{% if object.foreign_agent %}<a href="{{ object.foreign_agent.get_absolute_url }}">{{ object.foreign_agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-heading"><strong>Inventor</strong></div>
-                  <div class="panel-body">
-                    <ul>
-                    {% for person in object.inventor.all %}
-                        <li>
-                            <p><a href="{{ person.get_absolute_url }}">{{ person.chinese_name }}</a></p>
-                        </li>
-                        {% empty %}
-                        <li>
-                            <p>Sorry, no inventor in this list.</p>
-                        </li>
-                    {%endfor %}
-                    </ul>
-                  </div>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-heading"><strong>Client Info</strong></div>
-                  <div class="panel-body">
-                    <ul>
-                      <li>
-                          <h5><strong>Client's ref. No.</strong></h5>
-                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_id }}</a>{% else %}None{% endif %}</p>
-                      </li>
-                      <li>
-                          <h5><strong>Client name in abbreviated form</strong></h5>
-                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</p>
-                      </li>
-                      <li>
-                          <h5><strong>Client Chinese Name</strong></h5>
-                          <p>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.client_ch_name }}</a>{% else %}None{% endif %}</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-            </div>
-            <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Files</strong></div>
                   <div class="panel-body">
@@ -278,9 +264,6 @@
                   </div>
                 </div>
             </div>
-        </div>
-        <hr>
-        <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Remarks</strong></div>

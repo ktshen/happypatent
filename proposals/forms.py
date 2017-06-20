@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 from .models import Employee, Patent, Agent, Client, Inventor
-from .widgets import AjaxSelect2MultipleWidget, AjaxSelect2Widget, MySelect2Widget
+from .widgets import AjaxSelect2Widget, MySelect2Widget
 from .utils import file_validate
 
 
@@ -98,16 +98,10 @@ class PatentModelForm(forms.ModelForm):
                   'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks', 'file')
 
         widgets = {
-            'client': AjaxSelect2Widget(search_fields=["client_en_name__icontains", "client_ch_name__icontains"],
-                                        able_ajax_create=True,
-                                        modelform=AjaxClientModelForm),
-            'local_agent': AjaxSelect2Widget(search_fields=["agent_title__icontains"],
-                                             able_ajax_create=True,
-                                             modelform=AjaxAgentModelForm),
-            'foreign_agent': AjaxSelect2Widget(search_fields=["agent_title__icontains", ],
-                                               able_ajax_create=True,
-                                               modelform=AjaxAgentModelForm),
-            'inventor': AjaxSelect2MultipleWidget(search_fields=['chinese_name__icontains', 'english_name__icontains']),
+            'client': AjaxSelect2Widget("proposals:client-select2"),
+            'local_agent': AjaxSelect2Widget("proposals:agent-select2"),
+            'foreign_agent': AjaxSelect2Widget("proposals:agent-select2"),
+            'inventor': AjaxSelect2Widget("proposals:inventor-select2", multiple=True),
             'application_type': MySelect2Widget(),
             'number_employee': MySelect2Widget(),
             'country': MySelect2Widget(),
