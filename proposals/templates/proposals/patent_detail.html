@@ -198,6 +198,10 @@
                         <td>{% if object.extended_days %}{{ object.extended_days }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
+                        <td><strong>Patent Term.</strong></td>
+                        <td>{% if object.patent_term %}{{ object.patent_term }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
                         <td><strong>Publication Date</strong></td>
                         <td>{% if object.publication_date %}{{ object.publication_date }}{% else %}None{% endif %}</td>
                     </tr>
@@ -265,10 +269,6 @@
                     <tr>
                         <td><strong>Date of request examination</strong></td>
                         <td>{% if object.examination_date %}{{ object.examination_date }}{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Patent Term.</strong></td>
-                        <td>{% if object.patent_term %}{{ object.patent_term }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Certificate No.</strong></td>

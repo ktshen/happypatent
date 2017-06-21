@@ -188,11 +188,13 @@ class EmployeeDeleteView(_DeleteView):
 class PatentMixin(object):
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        print(self.request.POST)
         if self.request.POST["patent_term_activation"] == "yes" and self.object.filing_date:
             self.object.patent_term = self.object.filing_date + relativedelta(years=PATENT_AVAILABLE_DURATION)
             if self.request.POST["country"] == "US":
                 self.object.patent_term += relativedelta(days=self.object.extended_days)
+        else:
+            self.object.patent_term = None
+            self.object.extended_days = 0
         return super(PatentMixin, self).form_valid(form)
 
 

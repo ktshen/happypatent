@@ -279,7 +279,7 @@ class Patent(_BaseModel):
 
     application_no = models.CharField(_('Application No.'), max_length=30, blank=True)
     filing_date = models.DateField(_('Filing Date'), blank=True, null=True)
-    extended_days = models.IntegerField("Extended Days (days)", blank=True, default=0)
+    extended_days = models.PositiveIntegerField("Extended Days (days)", blank=True, default=0)
     publication_date = models.DateField(_('Publication Date'), blank=True, null=True)
     publication_no = models.CharField(_('Publication No.'), max_length=30, blank=True)
     patent_date = models.DateField(_('Date of patent'), blank=True, null=True)
@@ -289,9 +289,9 @@ class Patent(_BaseModel):
     pre_decision_no = models.CharField(_('Preliminary decision No.'), max_length=30, blank=True)
     re_examine_date = models.DateField(_('Date of re-examination'), blank=True, null=True)
 
-    description_pages = models.IntegerField(_('Number of description pages'), blank=True, null=True)
-    drawing_pages = models.IntegerField(_('Number of drawing pages'), blank=True, null=True)
-    figures_number = models.IntegerField(_('Number of figures'), blank=True, null=True)
+    description_pages = models.PositiveIntegerField(_('Number of description pages'), blank=True, null=True)
+    drawing_pages = models.PositiveIntegerField(_('Number of drawing pages'), blank=True, null=True)
+    figures_number = models.PositiveIntegerField(_('Number of figures'), blank=True, null=True)
 
     request_examination = models.CharField(_('Request Examination'), max_length=30,
                                            choices=YES_OR_NO, blank=True)
