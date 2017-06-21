@@ -23,9 +23,6 @@ class AjaxSelect2MultipleWidget(AjaxSelect2Mixin, SelectMultiple):
     pass
 
 
-
-
-
 class MySelect2Widget(Select):
     def __init__(self, attrs={}, choices=()):
         attrs["class"] = "form-control select2-js"

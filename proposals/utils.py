@@ -86,4 +86,9 @@ def file_validate(value):
         msg = msg + '.'
         raise ValidationError(msg)
 
+YES_OR_NO = (
+        ('yes', 'Yes'),
+        ('no', 'No')
+    )
+
 

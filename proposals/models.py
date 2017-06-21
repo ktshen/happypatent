@@ -4,11 +4,12 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from happypatent.users.models import BaseProfileModel, User
 from django.utils import timezone
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericRelation
+from happypatent.users.models import BaseProfileModel, User
+from .utils import YES_OR_NO
 
 
 @python_2_unicode_compatible
@@ -219,10 +220,6 @@ class Patent(_BaseModel):
         ('DE', 'DE'),
         ('FR', 'FR'),
     )
-    YES_OR_NO = (
-        ('yes', 'Yes'),
-        ('no', 'No')
-    )
     CASE_STATUS_CHOICES = (
         ('1', _('Draft/Translation')),
         ('2', _('Preliminary examination')),
@@ -259,43 +256,51 @@ class Patent(_BaseModel):
     case_id = models.CharField(_('Case ID'), max_length=30, unique=True)
     chinese_title = models.CharField(_('Chinese Title'), max_length=100)
     english_title = models.CharField(_('English Title'), max_length=100)
-    client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True, blank=True)
-    client_ref_no = models.CharField(_("Client Ref. No."), max_length=15, blank=True)
     application_type = models.CharField(_('Type'), max_length=30,
-                                   choices=APPLICATION_TYPE_CHOICES, blank=True)
+                                        choices=APPLICATION_TYPE_CHOICES, blank=True)
     country = models.CharField(_('Country'), max_length=30,
                                choices=COUNTRY_CHOICES)
-    request_examination = models.CharField(_('Request Examination'), max_length=30,
-                                           choices=YES_OR_NO, blank=True)
-    examination_date = models.DateField(_('Date of request examination'), blank=True, null=True)
+
+    client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True, blank=True)
+    client_ref_no = models.CharField(_("Client Ref. No."), max_length=15, blank=True)
     inventor = models.ManyToManyField(verbose_name=_('Inventor'), to=Inventor, blank=True)
+
     case_status = models.CharField(_('Status'), max_length=30,
                                    choices=CASE_STATUS_CHOICES, blank=True)
-    filing_date = models.DateField(_('Filing Date'), blank=True, null=True)
+    control_date = models.DateField(_('Control Date'), null=True, blank=True)
+    deadline = models.DateField(_('Deadline'), null=True, blank=True)
+    control_item = models.CharField(_('Control Item'), max_length=30,
+                                    choices=CONTROL_ITEM_CHOICES, blank=True)
+
+    owner = models.CharField(_('Owner'), max_length=50, blank=True)
+    agent = models.ForeignKey(verbose_name=_("Agent"), to=Agent, related_name='patent_agent',
+                              on_delete=models.SET_NULL, null=True, blank=True)
+    agent_ref_no = models.CharField(_("Agent Ref. No."), max_length=15, blank=True)
+
     application_no = models.CharField(_('Application No.'), max_length=30, blank=True)
+    filing_date = models.DateField(_('Filing Date'), blank=True, null=True)
+    extended_days = models.IntegerField("Extended Days (days)", blank=True, default=0)
     publication_date = models.DateField(_('Publication Date'), blank=True, null=True)
     publication_no = models.CharField(_('Publication No.'), max_length=30, blank=True)
     patent_date = models.DateField(_('Date of patent'), blank=True, null=True)
     patent_no = models.CharField(_('Patent No.'), max_length=30, blank=True)
-    patent_term = models.DateField(_('Patent Term.'), blank=True, null=True)
-    certificate_no = models.CharField(_('Certificate No.'), max_length=30, blank=True)
 
-    agent = models.ForeignKey(verbose_name=_("Agent"), to=Agent, related_name='patent_agent',
-                              on_delete=models.SET_NULL, null=True, blank=True)
-    agent_ref_no = models.CharField(_("Agent Ref. No."), max_length=15, blank=True)
     pre_decision_date = models.DateField(_('Date of preliminary decision'), blank=True, null=True)
     pre_decision_no = models.CharField(_('Preliminary decision No.'), max_length=30, blank=True)
     re_examine_date = models.DateField(_('Date of re-examination'), blank=True, null=True)
 
-    control_item = models.CharField(_('Control Item'), max_length=30,
-                                    choices=CONTROL_ITEM_CHOICES, blank=True)
-    control_date = models.DateField(_('Control Date'), null=True, blank=True)
-    deadline = models.DateField(_('Deadline'), null=True, blank=True)
-
     description_pages = models.IntegerField(_('Number of description pages'), blank=True, null=True)
     drawing_pages = models.IntegerField(_('Number of drawing pages'), blank=True, null=True)
     figures_number = models.IntegerField(_('Number of figures'), blank=True, null=True)
-    owner = models.CharField(_('Owner'), max_length=50, blank=True)
+
+    request_examination = models.CharField(_('Request Examination'), max_length=30,
+                                           choices=YES_OR_NO, blank=True)
+    examination_date = models.DateField(_('Date of request examination'), blank=True, null=True)
+    patent_term = models.DateField(_('Patent Term.'), blank=True, null=True)
+    patent_term_activation = models.CharField(_('Patent Term. Activation'), max_length=10,
+                                              choices=YES_OR_NO, default="no")
+    certificate_no = models.CharField(_('Certificate No.'), max_length=30, blank=True)
+
     priority = models.CharField(_('Priority'), max_length=30, choices=YES_OR_NO, default='no')
     prio_country = models.CharField(_('(Priority) Country'), max_length=30,
                                     choices=COUNTRY_CHOICES, blank=True)

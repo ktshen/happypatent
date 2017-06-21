@@ -6,7 +6,7 @@ from crispy_forms.layout import Submit,Layout,Div,Fieldset
 
 from .models import Employee, Patent, Agent, Client, Inventor
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
-from .utils import file_validate
+from .utils import file_validate, YES_OR_NO
 
 
 class EmployeeModelForm(forms.ModelForm):
@@ -139,8 +139,8 @@ class PatentModelForm(forms.ModelForm):
         model = Patent
         fields = ('case_id', 'chinese_title', 'english_title', 'client', 'client_ref_no',
                   'application_type', 'country', 'request_examination', 'examination_date',
-                  'inventor', 'case_status', 'filing_date', 'application_no', 'publication_date',
-                  'publication_no', 'patent_date', 'patent_no', 'patent_term', 'certificate_no',
+                  'inventor', 'case_status', 'filing_date', 'extended_days', 'patent_term_activation','application_no',
+                  'publication_date', 'publication_no', 'patent_date', 'patent_no', 'certificate_no',
                   'agent', 'agent_ref_no', 'pre_decision_date', 'pre_decision_no',
                   're_examine_date', 'control_item', 'control_date', 'deadline', 'description_pages',
                   'drawing_pages', 'figures_number', 'owner', 'priority', 'prio_country', 'prio_application_no',
@@ -162,6 +162,7 @@ class PatentModelForm(forms.ModelForm):
             'control_item': MySelect2Widget(),
             'priority': MySelect2Widget(),
             'prio_country': MySelect2Widget(),
+            'patent_term_activation': MySelect2Widget(),
         }
 
 

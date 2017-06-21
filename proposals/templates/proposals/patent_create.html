@@ -40,15 +40,4 @@
 {% block javascript %}
 <script src="{% static "js/patent-create.js" %}"></script>
 <script src="{% static "js/render-select2.js" %}"></script>
-<script>
-$(document).ready(function(){
-    var s = $("#id_client").find('option[selected="selected"]').attr("value");
-    if(s===undefined || s==="-1" || s===''){
-        $("#id_inventor").prop("disabled", true);
-    }
-    $("#id_client").on("select2:select", function(e){
-        $("#id_inventor").prop("disabled", false);
-    });
-})
-</script>
 {% endblock %}

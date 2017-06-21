@@ -57,9 +57,9 @@
                   <td>{{ patent.control_date}}</td>
                   <td>{{ patent.deadline}}</td>
                   {% if request|is_pc %}
-                  <td>{{ patent.case_status_template }}</td>
-                  <td>{{ patent.client.abbr_client }}</td>
-                  <td>{{ patent.agent.agent_title }}</td>
+                  <td>{% if patent.case_status %}{{ patent.case_status_template }}{% else %}None{% endif %}</td>
+                  <td>{% if patent.client %}<a href="{{ patent.client.get_absolute_url }}">{{ patent.client.abbr_client }}</a>{% else %}None{% endif %}</td>
+                  <td>{% if patent.agent %}<a href="{{ patent.agent.get_absolute_url }}">{{ patent.agent.agent_title }}</a>{% else %}None{% endif %}</td>
                   <td>{{ patent.country }}</td>
                   {% endif %}
                 </tr>

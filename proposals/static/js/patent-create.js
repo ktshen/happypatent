@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    //Priority
     function showPriority(){
         $("#div_id_prio_country").show();
         $("#div_id_prio_application_no").show();
@@ -27,4 +27,32 @@ $(document).ready(function() {
         PriorityDecision();
     });
 
+    //client and inventor
+    var s = $("#id_client").find('option[selected="selected"]').attr("value");
+    if(s===undefined || s==="-1" || s===''){
+        $("#id_inventor").prop("disabled", true);
+    }
+    $("#id_client").on("select2:select", function(e){
+        $("#id_inventor").prop("disabled", false);
+    });
+
+    function manage_US(e){
+        if(e===true){
+            $("#div_id_extended_days").show();
+            $("#div_id_IDS_infomation").show();
+        }
+        else{
+            $("#div_id_extended_days").hide();
+            $("#div_id_IDS_infomation").hide();
+            $("#id_extended_days").val("0");
+            $("#id_IDS_infomation").val("");
+        }
+    }
+    //IDS, extended days (US only)
+    $("#id_country").on("select2:select", function(e){
+        if(e.params.data.id==="US") manage_US(true);
+        else manage_US(false);
+    });
+    //fire at start
+    if($("#id_country").find('option[selected="selected"]').val()!=="US") manage_US(false);
 });

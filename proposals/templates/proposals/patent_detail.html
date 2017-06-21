@@ -194,6 +194,10 @@
                         <td>{{ object.filing_date }}</td>
                     </tr>
                     <tr>
+                        <td><strong>Extended Days (days)</strong></td>
+                        <td>{% if object.extended_days %}{{ object.extended_days }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
                         <td><strong>Publication Date</strong></td>
                         <td>{% if object.publication_date %}{{ object.publication_date }}{% else %}None{% endif %}</td>
                     </tr>

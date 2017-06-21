@@ -10,12 +10,14 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.db.models import Q
+from dateutil.relativedelta import relativedelta
 
 from .models import Employee, Patent, Agent, Client, User, FileAttachment, Inventor
 from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
                    AgentModelForm, InventorModelForm
 from .utils import CaseIDGenerator
 
+PATENT_AVAILABLE_DURATION = 20  # Years
 
 def get_model_fields_data(obj):
     return [(field.name, getattr(obj,field.name)) for field in obj._meta.fields]
@@ -129,7 +131,8 @@ class AjaxableResponseMixin(object):
 
 class UserAppendCreateViewMixin(object):
     def form_valid(self, form):
-        self.object = form.save(commit=False)
+        if not self.object:
+            self.object = form.save(commit=False)
         self.object.created_by = User.objects.get(username=self.request.user.username)
         self.object.save()
         response = super(UserAppendCreateViewMixin, self).form_valid(form)
@@ -182,7 +185,18 @@ class EmployeeDeleteView(_DeleteView):
     success_url = reverse_lazy("proposals:employee-list")
 
 
-class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, UserAppendCreateViewMixin,
+class PatentMixin(object):
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        print(self.request.POST)
+        if self.request.POST["patent_term_activation"] == "yes" and self.object.filing_date:
+            self.object.patent_term = self.object.filing_date + relativedelta(years=PATENT_AVAILABLE_DURATION)
+            if self.request.POST["country"] == "US":
+                self.object.patent_term += relativedelta(days=self.object.extended_days)
+        return super(PatentMixin, self).form_valid(form)
+
+
+class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, PatentMixin, UserAppendCreateViewMixin,
                        FileAttachmentViewMixin, CreateView):
     model = Patent
     template_name = 'proposals/patent_create.html'
@@ -240,7 +254,7 @@ class PatentDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "case_id"
 
 
-class PatentUpdateView(LoginRequiredMixin, UpdateView):
+class PatentUpdateView(LoginRequiredMixin, PatentMixin, UpdateView):
     model = Patent
     slug_field = "case_id"
     slug_url_kwarg = "case_id"
