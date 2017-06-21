@@ -43,7 +43,7 @@
                   {% if request|is_pc %}
                   <th>Case status</th>
                   <th>Client</th>
-                  <th>Local Agent</th>
+                  <th>Agent</th>
                   <th>Country</th>
                   {% endif %}
                 </tr>
@@ -59,7 +59,7 @@
                   {% if request|is_pc %}
                   <td>{{ patent.case_status_template }}</td>
                   <td>{{ patent.client.abbr_client }}</td>
-                  <td>{{ patent.local_agent.agent_title }}</td>
+                  <td>{{ patent.agent.agent_title }}</td>
                   <td>{{ patent.country }}</td>
                   {% endif %}
                 </tr>

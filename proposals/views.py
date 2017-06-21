@@ -196,6 +196,7 @@ class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, UserAppendCreate
                 "case_id": self.case_id.split("-")[0],
                 "chinese_title": patent.chinese_title,
                 "english_title": patent.english_title,
+                "inventor": patent.inventor.all()
             }
             if patent.client:
                 init["client"] = patent.client
