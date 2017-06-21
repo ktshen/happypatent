@@ -43,7 +43,7 @@
 <script>
 $(document).ready(function(){
     var s = $("#id_client").find('option[selected="selected"]').attr("value");
-    if(s===undefined || s==="-1"){
+    if(s===undefined || s==="-1" || s===''){
         $("#id_inventor").prop("disabled", true);
     }
     $("#id_client").on("select2:select", function(e){

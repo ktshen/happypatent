@@ -405,6 +405,8 @@ class InventorSelect2View(AjaxSelect2View):
     search_fields = ["chinese_name__istartswith", "english_name__istartswith"]
 
     def get_queryset(self, *args, **kwargs):
+        if not self.request.GET["client_id"]:
+            return HttpResponseBadRequest("Need client_id to get the corresponding inventors.")
         return self.model.objects.filter(client__client_id=self.request.GET["client_id"])\
                                  .filter(kwargs["filter_query"])
 
