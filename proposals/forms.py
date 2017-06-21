@@ -139,7 +139,7 @@ class PatentModelForm(forms.ModelForm):
         model = Patent
         fields = ('case_id', 'chinese_title', 'english_title', 'client', 'client_ref_no',
                   'application_type', 'country', 'request_examination', 'examination_date',
-                  'inventor', 'case_status', 'filing_date', 'extended_days', 'patent_term_activation','application_no',
+                  'inventor', 'case_status', 'filing_date', 'extended_days', 'patent_term', 'application_no',
                   'publication_date', 'publication_no', 'patent_date', 'patent_no', 'certificate_no',
                   'agent', 'agent_ref_no', 'pre_decision_date', 'pre_decision_no',
                   're_examine_date', 'control_item', 'control_date', 'deadline', 'description_pages',

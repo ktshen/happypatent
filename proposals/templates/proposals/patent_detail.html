@@ -252,11 +252,18 @@
                         <td><strong>Patent No.</strong></td>
                         <td>{% if object.patent_no %}{{ object.patent_no }}{% else %}None{% endif %}</td>
                     </tr>
+                    {% if object.country == "US" %}
+                    <tr>
+                        <td><strong>Final Patent Term.</strong></td>
+                        <td>{% if object.final_patent_term %}{{ object.final_patent_term }}{% else %}None{% endif %}</td>
+                    </tr>
+                    {% else %}
                     <tr>
                         <td><strong>Patent Term.</strong></td>
                         <td>{% if object.patent_term %}{{ object.patent_term }}{% else %}None{% endif %}</td>
                     </tr>
-                    {% if not object.country == "US" %}
+                    {% endif %}
+                    {% if object.country == "US" %}
                     <tr>
                         <td><strong>Extended Days (days)</strong></td>
                         <td>{% if object.extended_days %}{{ object.extended_days }}{% else %}None{% endif %}</td>
@@ -303,7 +310,7 @@
                         <td><strong>File-holder position</strong></td>
                         <td>{% if object.file_holder_position %}{{ object.file_holder_position }}{% else %}None{% endif %}</td>
                     </tr>
-                    {% if not object.country == "US" %}
+                    {% if object.country == "US" %}
                     <tr>
                         <td><strong>IDS Information</strong></td>
                         <td>{% if object.IDS_infomation %}{{ object.IDS_infomation }}{% else %}None{% endif %}</td>
@@ -318,7 +325,7 @@
                   <div class="panel-body">
                     <ul>
                         {% for file in object.files.all %}
-                        <li><h5><a href="{{ file.file.url }}" download > download {{ file.filename }}</a></h5></li>
+                        <li><h5><a href="{{ file.file.url }}" download > {{ file.filename }}</a></h5></li>
                         {% endfor %}
                     </ul>
                   </div>

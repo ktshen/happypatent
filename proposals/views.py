@@ -17,8 +17,6 @@ from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
                    AgentModelForm, InventorModelForm
 from .utils import CaseIDGenerator
 
-PATENT_AVAILABLE_DURATION = 20  # Years
-
 def get_model_fields_data(obj):
     return [(field.name, getattr(obj,field.name)) for field in obj._meta.fields]
 
@@ -141,11 +139,11 @@ class UserAppendCreateViewMixin(object):
 
 class FileAttachmentViewMixin(object):
     def form_valid(self, form):
-        super(FileAttachmentViewMixin, self)
+        response = super(FileAttachmentViewMixin, self).form_valid(form)
         for file in self.request.FILES.getlist('file'):
             instance = FileAttachment(file=file, content_object=self.object)
             instance.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return response
 
 
 class EmployeeCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
@@ -188,13 +186,8 @@ class EmployeeDeleteView(_DeleteView):
 class PatentMixin(object):
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        if self.request.POST["patent_term_activation"] == "yes" and self.object.filing_date:
-            self.object.patent_term = self.object.filing_date + relativedelta(years=PATENT_AVAILABLE_DURATION)
-            if self.request.POST["country"] == "US":
-                self.object.patent_term += relativedelta(days=self.object.extended_days)
-        else:
-            self.object.patent_term = None
-            self.object.extended_days = 0
+        if self.object.patent_term and self.object.extended_days and self.object.country == "US":
+            self.object.final_patent_term = self.object.patent_term + relativedelta(days=self.object.extended_days)
         return super(PatentMixin, self).form_valid(form)
 
 
@@ -256,7 +249,7 @@ class PatentDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "case_id"
 
 
-class PatentUpdateView(LoginRequiredMixin, PatentMixin, UpdateView):
+class PatentUpdateView(LoginRequiredMixin, PatentMixin, FileAttachmentViewMixin, UpdateView):
     model = Patent
     slug_field = "case_id"
     slug_url_kwarg = "case_id"

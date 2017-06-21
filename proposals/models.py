@@ -296,8 +296,8 @@ class Patent(_BaseModel):
                                            choices=YES_OR_NO, blank=True)
     examination_date = models.DateField(_('Date of request examination'), blank=True, null=True)
     patent_term = models.DateField(_('Patent Term.'), blank=True, null=True)
-    patent_term_activation = models.CharField(_('Patent Term. Activation'), max_length=10,
-                                              choices=YES_OR_NO, default="no")
+    final_patent_term = models.DateField(_('Final Patent Term.'), blank=True, null=True)
+
     certificate_no = models.CharField(_('Certificate No.'), max_length=30, blank=True)
 
     priority = models.CharField(_('Priority'), max_length=30, choices=YES_OR_NO, default='no')
