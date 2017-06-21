@@ -143,7 +143,7 @@ class PatentModelForm(forms.ModelForm):
                   'publication_date', 'publication_no', 'patent_date', 'patent_no', 'certificate_no',
                   'agent', 'agent_ref_no', 'pre_decision_date', 'pre_decision_no',
                   're_examine_date', 'control_item', 'control_date', 'deadline', 'description_pages',
-                  'drawing_pages', 'figures_number', 'owner', 'priority', 'prio_country', 'prio_application_no',
+                  'drawing_pages', 'figures_number', 'priority', 'prio_country', 'prio_application_no',
                   'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks', 'file')
 
         widgets = {

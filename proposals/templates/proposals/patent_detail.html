@@ -132,7 +132,15 @@
                         <tr>
                             <td><strong>No inventor in this list.</strong></td>
                         </tr>
-                    {%endfor %}
+                    {% endfor %}
+                    <tr>
+                        <td><strong>Agent</strong></td>
+                        <td>{% if object.agent %}<a href="{{ object.agent.get_absolute_url }}">{{ object.agent.agent_title }}</a>{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Agent Ref. No.</strong></td>
+                        <td>{% if object.agent_ref_no %}{{ object.agent_ref_no }}{% else %}None{% endif %}</td>
+                    </tr>
                 </tbody>
                 </table>
             </div>
@@ -161,27 +169,6 @@
                 </tbody>
                 </table>
             </div>
-             <div class="col-md-6">
-                <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td><strong>Owner</strong></td>
-                        <td>{% if object.owner %}{{ object.owner }}{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Agent</strong></td>
-                        <td>{% if object.agent %}<a href="{{ object.agent.get_absolute_url }}">{{ object.agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Agent Ref. No.</strong></td>
-                        <td>{% if object.agent_ref_no %}{{ object.agent_ref_no }}{% else %}None{% endif %}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
             <div class="col-md-6">
                 <table class="table table-striped">
                 <tbody>
@@ -194,12 +181,12 @@
                         <td>{{ object.filing_date }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Extended Days (days)</strong></td>
-                        <td>{% if object.extended_days %}{{ object.extended_days }}{% else %}None{% endif %}</td>
+                        <td><strong>Request Examination</strong></td>
+                        <td>{% if object.request_examination %}{{ object.request_examination }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
-                        <td><strong>Patent Term.</strong></td>
-                        <td>{% if object.patent_term %}{{ object.patent_term }}{% else %}None{% endif %}</td>
+                        <td><strong>Date of request examination</strong></td>
+                        <td>{% if object.examination_date %}{{ object.examination_date }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Publication Date</strong></td>
@@ -209,17 +196,12 @@
                         <td><strong>Publication No.</strong></td>
                         <td>{% if object.publication_no %}{{ object.publication_no }}{% else %}None{% endif %}</td>
                     </tr>
-                    <tr>
-                        <td><strong>Date of patent</strong></td>
-                        <td>{% if object.patent_date %}{{ object.patent_date }}{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Patent No.</strong></td>
-                        <td>{% if object.patent_no %}{{ object.patent_no }}{% else %}None{% endif %}</td>
-                    </tr>
                 </tbody>
                 </table>
             </div>
+        </div>
+        <hr>
+        <div class="row">
             <div class="col-md-6">
                 <table class="table table-striped">
                 <tbody>
@@ -238,9 +220,6 @@
                 </tbody>
                 </table>
             </div>
-        </div>
-        <hr>
-        <div class="row">
             <div class="col-md-6">
                 <table class="table table-striped">
                 <tbody>
@@ -259,17 +238,30 @@
                 </tbody>
                 </table>
             </div>
+        </div>
+        <hr>
+        <div class="row">
             <div class="col-md-6">
                 <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <td><strong>Request Examination</strong></td>
-                        <td>{% if object.request_examination %}{{ object.request_examination }}{% else %}None{% endif %}</td>
+                        <td><strong>Date of patent</strong></td>
+                        <td>{% if object.patent_date %}{{ object.patent_date }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
-                        <td><strong>Date of request examination</strong></td>
-                        <td>{% if object.examination_date %}{{ object.examination_date }}{% else %}None{% endif %}</td>
+                        <td><strong>Patent No.</strong></td>
+                        <td>{% if object.patent_no %}{{ object.patent_no }}{% else %}None{% endif %}</td>
                     </tr>
+                    <tr>
+                        <td><strong>Patent Term.</strong></td>
+                        <td>{% if object.patent_term %}{{ object.patent_term }}{% else %}None{% endif %}</td>
+                    </tr>
+                    {% if object.patent.country == "US" %}
+                    <tr>
+                        <td><strong>Extended Days (days)</strong></td>
+                        <td>{% if object.extended_days %}{{ object.extended_days }}{% else %}None{% endif %}</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <td><strong>Certificate No.</strong></td>
                         <td>{% if object.certificate_no %}{{ object.certificate_no }}{% else %}None{% endif %}</td>
@@ -277,11 +269,6 @@
                 </tbody>
                 </table>
             </div>
-
-
-        </div>
-        <hr>
-        <div class="row">
             <div class="col-md-6">
                 <table class="table table-striped">
                 <tbody>
@@ -306,6 +293,9 @@
                 </tbody>
                 </table>
             </div>
+        </div>
+        <hr>
+        <div class="row">
             <div class="col-md-6">
                 <table class="table table-striped">
                 <tbody>
@@ -313,16 +303,15 @@
                         <td><strong>File-holder position</strong></td>
                         <td>{% if object.file_holder_position %}{{ object.file_holder_position }}{% else %}None{% endif %}</td>
                     </tr>
+                    {% if object.patent.country == "US" %}
                     <tr>
                         <td><strong>IDS Information</strong></td>
                         <td>{% if object.IDS_infomation %}{{ object.IDS_infomation }}{% else %}None{% endif %}</td>
                     </tr>
+                    {% endif %}
                 </tbody>
                 </table>
             </div>
-        </div>
-        <hr>
-        <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Files</strong></div>
@@ -335,6 +324,9 @@
                   </div>
                 </div>
             </div>
+        </div>
+        <hr>
+        <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Remarks</strong></div>

@@ -272,7 +272,6 @@ class Patent(_BaseModel):
     control_item = models.CharField(_('Control Item'), max_length=30,
                                     choices=CONTROL_ITEM_CHOICES, blank=True)
 
-    owner = models.CharField(_('Owner'), max_length=50, blank=True)
     agent = models.ForeignKey(verbose_name=_("Agent"), to=Agent, related_name='patent_agent',
                               on_delete=models.SET_NULL, null=True, blank=True)
     agent_ref_no = models.CharField(_("Agent Ref. No."), max_length=15, blank=True)
