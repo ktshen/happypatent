@@ -4,6 +4,8 @@ from allauth.account.forms import SignupForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
+from proposals.widgets import MySelect2Widget
+
 from .models import User
 
 
@@ -42,4 +44,8 @@ class UserProfileModelForm(forms.ModelForm):
                   'county', 'address', 'home_number', 'mobile_number',
                   'office_number', 'spouse_name', 'education', 'experience',
                   'remarks', 'profile_pic']
+
+        widgets = {
+            "gender": MySelect2Widget()
+        }
 
