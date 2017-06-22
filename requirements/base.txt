@@ -58,4 +58,5 @@ https://github.com/selwin/django-user_agents/archive/master.zip
 django-ckeditor==5.2.2
 
 python-dateutil==2.6.0
+geocoder==1.23.1
 
