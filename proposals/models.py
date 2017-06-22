@@ -103,11 +103,11 @@ class Client(_BaseModel):
 @python_2_unicode_compatible
 class Inventor(_BaseModel):
     chinese_name = models.CharField(_('Chinese name'), max_length=50)
-    english_name = models.CharField(_('English name'), max_length=50)
+    english_name = models.CharField(_('English name (Last Name, First Name)'), max_length=50)
     country = models.CharField(_('Country'), max_length=50)
     post_address = models.CharField(_('Post Office Address'), max_length=100)
     english_address = models.CharField(_('English Address'), max_length=100)
-    phone_number = models.CharField(_('Phone Number'), max_length=50)
+    phone_number = models.CharField(_('Phone Number'), max_length=50, blank=True)
     id_number = models.CharField(_('ID Number'), max_length=20, blank=True)
     email = models.EmailField(blank=True)
     client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
@@ -307,7 +307,7 @@ class Patent(_BaseModel):
     prio_filing_date = models.DateField(_('(Priority) Filing Date'), blank=True, null=True)
 
     file_holder_position = models.CharField(_("File-holder position"), max_length=100, blank=True)
-    IDS_infomation = models.CharField(_('IDS Information'), max_length=100, blank=True)
+    IDS_infomation = models.TextField(_('IDS Information'), max_length=300, blank=True)
     files = GenericRelation(FileAttachment, related_query_name='patent')
 
     def __str__(self):

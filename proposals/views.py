@@ -2,6 +2,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 from django.views.generic.list import BaseListView
+from django.views.generic.base import View
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,6 +12,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.db.models import Q
 from dateutil.relativedelta import relativedelta
+import geocoder
 
 from .models import Employee, Patent, Agent, Client, User, FileAttachment, Inventor
 from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
@@ -59,8 +61,8 @@ class AjaxSelect2View(LoginRequiredMixin, BaseListView):
             return HttpResponseBadRequest("No q in GET.")
         qs = [Q(**{i:q}) for i in self.search_fields]
         filter_query = qs.pop()
-        for q in qs:
-            filter_query |= q
+        for t in qs:
+            filter_query |= t
         if not self.model:
             raise ImproperlyConfigured("Model parameter is missing. Please define it.")
         self.object_list = self.get_queryset(filter_query=filter_query)
@@ -420,3 +422,59 @@ class InventorSelect2View(AjaxSelect2View):
         return self.model.objects.filter(client__client_id=self.request.GET["client_id"])\
                                  .filter(kwargs["filter_query"])
 
+
+class ChineseAddressToEnglishView(View):
+    http_method_names = [u'get']
+
+    def get(self, request, *args, **kwargs):
+        address = self.request.GET.get("address", "")
+        error = ""
+        result = ""
+        if address:
+            google_r = geocoder.google(address).address
+            print(google_r)
+            if not google_r:
+                error = "It is not a valid address."
+            result = self.chinese_to_english(address, google_r)
+        else:
+            error = "Address field is empty."
+        if error:
+            return JsonResponse({"error": error})
+        return JsonResponse({"english_address": result})
+
+    def chinese_to_english(self, address, r):
+        if "No." in r and "號" not in address:
+            a = r.split("No. ")
+            b = a[1].split(", ", 1)[1]
+            r = a[0] + b
+        if "樓" in address:
+            floor = self.find_number(address, address.index("樓"), -1)
+            if "樓之" in address and floor:
+                dash_floor = self.find_number(address, address.index("樓之") + 1, +1)
+                if dash_floor:
+                    r = floor + "F-" + dash_floor + ", " + r
+            elif floor:
+                r = floor + "F" + ", " + r
+        if "室" in address:
+            room = self.find_number(address, address.index("室"), -1)
+            if room:
+                r = "Rm. " + room + ", " + r
+        return r
+
+    @staticmethod
+    def find_number(address, index, no):
+        # find forward: no = -1
+        # find backward: no = +1
+        number = "1234567890"
+        s = ""
+        index += no
+        while len(address) > index >= 0:
+            if address[index] in number:
+                if no == -1:
+                    s = address[index] + s
+                else:
+                    s = s + address[index]
+            else:
+                break
+            index += no
+        return s

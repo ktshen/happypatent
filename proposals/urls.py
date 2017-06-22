@@ -49,5 +49,6 @@ urlpatterns = [
     url(r'^inventor/delete/$', views.InventorDeleteView.as_view(), name='inventor-delete'),
     url(r'^inventor/select2/$', views.InventorSelect2View.as_view(), name='inventor-select2'),
 
-    # url(r"^fields/auto.json$", views.Select2View.as_view(), name="select2-json"),
+    url(r'^chinese_to_english/$', views.ChineseAddressToEnglishView.as_view(), name='chinese-english-address'),
+
 ]

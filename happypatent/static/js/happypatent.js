@@ -160,4 +160,21 @@
             }
         });
     });
+
+    // Use for translating chinese post address to english address
+    $("#div_id_post_address").find("label").append('<a class="btn btn-xs btn-primary" id="translate_address">Try to translate</a>')
+    $("#translate_address").on("click", function(){
+        $.ajax({
+            url: "/proposals/chinese_to_english/",
+            data: {
+                "address": $("#id_post_address").val()
+            },
+            success: function(data){
+                $("#id_english_address").val(data.english_address);
+            },
+            error: function(e){
+                alert("Can't not translate.")
+            }
+        })
+    })
 });
