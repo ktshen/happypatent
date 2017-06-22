@@ -117,40 +117,48 @@
                     width: "50%",
                     position:{ my: "center center", at: "center center", of: $("section.content") },
                     buttons: {
-                        "Submit": function() {
-                            while(feedback_array.length>0){
-                                let ele = feedback_array.pop();
-                                ele.remove();
-                            }
-                            while(parent_div.length>0){
-                                let ele = parent_div.pop();
-                                ele.removeClass("has-error");
-                            }
-                            var error = false;
-                            $("#ajax-modal").find("form").ajaxSubmit({
-                                url: $target.attr("create-new-url"),
-                                dataType:"json",
-                                method: "POST",
-                                success: function (data) {
-                                    let newOption = new Option(data.text, data.id, false, true);
-                                    $target.append(newOption);
-                                    new_modal.remove();
-                                },
-                                error: function (data) {
-                                    error = true;
-                                    for (key in data.responseJSON){
-                                        let $feedback = $('<span class="help-block">'+ data.responseJSON[key] +'</span>');
-                                        let $parent = $('input[name='+ key +']').parents(".form-group").first() ;
-                                        $parent.addClass("has-error").append($feedback);
-                                        parent_div.push($parent);
-                                        feedback_array.push($feedback);
-                                    }
+                        "Submit": {
+                            click: function() {
+                                while(feedback_array.length>0){
+                                    let ele = feedback_array.pop();
+                                    ele.remove();
                                 }
-                            });
+                                while(parent_div.length>0){
+                                    let ele = parent_div.pop();
+                                    ele.removeClass("has-error");
+                                }
+                                var error = false;
+                                $("#ajax-modal").find("form").ajaxSubmit({
+                                    url: $target.attr("create-new-url"),
+                                    dataType:"json",
+                                    method: "POST",
+                                    success: function (data) {
+                                        let newOption = new Option(data.text, data.id, false, true);
+                                        $target.append(newOption);
+                                        new_modal.remove();
+                                    },
+                                    error: function (data) {
+                                        error = true;
+                                        for (key in data.responseJSON){
+                                            let $feedback = $('<span class="help-block">'+ data.responseJSON[key] +'</span>');
+                                            let $parent = $('input[name='+ key +']').parents(".form-group").first() ;
+                                            $parent.addClass("has-error").append($feedback);
+                                            parent_div.push($parent);
+                                            feedback_array.push($feedback);
+                                        }
+                                    }
+                                });
+                            },
+                            class: "btn btn-primary",
+                            text: "Submit"
                         },
-                        Cancel: function() {
-                          $(this).remove();
-                        }
+                        Cancel: {
+                            click: function() {
+                                      $(this).remove();
+                                    },
+                            class: "btn btn-default",
+                            text: "Cancel"
+                        },
                     }
                 });
                 $(new_modal).find('input[type ="submit"]').remove();
