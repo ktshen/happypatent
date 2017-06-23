@@ -431,11 +431,11 @@ class ChineseAddressToEnglishView(View):
         error = ""
         result = ""
         if address:
-            google_r = geocoder.google(address).address
-            if not google_r or not google_r.ok:
+            google_r = geocoder.google(address)
+            if not google_r.address or not google_r.ok:
                 error = "It is not a valid address."
             else:
-                result = self.chinese_to_english(address, google_r)
+                result = self.chinese_to_english(address, google_r.address)
         else:
             error = "Address field is empty."
         if error:
