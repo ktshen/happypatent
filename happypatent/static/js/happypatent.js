@@ -178,7 +178,8 @@
                 "address": $("#id_post_address").val()
             },
             success: function(data){
-                $("#id_english_address").val(data.english_address);
+                if(data.english_address) $("#id_english_address").val(data.english_address);
+                else if (data.error) alert(data.error);
             },
             error: function(e){
                 alert("Can't not translate.")
