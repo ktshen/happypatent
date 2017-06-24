@@ -31,31 +31,35 @@
 
     $(".has-danger").addClass("has-error");
 
-    $("#remove-object").on("click", function() {
+    $("#remove-object").on("click", triggerRemove);
+    $(".remove-objects").on("click", triggerRemove);
+
+    function triggerRemove(){
+        let form_id = $(this).attr("form_id") || "form#remove-form";
         $('<div></div>').appendTo('section.content')
-            .html('<div><p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>This item will be permanently deleted and cannot be recovered. Are you sure?</p></div>')
-            .dialog({
-                resizable: false,
-                height: "auto",
-                title: 'Warning',
-                width: 400,
-                zIndex: 10000,
-                autoOpen: true,
-                modal: true,
-                buttons: {
-                    "Delete": {
-                        click: function() { $("form#remove-form").submit();},
-                        class: "btn btn-danger",
-                        text: "Delete"
-                    },
-                    Cancel: {
-                        click: function() { $(this).remove();},
-                        class: "btn btn-default",
-                        text: "Cancel"
-                    },
-                }
-            });
-    });
+        .html('<div><p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>This item will be permanently deleted and cannot be recovered. Are you sure?</p></div>')
+        .dialog({
+            resizable: false,
+            height: "auto",
+            title: 'Warning',
+            width: 400,
+            zIndex: 10000,
+            autoOpen: true,
+            modal: true,
+            buttons: {
+                "Delete": {
+                    click: function() {$(form_id).submit();},
+                    class: "btn btn-danger",
+                    text: "Delete"
+                },
+                Cancel: {
+                    click: function() { $(this).remove();},
+                    class: "btn btn-default",
+                    text: "Cancel"
+                },
+            }
+        });
+    }
 
     $(".ajax-select2").each(function(index) {
         $(this).select2({

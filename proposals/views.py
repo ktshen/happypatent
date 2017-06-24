@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
@@ -10,14 +11,17 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadReque
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
+from django.contrib import messages
 from django.db.models import Q
 from dateutil.relativedelta import relativedelta
 import geocoder
 
-from .models import Employee, Patent, Agent, Client, User, FileAttachment, Inventor
+from .models import Employee, Patent, Agent, Client, User, FileAttachment, \
+                    Inventor, ControlEvent
 from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
-                   AgentModelForm, InventorModelForm
+                   AgentModelForm, InventorModelForm, ControlEventModelForm
 from .utils import CaseIDGenerator
+
 
 def get_model_fields_data(obj):
     return [(field.name, getattr(obj,field.name)) for field in obj._meta.fields]
@@ -273,6 +277,62 @@ class PatentDeleteView(_DeleteView):
     success_url = reverse_lazy("proposals:patent-list")
 
 
+class ControlEventEditMixin(object):
+    def get_initial(self):
+        if hasattr(self, "patent"):
+            return {"case_id": self.patent.case_id}
+        else:
+            return {}
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.patent = get_object_or_404(Patent, case_id=form.cleaned_data["case_id"])
+        return super(ControlEventEditMixin, self).form_valid(form)
+
+    def get_success_url(self):
+        if self.object.patent:
+            return self.object.patent.get_absolute_url()
+        else:
+            return super(ControlEventEditMixin, self).get_success_url()
+
+
+class ControlEventCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin,
+                             ControlEventEditMixin, CreateView):
+    model = ControlEvent
+    template_name = "proposals/control_event_create.html"
+    form_class = ControlEventModelForm
+
+    def get(self, request, *args, **kwargs):
+        if "case_id" not in request.GET:
+            return HttpResponseBadRequest("There's no case_id in request.")
+        else:
+            self.patent = get_object_or_404(Patent, case_id=request.GET["case_id"])
+        if self.patent.control_event.count() >= 3:
+            messages.add_message(request, messages.WARNING, 'The maximum amount of control event for each patent is 3.')
+            return redirect(self.patent.get_absolute_url())
+        return super(ControlEventCreateView, self).get(request, *args, **kwargs)
+
+
+class ControlEventUpdateView(LoginRequiredMixin, SuccessMessageMixin, ControlEventEditMixin, UpdateView):
+    model = ControlEvent
+    form_class = ControlEventModelForm
+    template_name = "proposals/control_event_create.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.patent = self.object.patent
+        return super(ControlEventUpdateView, self).get(request, *args, **kwargs)
+
+
+class ControlEventDeleteView(_DeleteView):
+    model = ControlEvent
+    slug_field = 'pk'
+    slug_url_kwarg = 'pk'
+
+    def get_success_url(self):
+        return self.object.patent.get_absolute_url()
+
+
 class AgentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,
                       SuccessMessageMixin, CreateView):
     model = Agent
@@ -292,6 +352,14 @@ class AgentDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "agent_id"
 
 
+class AgentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Agent
+    slug_field = "agent_id"
+    slug_url_kwarg = "agent_id"
+    template_name = "proposals/agent_create.html"
+    form_class = AgentModelForm
+
+
 class AgentListView(LoginRequiredMixin, ListView):
     model = Agent
     queryset = Agent.objects.all().order_by("country", "-created")
@@ -302,14 +370,6 @@ class AgentDeleteView(_DeleteView):
     slug_field = 'agent_id'
     slug_url_kwarg = 'agent_id'
     success_url = reverse_lazy("proposals:agent-list")
-
-
-class AgentUpdateView(LoginRequiredMixin, UpdateView):
-    model = Agent
-    slug_field = "agent_id"
-    slug_url_kwarg = "agent_id"
-    template_name = "proposals/agent_create.html"
-    form_class = AgentModelForm
 
 
 class AgentSelect2View(AjaxSelect2View):

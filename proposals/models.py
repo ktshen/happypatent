@@ -101,25 +101,6 @@ class Client(_BaseModel):
 
 
 @python_2_unicode_compatible
-class Inventor(_BaseModel):
-    chinese_name = models.CharField(_('Chinese name'), max_length=50)
-    english_name = models.CharField(_('English name (Last Name, First Name)'), max_length=50)
-    country = models.CharField(_('Country'), max_length=50)
-    post_address = models.CharField(_('Post Office Address'), max_length=100)
-    english_address = models.CharField(_('English Address'), max_length=100)
-    phone_number = models.CharField(_('Phone Number'), max_length=50, blank=True)
-    id_number = models.CharField(_('ID Number'), max_length=20, blank=True)
-    email = models.EmailField(blank=True)
-    client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.chinese_name
-
-    def get_absolute_url(self):
-        return reverse("proposals:inventor-detail", args=[self.pk])
-
-
-@python_2_unicode_compatible
 class Employee(BaseProfileModel, _BaseModel):
     GENDER_CHOICE = (
         ('m', _('Male')),
@@ -176,6 +157,25 @@ class Employee(BaseProfileModel, _BaseModel):
             return dict(Employee.TITLE_ID)[self.title_id]
         else:
             return self.title_id
+
+
+@python_2_unicode_compatible
+class Inventor(_BaseModel):
+    chinese_name = models.CharField(_('Chinese name'), max_length=50)
+    english_name = models.CharField(_('English name (Last Name, First Name)'), max_length=50)
+    country = models.CharField(_('Country'), max_length=50)
+    post_address = models.CharField(_('Post Office Address'), max_length=100)
+    english_address = models.CharField(_('English Address'), max_length=100)
+    phone_number = models.CharField(_('Phone Number'), max_length=50, blank=True)
+    id_number = models.CharField(_('ID Number'), max_length=20, blank=True)
+    email = models.EmailField(blank=True)
+    client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.chinese_name
+
+    def get_absolute_url(self):
+        return reverse("proposals:inventor-detail", args=[self.pk])
 
 
 @python_2_unicode_compatible
@@ -236,22 +236,6 @@ class Patent(_BaseModel):
         ('13', _('Client abandon')),
         ('14', _('Invalidation examination')),
     )
-    CONTROL_ITEM_CHOICES = (
-        ('1', _('File new application')),
-        ('2', _('File Chinese description')),
-        ('3', _('Request examination')),
-        ('4', _('File patent invalidation')),
-        ('5', _('File re-examination')),
-        ('6', _('File amendment')),
-        ('7', _('File response')),
-        ('8', _('Pay issue fee')),
-        ('9', _('Pay maintenance fee')),
-        ('10', _('Pay annuity fee')),
-        ('11', _('File appeal')),
-        ('12', _('File re-appeal')),
-        ('13', _('File administrative litigation')),
-        ('14', _('Other')),
-    )
 
     case_id = models.CharField(_('Case ID'), max_length=30, unique=True)
     chinese_title = models.CharField(_('Chinese Title'), max_length=100)
@@ -267,10 +251,6 @@ class Patent(_BaseModel):
 
     case_status = models.CharField(_('Status'), max_length=30,
                                    choices=CASE_STATUS_CHOICES, blank=True)
-    control_date = models.DateField(_('Control Date'), null=True, blank=True)
-    deadline = models.DateField(_('Deadline'), null=True, blank=True)
-    control_item = models.CharField(_('Control Item'), max_length=30,
-                                    choices=CONTROL_ITEM_CHOICES, blank=True)
 
     agent = models.ForeignKey(verbose_name=_("Agent"), to=Agent, related_name='patent_agent',
                               on_delete=models.SET_NULL, null=True, blank=True)
@@ -322,17 +302,46 @@ class Patent(_BaseModel):
         else:
             return self.case_status
 
-    def control_item_template(self):
-        if self.control_item:
-            return dict(Patent.CONTROL_ITEM_CHOICES)[self.control_item]
-        else:
-            return self.control_item
-
     def application_type_template(self):
         if self.application_type:
             return dict(Patent.APPLICATION_TYPE_CHOICES)[self.application_type]
         else:
             return self.application_type
+
+
+@python_2_unicode_compatible
+class ControlEvent(_BaseModel):
+    CONTROL_ITEM_CHOICES = (
+        ('1', _('File new application')),
+        ('2', _('File Chinese description')),
+        ('3', _('Request examination')),
+        ('4', _('File patent invalidation')),
+        ('5', _('File re-examination')),
+        ('6', _('File amendment')),
+        ('7', _('File response')),
+        ('8', _('Pay issue fee')),
+        ('9', _('Pay maintenance fee')),
+        ('10', _('Pay annuity fee')),
+        ('11', _('File appeal')),
+        ('12', _('File re-appeal')),
+        ('13', _('File administrative litigation')),
+        ('14', _('Other')),
+    )
+    control_item = models.CharField(_('Control Item'), max_length=30,
+                                    choices=CONTROL_ITEM_CHOICES)
+    control_date = models.DateField(_('Control Date'))
+    deadline = models.DateField(_('Deadline'))
+    complete_date = models.DateField(_("Complete Date"), null=True, blank=True)
+    patent = models.ForeignKey(to=Patent, on_delete=models.CASCADE, related_name="control_event", null=True)
+
+    def __str__(self):
+        return str(self.patent) + " " + self.control_item
+
+    def control_item_template(self):
+        if self.control_item:
+            return dict(ControlEvent.CONTROL_ITEM_CHOICES)[self.control_item]
+        else:
+            return self.control_item
 
 
 @python_2_unicode_compatible

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Employee, Agent, Client,  Patent, Work, FileAttachment
+from .models import Employee, Agent, Client,  Patent, Work, FileAttachment, ControlEvent
 
 
 @admin.register(FileAttachment)
@@ -33,11 +33,12 @@ class EmployeeModelAdmin(admin.ModelAdmin):
 
 @admin.register(Patent)
 class PatentModelAdmin(admin.ModelAdmin):
-    list_display = ('case_id', 'chinese_title', 'english_title', 'application_type',
-                    'control_item', 'control_date', 'deadline')
-    list_filter = ('control_item', 'application_type')
+    list_display = ('case_id', 'chinese_title', 'english_title', 'application_type')
+    list_filter = ('application_type',)
     search_fields = ('chinese_title', 'english_title',)
-    date_hierarchy = 'deadline'
-    ordering = ['deadline', 'control_item', 'application_type']
+    ordering = ['application_type']
 
 
+@admin.register(ControlEvent)
+class ControlEventModelAdmin(admin.ModelAdmin):
+    pass

@@ -4,7 +4,7 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit,Layout,Div,Fieldset
 
-from .models import Employee, Patent, Agent, Client, Inventor
+from .models import Employee, Patent, Agent, Client, Inventor, ControlEvent
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
 from .utils import file_validate, YES_OR_NO
 
@@ -23,6 +23,41 @@ class EmployeeModelForm(forms.ModelForm):
         widgets = {
             "gender": MySelect2Widget(),
             "title_id": MySelect2Widget(),
+        }
+
+
+class ClientModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ClientModelForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout.append(Submit('save', 'save'))
+
+    class Meta:
+        model = Client
+        fields = ('abbr_client', 'client_ch_name', 'client_en_name', 'country',
+                  'post_address', 'english_address', 'invoice_address', 'phone_number',
+                  'fax_number', 'contact_person_name', 'contact_person_title',
+                  'contact_person_phone_number', 'contact_person_email', 'repr_chinese_name',
+                  'repr_english_name', 'vat_no', 'number_employee', 'primary_owner',
+                  'secondary_owner', 'status', 'remarks')
+        widgets = {
+            "number_employee": MySelect2Widget(),
+        }
+
+
+class InventorModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(InventorModelForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout.append(Submit('save', 'save'))
+
+    class Meta:
+        model = Inventor
+        fields = ('chinese_name', 'english_name', 'client', 'country', 'post_address',
+                  'english_address', 'phone_number', 'id_number', 'email', 'remarks')
+
+        widgets = {
+            'client': MySelect2Widget(),
         }
 
 
@@ -93,37 +128,6 @@ class AgentModelForm(forms.ModelForm):
         }
 
 
-class AjaxAgentModelForm(AgentModelForm):
-    def __init__(self, *args, **kwargs):
-        super(AjaxAgentModelForm, self).__init__(*args, **kwargs)
-        self.helper.form_action = reverse("proposals:agent-create")
-
-
-class ClientModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ClientModelForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.layout.append(Submit('save', 'save'))
-
-    class Meta:
-        model = Client
-        fields = ('abbr_client', 'client_ch_name', 'client_en_name', 'country',
-                  'post_address', 'english_address', 'invoice_address', 'phone_number',
-                  'fax_number', 'contact_person_name', 'contact_person_title',
-                  'contact_person_phone_number', 'contact_person_email', 'repr_chinese_name',
-                  'repr_english_name', 'vat_no', 'number_employee', 'primary_owner',
-                  'secondary_owner', 'status', 'remarks')
-        widgets = {
-            "number_employee": MySelect2Widget(),
-        }
-
-
-class AjaxClientModelForm(ClientModelForm):
-    def __init__(self, *args, **kwargs):
-        super(AjaxClientModelForm, self).__init__(*args, **kwargs)
-        self.helper.form_action = reverse("proposals:client-create")
-
-
 class PatentModelForm(forms.ModelForm):
     file = forms.FileField(label="Files",
                            widget=forms.ClearableFileInput(attrs={'multiple': True}),
@@ -142,9 +146,9 @@ class PatentModelForm(forms.ModelForm):
                   'inventor', 'case_status', 'filing_date', 'extended_days', 'patent_term', 'application_no',
                   'publication_date', 'publication_no', 'patent_date', 'patent_no', 'certificate_no',
                   'agent', 'agent_ref_no', 'pre_decision_date', 'pre_decision_no',
-                  're_examine_date', 'control_item', 'control_date', 'deadline', 'description_pages',
-                  'drawing_pages', 'figures_number', 'priority', 'prio_country', 'prio_application_no',
-                  'prio_filing_date', 'file_holder_position', 'IDS_infomation', 'remarks', 'file')
+                  're_examine_date', 'description_pages', 'drawing_pages', 'figures_number', 'priority',
+                  'prio_country', 'prio_application_no', 'prio_filing_date', 'file_holder_position',
+                  'IDS_infomation', 'remarks', 'file')
 
         widgets = {
             'client': AjaxSelect2Widget("proposals:client-select2",
@@ -159,24 +163,25 @@ class PatentModelForm(forms.ModelForm):
             'country': MySelect2Widget(),
             'request_examination': MySelect2Widget(),
             'case_status': MySelect2Widget(),
-            'control_item': MySelect2Widget(),
             'priority': MySelect2Widget(),
             'prio_country': MySelect2Widget(),
             'patent_term_activation': MySelect2Widget(),
         }
 
 
-class InventorModelForm(forms.ModelForm):
+class ControlEventModelForm(forms.ModelForm):
+    case_id = forms.CharField(max_length=50, widget=forms.TextInput(attrs={"type":"hidden"}))
+
     def __init__(self, *args, **kwargs):
-        super(InventorModelForm, self).__init__(*args, **kwargs)
+        super(ControlEventModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout.append(Submit('save', 'save'))
 
     class Meta:
-        model = Inventor
-        fields = ('chinese_name', 'english_name', 'client', 'country', 'post_address',
-                  'english_address', 'phone_number', 'id_number', 'email', 'remarks')
-
+        model = ControlEvent
+        fields = ('control_item', 'control_date', 'deadline', "complete_date", "remarks")
         widgets = {
-            'client': MySelect2Widget(),
+            'control_item': MySelect2Widget(),
         }
+
+

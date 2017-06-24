@@ -102,6 +102,10 @@
                         <td>{{ object.english_title }}</td>
                     </tr>
                     <tr>
+                        <td><strong>Case Status</strong></td>
+                        <td>{% if object.case_status %}{{ object.case_status_template }}{% else %}None{% endif %}</td>
+                    </tr>
+                    <tr>
                         <td><strong>Application Type</strong></td>
                         <td>{% if object.application_type_template %}{{ object.application_type_template }}{% else %}None{% endif %}</td>
                     </tr>
@@ -146,28 +150,54 @@
             </div>
         </div>
         <hr>
+
         <div class="row">
+
             <div class="col-md-6">
+                {% for event in object.control_event.all %}
+                <div class="pull-right">
+                    <a class="btn btn-xs btn-warning" href="{% url "proposals:control-event-update" event.pk %}">Update</a>
+                    <button class="btn btn-xs btn-danger remove-objects" form_id="#remove-form-{{ forloop.counter }}">Remove</button>
+                    <form action="{% url "proposals:control-event-delete" %}" id="remove-form-{{ forloop.counter }}" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="slug_field" value="{{ event.pk }}">
+                    </form>
+                </div>
+                <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <td><strong>Control Item({{ forloop.counter }})</strong></td>
+                    <td>{{ event.control_item_template }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Control Date({{ forloop.counter }})</strong></td>
+                    <td>{{ event.control_date }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Deadline({{ forloop.counter }})</strong></td>
+                    <td>{{ event.deadline }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Complete Date({{ forloop.counter }})</strong></td>
+                    <td>{% if event.complete_data %}{{ event.complete_data }}{% else %}None{% endif %}</td>
+                </tr>
+                </tbody>
+                </table>
+                {% if not forloop.last %}
+                <hr>
+                {% endif %}
+                {% empty %}
                 <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <td><strong>Case Status</strong></td>
-                        <td>{% if object.case_status %}{{ object.case_status_template }}{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Control Date</strong></td>
-                        <td>{{ object.control_date }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Deadline</strong></td>
-                        <td>{{ object.deadline }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Control Item</strong></td>
-                        <td>{% if object.control_item %}{{ object.control_item_template }}{% else %}None{% endif %}</td>
+                        <td><strong>No control event yet.</strong></td>
                     </tr>
                 </tbody>
                 </table>
+                {% endfor %}
+
+
+                <a href="{% url "proposals:control-event-create"%}?case_id={{ object.case_id }}" class="btn btn-xs btn-info">Create New Control Event</a>
             </div>
             <div class="col-md-6">
                 <table class="table table-striped">

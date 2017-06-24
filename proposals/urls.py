@@ -49,6 +49,11 @@ urlpatterns = [
     url(r'^inventor/delete/$', views.InventorDeleteView.as_view(), name='inventor-delete'),
     url(r'^inventor/select2/$', views.InventorSelect2View.as_view(), name='inventor-select2'),
 
+    url(r'^control-event/create/$', views.ControlEventCreateView.as_view(), name='control-event-create'),
+    url(r'^control-event/(?P<pk>[-\w]+)/update/$', views.ControlEventUpdateView.as_view(),
+        name='control-event-update'),
+    url(r'^control-event/delete/$', views.ControlEventDeleteView.as_view(), name='control-event-delete'),
+
     url(r'^chinese_to_english/$', views.ChineseAddressToEnglishView.as_view(), name='chinese-english-address'),
 
 ]
