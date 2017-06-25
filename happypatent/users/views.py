@@ -79,11 +79,9 @@ class RetrieveCalendarEvent(LoginRequiredMixin, View):
                 "id": q.patent.pk,
                 "case_id": q.patent.case_id,
                 "url": q.patent.get_absolute_url(),
+                "control_date": q.control_date.strftime("%Y-%m-%d"),
+                "deadline": q.deadline.strftime("%Y-%m-%d")
             }
-            if q.control_date >= start_date and q.control_date <= end_date:
-                e["control_date"] = q.control_date.strftime("%Y-%m-%d")
-            if q.deadline >= start_date and q.deadline <= end_date:
-                e["deadline"] = q.deadline.strftime("%Y-%m-%d")
             events.append(e)
 
         # Get User's Calendar event
