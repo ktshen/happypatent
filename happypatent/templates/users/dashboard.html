@@ -261,7 +261,7 @@ $(document).ready(function() {
             })
         },
         eventRender: function(event, element, view) {
-            if (view.type == "listWeek")
+            if (view.type == "listWeek" && event.description!==undefined)
                 $(element).find("a").after('<div class="pull-right">'+ event.description+'</div>');
         },
         eventAfterRender: function( event, element ){
