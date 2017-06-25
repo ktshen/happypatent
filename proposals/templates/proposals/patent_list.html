@@ -37,8 +37,6 @@
                   <th>Case ID</th>
                   <th>Chinese Title</th>
                   <th>English Title</th>
-                  <th>Control Date</th>
-                  <th>Deadline</th>
                   {% if request|is_pc %}
                   <th>Case status</th>
                   <th>Client</th>
@@ -53,8 +51,6 @@
                   <td><a href="{{ patent.get_absolute_url }}">{{ patent.case_id }}</a></td>
                   <td><a href="{{ patent.get_absolute_url }}">{{ patent.chinese_title }}</a></td>
                   <td>{{ patent.english_title }}</td>
-                  <td>{{ patent.control_date}}</td>
-                  <td>{{ patent.deadline}}</td>
                   {% if request|is_pc %}
                   <td>{% if patent.case_status %}{{ patent.case_status_template }}{% else %}None{% endif %}</td>
                   <td>{% if patent.client %}<a href="{{ patent.client.get_absolute_url }}">{{ patent.client.abbr_client }}</a>{% else %}None{% endif %}</td>
