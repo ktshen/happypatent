@@ -121,7 +121,7 @@ $(document).ready(function() {
             listWeek: { buttonText: 'Week' },
             month: { buttonText: 'Month' }
         },
-        defaultView: 'month',
+        defaultView: 'listWeek',
         navLinks: true, // can click day/week names to navigate views
         editable: true,
         droppable: true,
@@ -142,30 +142,26 @@ $(document).ready(function() {
                             return true;
                         }
                         if("case_id" in entry){
-                            if ("control_date" in entry){
-                                events.push({
-                                    id: entry["id"],
-                                    title: entry["case_id"],
-                                    url: ("url" in entry)? entry.url : undefined,
-                                    editable: false,
-                                    allDay: true,
-                                    start: new Date(entry["control_date"]),
-                                    backgroundColor: "#f39c12", //yellow
-                                    borderColor: "#f39c12" //yellow
-                                });
-                            }
-                            if ("deadline" in entry){
-                                events.push({
-                                    id: entry["id"],
-                                    title: entry["case_id"],
-                                    url: ("url" in entry)? entry.url : undefined,
-                                    editable: false,
-                                    allDay: true,
-                                    start: new Date(entry["deadline"]),
-                                    backgroundColor: "#FF3333", //red
-                                    borderColor: "#FF3333" //red
-                                });
-                            }
+                            let option = {
+                                id: entry["id"],
+                                title: entry["case_id"],
+                                url: ("url" in entry)? entry.url : undefined,
+                                editable: false,
+                                allDay: true,
+                                description: "Control Date: " + entry["control_date"] + ", Deadline: " + entry["deadline"],
+                            };
+                            let control_date_option = {
+                                start: new Date(entry["control_date"]),
+                                backgroundColor: "#f39c12", //yellow
+                                borderColor: "#f39c12", //yellow
+                            };
+                            let deadline_option = {
+                                start : new Date(entry["deadline"]),
+                                backgroundColor: "#FF3333", //red
+                                borderColor: "#FF3333", //red
+                            };
+                            events.push($.extend(true, control_date_option, option));
+                            events.push($.extend(true, deadline_option, option));
                         }
                         else if("title" in entry){
                             let e = {
@@ -264,8 +260,14 @@ $(document).ready(function() {
                 data: {"id": event.id, "end": event.end._d.toUTCString()},
             })
         },
+        eventRender: function(event, element, view) {
+            if (view.type == "listWeek")
+                $(element).find("a").after('<div class="pull-right">'+ event.description+'</div>');
+        },
         eventAfterRender: function( event, element ){
-          $(element).tooltip({title:event.title, html: true, container: "body"});
+            let title_html = "<h4><strong>" + event.title +"</strong></h4>";
+            if(event.description!==undefined) title_html += "<p><small>"+ event.description +"</small></p>";
+            $(element).tooltip({title:title_html, html: true, container: "body"});
         },
     });
 
@@ -285,7 +287,6 @@ $(document).ready(function() {
             var eventObject = {
               title: $.trim($(this).text()) // use the element's text as the event title
             };
-
             // store the Event Object in the DOM element so we can get to it later
             $(this).data('eventObject', eventObject);
 

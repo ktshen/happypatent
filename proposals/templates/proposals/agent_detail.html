@@ -81,8 +81,8 @@
     <div class="box-header with-border">
       <h3 id="agent-title" class="box-title ">{{ object.agent_title }}</h3>
       <div class="pull-right">
-          <a class="btn btn-warning" href="{% url "proposals:agent-update" object.agent_id %}" role="button">Update</a>
           {% if request.user == object.created_by  %}
+          <a class="btn btn-warning" href="{% url "proposals:agent-update" object.agent_id %}" role="button">Update</a>
           <button class="btn btn-danger" id="remove-object">Remove</button>
           <form action="{% url "proposals:agent-delete" %}" id="remove-form" method="post">
               {% csrf_token %}

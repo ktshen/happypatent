@@ -265,9 +265,7 @@ class PatentUpdateView(LoginRequiredMixin, PatentMixin, FileAttachmentViewMixin,
 
 class PatentListView(LoginRequiredMixin, ListView):
     model = Patent
-
-    def get_queryset(self):
-        return self.model.objects.filter(created_by__username=self.request.user.username).order_by('-update', '-created')
+    ordering = ['-update', '-created']
 
 
 class PatentDeleteView(_DeleteView):

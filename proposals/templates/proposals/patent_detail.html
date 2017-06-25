@@ -4,7 +4,7 @@
 {% block title %}Patent{% endblock %}
 {% block content_title %}Patent{% endblock %}
 {% block css %}
-    <style>
+<style>
         #patent-title{
              color: #2BB4B4;
              margin-top:0.8%;
@@ -15,14 +15,14 @@
              width: 87%;
              margin: 0 auto;
         }
-      .table.table-striped{
+        .table.table-striped{
         border: 2px solid #f9f9f9;
         }
 
         .table-striped > tbody > tr:first-child >td{
             border-top: 2px solid #f9f9f9
         }
-     .box-footer > h5:first-child{
+        .box-footer > h5:first-child{
             float:left;
             color: #777;
         }
@@ -43,12 +43,12 @@
             padding-right:3%;
             color: #777;
         }
-    .panel-default{
-      border: 2px solid #f9f9f9;
-      border-radius: 0px;
-      -webkit-box-shadow: none;
-              box-shadow: none;
-  }
+        .panel-default{
+            border: 2px solid #f9f9f9;
+            border-radius: 0px;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
   .panel-default .panel-body{
       border-top-color: #f9f9f9;
       border-top-width: 2px;
@@ -67,7 +67,7 @@
       border-top-right-radius: 0;
 
    }
-    </style>
+</style>
 {% endblock css %}
 
 {% block content %}
@@ -76,12 +76,14 @@
       <h3 id="patent-title" class="box-title ">{{ object.case_id }}</h3>
       <div class="pull-right">
           <a class="btn btn-default" href="{% url "proposals:patent-create" %}?other_country=true&case_id={{ object.case_id }}" role="button">Apply for other country</a>
+          {% if object.created_by == request.user %}
           <a class="btn btn-warning" href="{% url "proposals:patent-update" object.case_id %}" role="button">Update</a>
           <button class="btn btn-danger" id="remove-object">Remove</button>
           <form action="{% url "proposals:patent-delete" %}" id="remove-form" method="post">
               {% csrf_token %}
               <input type="hidden" name="slug_field" value="{{ object.case_id }}">
           </form>
+          {% endif %}
       </div>
     </div>
     <div class="box-body">
@@ -155,6 +157,7 @@
 
             <div class="col-md-6">
                 {% for event in object.control_event.all %}
+                {% if object.created_by == request.user %}
                 <div class="pull-right">
                     <a class="btn btn-xs btn-warning" href="{% url "proposals:control-event-update" event.pk %}">Update</a>
                     <button class="btn btn-xs btn-danger remove-objects" form_id="#remove-form-{{ forloop.counter }}">Remove</button>
@@ -163,6 +166,7 @@
                       <input type="hidden" name="slug_field" value="{{ event.pk }}">
                     </form>
                 </div>
+                {% endif %}
                 <table class="table table-striped">
                 <tbody>
                 <tr>
@@ -179,7 +183,7 @@
                 </tr>
                 <tr>
                     <td><strong>Complete Date({{ forloop.counter }})</strong></td>
-                    <td>{% if event.complete_data %}{{ event.complete_data }}{% else %}None{% endif %}</td>
+                    <td>{% if event.complete_date %}{{ event.complete_date }}{% else %}None{% endif %}</td>
                 </tr>
                 </tbody>
                 </table>
