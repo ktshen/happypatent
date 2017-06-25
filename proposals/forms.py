@@ -46,6 +46,8 @@ class ClientModelForm(forms.ModelForm):
 
 
 class InventorModelForm(forms.ModelForm):
+    client_id = forms.CharField(max_length=50, widget=forms.TextInput(attrs={"type": "hidden"}))
+
     def __init__(self, *args, **kwargs):
         super(InventorModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -53,12 +55,8 @@ class InventorModelForm(forms.ModelForm):
 
     class Meta:
         model = Inventor
-        fields = ('chinese_name', 'english_name', 'client', 'country', 'post_address',
+        fields = ('chinese_name', 'english_name', 'country', 'post_address',
                   'english_address', 'phone_number', 'id_number', 'email', 'remarks')
-
-        widgets = {
-            'client': MySelect2Widget(),
-        }
 
 
 class AgentModelForm(forms.ModelForm):

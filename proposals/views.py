@@ -423,20 +423,35 @@ class ClientSelect2View(AjaxSelect2View):
     search_fields = ["client_en_name__icontains", "client_ch_name__icontains"]
 
 
-class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
+class InventorEditMixin(object):
+    def get_initial(self):
+        if self.request.method == "GET":
+            if "client_id" in self.request.GET:
+                client_id = self.request.GET["client_id"]
+                client = Client.objects.get(client_id=client_id)
+                return {"client_id": client.client_id,
+                        "post_address": client.post_address,
+                        "english_address": client.english_address}
+            elif self.object and hasattr(self.object, "client"):
+                client_id = self.object.client.client_id
+                return {"client_id": client_id}
+            else:
+                return HttpResponseBadRequest("Can't find client_id.")
+        else:
+            return self.initial.copy()
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.client = get_object_or_404(Client, client_id=form.cleaned_data["client_id"])
+        return super(InventorEditMixin, self).form_valid(form)
+
+
+class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin,
+                         InventorEditMixin, CreateView):
     model = Inventor
     template_name = "proposals/inventor_create.html"
     form_class = InventorModelForm
     success_message = "%(chinese_name)s was created successfully."
-
-    def get_initial(self):
-        try:
-            client = Client.objects.get(client_id=self.request.GET["client_id"])
-        except Client.DoesNotExist:
-            return HttpResponseBadRequest("Client specified doesn't not exist.")
-        return {"client": client,
-                "post_address": client.post_address,
-                "english_address": client.english_address}
 
     def get(self, request, *args, **kwargs):
         if not "client_id" in request.GET:
@@ -453,7 +468,7 @@ class InventorDetailView(LoginRequiredMixin, DetailView):
     model = Inventor
 
 
-class InventorUpdateView(LoginRequiredMixin, UpdateView):
+class InventorUpdateView(LoginRequiredMixin, InventorEditMixin, UpdateView):
     model = Inventor
     template_name = "proposals/inventor_create.html"
     form_class = InventorModelForm
@@ -467,7 +482,9 @@ class InventorDeleteView(_DeleteView):
     model = Inventor
     slug_field = 'pk'
     slug_url_kwarg = 'pk'
-    success_url = reverse_lazy("proposals:agent-list")
+
+    def get_success_url(self):
+        return self.object.client.get_absolute_url()
 
 
 class InventorSelect2View(AjaxSelect2View):
