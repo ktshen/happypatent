@@ -1,13 +1,13 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import DetailView, ListView, RedirectView, UpdateView, TemplateView, View
+from django.views.generic import DetailView, RedirectView, UpdateView, TemplateView, View
 from django.shortcuts import redirect, render_to_response
-from django.http.response import HttpResponse, Http404, JsonResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from datetime import datetime
 from .models import User, CalendarEvent
 from .forms import UserProfileModelForm
-from proposals.models import Patent, Agent, Client, Employee
+from proposals.models import Patent, Agent, Client, Employee, ControlEvent
 from billboard.models import Post, Comment
 from django.utils.timezone import utc
 
@@ -68,15 +68,17 @@ class RetrieveCalendarEvent(LoginRequiredMixin, View):
         events = []
 
         # Get patent objects, which deadline or control date is within start and end date.
-        qs = Patent.objects.filter(
+        qs = ControlEvent.objects.filter(
             Q(created_by__username=username) &
-            (Q(control_date__range=(start_date, end_date)) | Q(deadline__range=(start_date, end_date)))
+            (Q(control_date__range=(start_date, end_date)) |
+             Q(deadline__range=(start_date, end_date))) &
+            Q(complete_date__isnull=True)
         )
         for q in qs:
             e = {
-                "id": q.pk,
-                "case_id": q.case_id,
-                "url": q.get_absolute_url(),
+                "id": q.patent.pk,
+                "case_id": q.patent.case_id,
+                "url": q.patent.get_absolute_url(),
             }
             if q.control_date >= start_date and q.control_date <= end_date:
                 e["control_date"] = q.control_date.strftime("%Y-%m-%d")
@@ -205,12 +207,3 @@ class TimeLineAjaxView(LoginRequiredMixin, View):
             }
             response.append(e)
         return JsonResponse(response, safe=False)
-
-
-
-
-
-
-
-
-
