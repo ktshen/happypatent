@@ -185,6 +185,12 @@
                     <td><strong>Complete Date({{ forloop.counter }})</strong></td>
                     <td>{% if event.complete_date %}{{ event.complete_date }}{% else %}None{% endif %}</td>
                 </tr>
+                {% if event.remarks %}
+                <tr>
+                    <td><strong>Remarks({{ forloop.counter }})</strong></td>
+                    <td>{{ event.remarks }}</td>
+                </tr>
+                {% endif %}
                 </tbody>
                 </table>
                 {% if not forloop.last %}
@@ -199,8 +205,6 @@
                 </tbody>
                 </table>
                 {% endfor %}
-
-
                 <a href="{% url "proposals:control-event-create"%}?case_id={{ object.case_id }}" class="btn btn-xs btn-info">Create New Control Event</a>
             </div>
             <div class="col-md-6">

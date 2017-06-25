@@ -67,7 +67,7 @@ class RetrieveCalendarEvent(LoginRequiredMixin, View):
         end_date = datetime.utcfromtimestamp(float(request.GET['end'])).date()
         events = []
 
-        # Get patent objects, which deadline or control date is within start and end date.
+        # Get control event objects, which deadline or control date is within start and end date.
         qs = ControlEvent.objects.filter(
             Q(created_by__username=username) &
             (Q(control_date__range=(start_date, end_date)) |
@@ -75,12 +75,18 @@ class RetrieveCalendarEvent(LoginRequiredMixin, View):
             Q(complete_date__isnull=True)
         )
         for q in qs:
+            control_date = q.control_date.strftime("%Y-%m-%d")
+            deadline = q.deadline.strftime("%Y-%m-%d")
             e = {
                 "id": q.patent.pk,
                 "case_id": q.patent.case_id,
                 "url": q.patent.get_absolute_url(),
-                "control_date": q.control_date.strftime("%Y-%m-%d"),
-                "deadline": q.deadline.strftime("%Y-%m-%d")
+                "control_date": control_date,
+                "deadline": deadline,
+                "description": "<strong>Control Item</strong>: %s, <strong>Control Date</strong>: %s, "
+                               "<strong>Deadline</strong>: %s" % (
+                    q.control_item_template(), control_date, deadline
+                ),
             }
             events.append(e)
 
