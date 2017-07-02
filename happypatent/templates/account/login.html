@@ -3,11 +3,35 @@
 {% load i18n %}
 {% load account %}
 {% load crispy_forms_tags %}
+{% block css %}
+    <style>
+    .box{
+        width: 80%;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 10px 70px 20px 100px;
+        box-shadow:none;
+    }
+    .form-control{
+        width:85%;
+    }
+    @media (max-width: 767px) {
+        .box {
+            width: 95%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+    }
+
+    </style>
+{% endblock %}
 
 {% block title %}{% trans "Sign In" %}{% endblock %}
 
 {% block inner %}
-
+ <div class="box box-solid">
+ <div class="row">
+ <div class="col-xs-12 col-md-offset-1">
 <h1>{% trans "Sign In" %}</h1>
 
 <p>{% blocktrans %}If you have not created an account yet, then please
@@ -23,6 +47,9 @@
   <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
   <button class="primaryAction btn btn-primary" type="submit">{% trans "Sign In" %}</button>
 </form>
+ </div>
+ </div>
+ </div>
 
 {% endblock %}
 

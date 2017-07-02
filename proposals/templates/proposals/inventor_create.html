@@ -7,21 +7,68 @@
 {% block css %}
 <style>
     .form-group{
-     margin-bottom:10px;
- }
+        margin-bottom:10px;
+        width:46%;
+    }
+
+    .form_wrap{
+        display:flex;
+        flex-direction:row;
+    }
+{#    .related{#}
+{#        padding:10px 10px 10px 30px;#}
+{#        border-bottom: #9cd1cc solid 1px;#}
+{#        margin-bottom: 7px;#}
+{#        border-bottom-left-radius: 2px;#}
+{#        border-bottom-right-radius: 1px ;#}
+{#    }#}
+{#    .remark_wrap{#}
+{#        padding:10px 10px 10px 25px;#}
+{#    }#}
+    .form_wrap > .form-group:nth-child(2){
+        margin-left:2%;
+    }
+
+    input.form-control{
+        background-color: #ffffff;
+    }
+    .box{
+        width: 90%;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 15px;
+        border-top-color: #2DA4A4;
+    }
+
+     @media screen and (max-width: 767px){
+        .box{
+            width: 95%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .form_wrap{
+            display:block;
+        }
+        .form-group{
+            width:100%;
+        }
+        .form_wrap > .form-group:nth-child(2){
+            margin-left:0;
+        }
+{#        .related{#}
+{#            padding:0;#}
+{#            border-bottom:none;#}
+{#            margin-bottom: 0;#}
+{#            border-bottom-left-radius: 0;#}
+{#            border-bottom-right-radius: 0;#}
+{#        }#}
+{#        .remark_wrap {#}
+{#            padding: 0;#}
+{#        }#}
 
 
- input.form-control{
-    background-color: #ffffff;
- }
- .box{
-      width: 75%;
-      margin: 0 auto;
-
-      background: #ffffff;
-      padding: 15px;
-      border-top-color: #2DA4A4;
-  }
+    }
 </style>
 {% endblock css %}
 {% block content %}

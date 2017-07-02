@@ -48,6 +48,94 @@
         .ui-dialog-titlebar-close {
             visibility: hidden;
         }
+        .main-sidebar{
+            padding-top:0px;
+        }
+        .main-sidebar .bkg-holder{
+            height:50px;
+            background-color:#39CCCC;
+            border-right:1px solid #fff6;
+        }
+
+        .main-header .navbar {
+            margin-bottom: 0;
+            display: flex;
+            justify-content: space-between;
+
+        }
+        .navbar:after,.navbar:before{
+            content:normal;
+        }
+        .main-header .navbar-custom-menu,
+        .main-header .sidebar-toggle{
+            float:none;
+        }
+        .main-header .nonuser-navbar .navbar{
+            padding-left:230px;
+            margin-left:0px;
+        }
+        .content-header{
+            min-height: 40px;
+        }
+        .content-header > h1 {
+            position: relative;
+            top:-5px;
+        }
+        .main-header .nonuser-navbar .logo > .logo-small {
+                display: none;
+            }
+        @media(min-width: 0px ) {
+            .sidebar-mini.sidebar-collapse .main-header .logo,
+            .sidebar-mini.sidebar-collapse .main-header .logo > .logo-lg,
+            .main-header .logo {
+                -webkit-transition: none;
+                -o-transition: none;
+                transition: none;
+                display: block;
+                float: none;
+                height: 50px;
+                font-size: 20px;
+                line-height: 50px;
+                text-align: center;
+                width: 230px;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                padding: 0 15px;
+                font-weight: 300;
+                overflow: hidden;
+            }
+        }
+        @media(max-width:767px){
+            .main-header .navbar{
+                margin-left:0;
+            }
+            .fixed .content-wrapper{
+                padding-top:50px;
+            }
+            .main-header .nonuser-navbar .navbar{
+                justify-content: center;
+                padding-left: 0;
+            }
+        }
+        @media(max-width:442px) {
+            .main-header .nonuser-navbar .logo > .logo-lg {
+                display: none;
+            }
+            .main-header .nonuser-navbar .logo > .logo-small,
+            .main-header .nonuser-navbar .logo {
+                width: 50px;
+                height: 50px;
+                padding: 0px 5px 5px 5px;
+                display:block;
+            }
+        }
+        @media(min-width:767px){
+            .main-header .sidebar-toggle{
+                visibility:hidden;
+            }
+        }
+
+
+{##ecf0f5#}
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -99,22 +187,21 @@
   <!-- Main Header -->
   <header class="main-header">
 
-    <!-- Logo -->
-    <a href="{% url "users:home" %}" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>H</b>P</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>HAPPY</b>Patent</span>
-    </a>
-
     <!-- Header Navbar -->
     {% if request.user.is_authenticated %}
+    <div class="navbar-wrapper">
     <nav class="navbar navbar-static-top" role="navigation">
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
-      <!-- Navbar Right Menu -->
+        <!-- Logo -->
+      <a href="{% url "users:home" %}" class="logo">
+     <!-- logo for regular state and mobile devices -->
+{#      <span class="logo-small"><b>HP</b></span>#}
+      <span class="logo-lg"><b>HAPPY</b>Patent</span>
+    </a>
+          <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- User Account Menu -->
@@ -148,11 +235,21 @@
           </li>
         </ul>
       </div>
+
     </nav>
+    </div>
     {% else %}
+    <div class="nonuser-navbar">
     <nav class="navbar navbar-static-top" role="navigation">
+        <span></span>
+      <!-- Logo -->
+       <a href="{% url "users:home" %}" class="logo">
+       <!-- logo for regular state and mobile devices -->
+           <span class="logo-small"><b>HP</b></span>
+          <span class="logo-lg"><b>HAPPY</b>Patent</span>
+       </a>
       <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
+       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
             <li class="nav-item">
                 <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
@@ -166,12 +263,15 @@
         </ul>
       </div>
     </nav>
+    </div>
     {% endif %}
   </header>
 
     {% if request.user.is_authenticated %}
         <!-- Left side column. contains the logo and sidebar -->
     <aside class="main-sidebar">
+        <!--bkg-holder: main-header extension-->
+        <div class="bkg-holder"></div>
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <!-- Sidebar Menu -->
@@ -255,7 +355,8 @@
     <div class="content-wrapper" >
         <!-- Content Header (Page header) -->
         <section class="content-header">
-          {% if messages %}
+           <h1><small>{% block content_title %}{% endblock %}</small></h1>
+            {% if messages %}
               {% for message in messages %}
                   <div class="alert alert-{{ message.tags }} alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -265,9 +366,6 @@
               {% endfor %}
           {% endif %}
 
-          <h1>
-            <small style="vertical-align: text-top">{% block content_title %}{% endblock %}</small>
-          </h1>
         </section>
 
         <!-- Main content -->
@@ -291,7 +389,7 @@
         {% endif %}
 
     <div class="container-fluid" style="margin-top: 50px">
-        <div class="col-md-5 col-md-offset-3">
+
             {% block inner %}
             {% endblock %}
         </div>

@@ -5,34 +5,51 @@
 {% block content_title %}Create New Agent{% endblock %}
 
 {% block css %}
+
     <style>
+
     .form-group{
         margin-bottom:10px;
         width:46%;
-
-
     }
 
-{#    .form-wrap > .form-group:first-child{#}
-{#       #}
-{#    }#}
+    .form_wrap{
+        display:flex;
+        flex-direction:row;
+    }
 
-    .form-wrap > .form-group:nth-child(2){
+    .form_wrap > .form-group:nth-child(2){
         margin-left:5%;
     }
 
-{#    .except .form-group{#}
-{#        width:100%;#}
-{#    }#}
+
     input.form-control{
         background-color: #ffffff;
     }
     .box{
-        width: 75%;
+        width: 90%;
         margin: 0 auto;
         background: #ffffff;
         padding: 30px;
         border-top-color: #2DA4A4;
+    }
+
+     @media screen and (max-width: 767px){
+        .box{
+            width: 95%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .form_wrap{
+            display:block;
+        }
+        .form-group{
+            width:100%;
+        }
+        .form_wrap > .form-group:nth-child(2){
+            margin-left:0;
+        }
     }
 
     </style>

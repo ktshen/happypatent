@@ -1,6 +1,61 @@
 {% extends "base.html" %}
+{% block css %}
+    <style>
+    .box{
+        width: 80%;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 10px 70px 20px 100px;
+        box-shadow:none;
+    }
+    .form-control{
+        width:85%;
+    }
+    .logo-wrap{
+        display:flex;
+        justify-content: space-around;
+        text-align: center;
+    }
+    .glyphicon{
+        top:25px;
+        font-size: 20px;
 
+    }
+{#    .logo-wrap >#}
+
+    @media (max-width: 767px) {
+        .box {
+            width: 95%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        .logo-wrap > h1{
+            font-size:25px;
+{#            text-align:center;#}
+        }
+    }
+
+
+    </style>
+{% endblock %}
 {% block inner %}
-    <h1>Home</h1>
-    <p>Please Login.</p>
+
+    <div class="box box-solid">
+        <div class="row">
+            <div class="col-xs-12 ">
+                <div class="logo-wrap">
+                  <span class="glyphicon glyphicon-tower"> </span>
+                    <h1 >Welcome to HappyPatent</h1>
+                  <span class="glyphicon glyphicon-tower"> </span>
+                </div>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-xs-12 col-xs-offset-4">
+                    <p>Please Login.</p>
+                </div>
+
+
+
+    </div>
 {% endblock %}
