@@ -381,7 +381,7 @@ class PatentModelForm(forms.ModelForm):
 
                     Div(
                         'file_holder_position',
-                        'IDS_infomation',
+                        'IDS_information',
                         css_class="form_wrap"
                     ),
                     css_class="related"
@@ -407,7 +407,7 @@ class PatentModelForm(forms.ModelForm):
                   'agent', 'agent_ref_no', 'pre_decision_date', 'pre_decision_no',
                   're_examine_date', 'description_pages', 'drawing_pages', 'figures_number', 'priority',
                   'prio_country', 'prio_application_no', 'prio_filing_date', 'file_holder_position',
-                  'IDS_infomation', 'remarks', 'file')
+                  'IDS_information', 'remarks', 'file')
 
         widgets = {
             'client': AjaxSelect2Widget("proposals:client-select2",

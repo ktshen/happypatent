@@ -288,7 +288,7 @@ class Patent(_BaseModel):
     prio_filing_date = models.DateField(_('(Priority) Filing Date'), blank=True, null=True)
 
     file_holder_position = models.CharField(_("File-holder position"), max_length=100, blank=True)
-    IDS_infomation = models.TextField(_('IDS Information'), blank=True)
+    IDS_information = models.TextField(_('IDS Information'), blank=True)
     files = GenericRelation(FileAttachment, related_query_name='patent')
 
     def __str__(self):
