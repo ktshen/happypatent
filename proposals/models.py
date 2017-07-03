@@ -208,6 +208,7 @@ class Patent(_BaseModel):
         ('invention', _('Invention')),
         ('utility', _('Utility')),
         ('design', _('Design')),
+        ('trademark', _('Trademark')),
     )
     COUNTRY_CHOICES = (
         ('TW', 'TW'),
@@ -287,7 +288,7 @@ class Patent(_BaseModel):
     prio_filing_date = models.DateField(_('(Priority) Filing Date'), blank=True, null=True)
 
     file_holder_position = models.CharField(_("File-holder position"), max_length=100, blank=True)
-    IDS_infomation = models.TextField(_('IDS Information'), max_length=300, blank=True)
+    IDS_infomation = models.TextField(_('IDS Information'), blank=True)
     files = GenericRelation(FileAttachment, related_query_name='patent')
 
     def __str__(self):
