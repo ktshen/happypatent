@@ -5,51 +5,80 @@
 {% block content_title %}Create New Agent{% endblock %}
 
 {% block css %}
-
-    <style>
-
-    .form-group{
-        margin-bottom:10px;
-        width:46%;
-    }
-
-    .form_wrap{
-        display:flex;
-        flex-direction:row;
-    }
-
-    .form_wrap > .form-group:nth-child(2){
-        margin-left:5%;
-    }
-
-
-    input.form-control{
-        background-color: #ffffff;
-    }
-    .box{
-        width: 90%;
-        margin: 0 auto;
-        background: #ffffff;
-        padding: 30px;
-        border-top-color: #2DA4A4;
-    }
-
-     @media screen and (max-width: 767px){
-        .box{
+<style>
+.form-group{
+     margin-bottom:5px;
+     width:95%;
+}
+.row{
+     margin-left:0;
+     margin-right:0;
+     border-bottom:1px solid #f4f4f5;
+     padding: 5px 0 15px 15px;
+}
+.remark-column-wrap{
+     width:50%;
+     float:left;
+     padding-top:63px;
+     padding-left:15px;
+}
+.row > .column-wrap:first-child{
+     border-right: 1px solid #f4f4f5;
+}
+.row > .column-wrap:nth-child(2){
+     padding-left: 15px;
+}
+.column-wrap{
+     width:50%;
+     float:left;
+}
+.buttonHolder{
+     padding-top: 20px;
+     margin-right: 20px;
+}
+.button-wrap{
+     display:flex;
+     justify-content:flex-end;
+}
+input.form-control{
+     background-color: #ffffff;
+}
+.box{
+     width: 90%;
+     margin: 0 auto;
+     background: #ffffff;
+     padding: 30px;
+     border-top-color: #2DA4A4;
+}
+@media screen and (max-width: 767px){
+     .box{
             width: 95%;
             margin: 0 auto;
             padding: 15px;
-        }
-
-        .form_wrap{
+       }
+      .column-wrap{
+            float:none;
             display:block;
+            width:100%
         }
+        .remark-column-wrap{
+            width:100%;
+            float:none;
+            display:block;
+            padding:0;
+         }
         .form-group{
             width:100%;
         }
-        .form_wrap > .form-group:nth-child(2){
-            margin-left:0;
+       .row > .column-wrap:first-child{
+            border-right: none;
         }
+         .row > .column-wrap:nth-child(2){
+            padding-left:0;
+        }
+         .button-wrap{
+            display:block;
+         }
     }
 
     </style>

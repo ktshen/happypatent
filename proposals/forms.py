@@ -16,49 +16,65 @@ class EmployeeModelForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset(
                 "",
+            Div(
                 Div(
                     'chinese_name',
                     'english_name',
-                    css_class="form_wrap"
-                ),
-                Div(
                     'id_number',
-                    'title_id',
-                    css_class="form_wrap"
+                    css_class="column-wrap"
                 ),
                 Div(
+                    'gender',
                     'email',
-                    'office_number',
-                    css_class="form_wrap"
+
+                    css_class="column-wrap"
                 ),
+                    css_class="row"
+            ),
+            Div(
                 Div(
                     'home_number',
-                    'engagement_date',
-                    css_class="form_wrap"
+                    'office_number',
+                    css_class="column-wrap"
                 ),
                 Div(
                     'county',
                     'address',
-                    css_class="form_wrap"
+                    css_class="column-wrap"
                 ),
+                    css_class="row"
+            ),
+            Div(
                 Div(
-                    'gender',
+                    'engagement_date',
+                    'title_id',
                     'spouse_name',
-                    css_class="form_wrap"
+                    css_class="column-wrap"
                 ),
                 Div(
                     'education',
+                    css_class="column-wrap"
+                ),
+                    css_class="row"
+            ),
+            Div(
+                Div(
                     'experience',
-                    css_class="form_wrap"
+                    css_class="column-wrap"
                 ),
                 Div(
-                    Div(
-                        'remarks',
-                        css_class="form_wrap"
-                    ),
+                    'remarks',
+                     css_class="column-wrap"
+                 ),
+                     css_class="row"
+            ),
+            Div(
+                Div(
                     ButtonHolder(Submit('save', 'save')),
-                    css_class="remark_wrap"
-                )
+                    css_class="button-wrap"
+                ),
+                css_class="row"
+            )
 
             )
         )
@@ -80,7 +96,46 @@ class InventorModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(InventorModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.layout.append(Submit('save', 'save'))
+        self.helper.layout=Layout(
+            Fieldset(
+                "",
+             Div(
+                Div(
+                    'id_number',
+                    'chinese_name',
+                    'english_name',
+                    css_class="column-wrap"
+                ),
+                Div(
+                    'country',
+                    'post_address',
+                    'english_address',
+                    css_class="column-wrap"
+                ),
+                   css_class="row"
+               ),
+            Div(
+                Div(
+                    'phone_number',
+                    'email',
+                    css_class="column-wrap"
+
+                ),
+                Div(
+                    'remarks',
+                    css_class="column-wrap"
+                ),
+                css_class="row"
+             ),
+                Div(
+                    Div(
+                        ButtonHolder(Submit('save','save')),
+                        css_class="button-wrap"
+                    ),
+                    css_class="row"
+                )
+            )
+        )
 
     class Meta:
         model = Inventor
@@ -98,40 +153,38 @@ class AgentModelForm(forms.ModelForm):
                 Div(
                     Div(
                         'agent_title',
-                        'contact_person_name',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'contact_person_phone_number',
-                        'contact_person_email',
-                        css_class="form_wrap"
-                    ),
-                    Div(
                         'country',
                         'address',
-                        css_class="form_wrap"
+
+                        css_class="column-wrap"
                     ),
-                    css_class="related"
-                ),
-                Div(
                     Div(
                         'beneficiary_name',
-                        'beneficiary_no',
-                        css_class="form_wrap"
-                    ),
-                    Div(
                         'remittance_bank',
-                        css_class="form_wrap"
+                        'beneficiary_no',
+                        css_class="column-wrap"
                     ),
-                    css_class="related",
+                        css_class="row"
                 ),
                 Div(
                     Div(
-                        'remarks',
-                        css_class="form_wrap"
+                        'contact_person_name',
+                        'contact_person_phone_number',
+                        'contact_person_email',
+                        css_class="column-wrap"
                     ),
-                    ButtonHolder(Submit('save', 'save')),
-                    css_class="remark_wrap"
+                    Div(
+                        'remarks',
+                        css_class="column-wrap"
+                    ),
+                        css_class="row"
+                 ),
+                Div(
+                    Div(
+                        ButtonHolder(Submit('save', 'save')),
+                        css_class="button-wrap"
+                    ),
+                    css_class="row"
                 )
             )
         )
@@ -157,79 +210,59 @@ class ClientModelForm(forms.ModelForm):
                 "",
                 Div(
                     Div(
+                        'abbr_client',
                         'client_ch_name',
                         'client_en_name',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'abbr_client',
                         'country',
-                        css_class="form_wrap"
-
+                        'status',
+                        'phone_number',
+                        'fax_number',
+                        css_class="column-wrap"
                     ),
-                    css_class="related"
-                ),
-                Div(
                     Div(
                         'post_address',
                         'english_address',
-                        css_class="form_wrap"
-                    ),
-                    Div(
                         'invoice_address',
-                        'phone_number',
-                        css_class="form_wrap"
+                        'invoice_address',
+                        'vat_no',
+                        'number_employee',
+                        css_class="column-wrap"
                     ),
-                    Div(
-
-                        'fax_number',
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
+                    css_class="row"
                 ),
                 Div(
-                    Div(
-                        'repr_chinese_name',
-                        'repr_english_name',
-                        css_class="form_wrap"
-                    ),
                     Div(
                         'contact_person_name',
                         'contact_person_title',
-                        css_class="form_wrap"
-                    ),
-                    Div(
                         'contact_person_phone_number',
                         'contact_person_email',
-                        css_class="form_wrap"
+                        css_class="column-wrap"
                     ),
+                    Div(
+                        'repr_chinese_name',
+                        'repr_english_name',
+                        css_class="column-wrap"
+                    ),
+                        css_class="row"
+                ),
+                Div(
                     Div(
                         'primary_owner',
                         'secondary_owner',
-                        css_class="form_wrap"
+                        css_class="column-wrap"
                     ),
-                    css_class="related"
-                ),
-                Div(
-                    Div(
-                        'vat_no',
-                        'number_employee',
-
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'status',
-                        css_class="form_wrap",
-                    ),
-                    css_class="related"
-                ),
-                Div(
                     Div(
                         'remarks',
-                        css_class="form_wrap"
+                        css_class="column-wrap"
                     ),
-                    ButtonHolder(Submit('save', 'save')),
-                    css_class="remark_wrap"
+                    css_class="row"
+                ),
+               Div(
+                    Div(
+                        ButtonHolder(Submit('save', 'save')),
+                        css_class="button-wrap"
+                    ),
+                        css_class="row"
                 )
             )
         )
@@ -265,137 +298,99 @@ class PatentModelForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset(
                 "",
-                Div(
                     Div(
-                        'case_id',
-                        'case_status',
-                        css_class="form_wrap"
+                        Div(
+                            'case_id',
+                            'english_title',
+                            'chinese_title',
+                            'case_status',
+                            'application_type',
+                            'country',
+                            css_class="column-wrap "
+                       ),
+                        Div(
+                            'client',
+                            'client_ref_no',
+                            'agent',
+                            'agent_ref_no',
+                            'inventor',
+                            css_class="column-wrap"
+                       ),
+                            css_class="row"
                     ),
-                    Div(
-                        'english_title',
-                        'chinese_title',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'patent_date',
-                        'patent_no',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'patent_term',
-                        'certificate_no',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'inventor',
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
-                ),
-                Div(
-                    Div(
-                        'client',
-                        'client_ref_no',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'agent',
-                        'agent_ref_no',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'deadline',
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
-                ),
-                Div(
-                    Div(
-                        'priority',
-                        'prio_country',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'prio_application_no',
-                        'prio_filing_date',
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
-                ),
-                Div(
-                    Div(
-                        'application_type',
-                        'country',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'application_no',
-                        'filing_date',
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
-                ),
-                Div(
-                    Div(
-                        'request_examination',
-                        'examination_date',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        're_examine_date',
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
-                ),
-                Div(
-                    Div(
-                        'publication_date',
-                        'publication_no',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'pre_decision_date',
-                        'pre_decision_no',
-                        css_class="form_wrap"
-                    ),
+                     Div(
 
-                    Div(
-                        'control_item',
-                        'control_date',
+                        Div(
+                            'application_no',
+                            'filing_date',
+                            'request_examination',
+                            css_class="column-wrap"
+                        ),
+                        Div(
+                            'examination_date',
+                            'publication_date',
+                            'publication_no',
+                            css_class="column-wrap"
+                        ),
+                            css_class="row"
+                     ),
+                        Div(
+                            Div(
+                                'pre_decision_date',
+                                'pre_decision_no',
+                                're_examine_date',
+                                css_class="column-wrap"
+                            ),
+                            Div(
 
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
-                ),
-                Div(
+                                'description_pages',
+                                'drawing_pages',
+                                'figures_number',
+                                css_class="column-wrap"
+                             ),
+                            css_class="row"
+                        ),
+                     Div(
+                        Div(
+                             'patent_date',
+                             'patent_no',
+                             'patent_term',
+                             'extended_days',
+                             'certificate_no',
+                             css_class="column-wrap"
+                         ),
+                         Div(
+                             'priority',
+                             'prio_country',
+                             'prio_application_no',
+                             'prio_filing_date',
+                             css_class="column-wrap"
+                         ),
+                            css_class="row"
+                     ),
                     Div(
-                        'description_pages',
-                        'drawing_pages',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'figures_number',
-                        'owner',
-                        css_class="form_wrap"
-                    ),
+                        Div(
+                            'file_holder_position',
+                            'IDS_information',
+                            css_class="column-wrap"
+                        ),
 
+                        Div(
+                           'remarks',
+                            css_class="remark-column-wrap"
+                        ),
+                            css_class="row"
+                      ),
                     Div(
-                        'file_holder_position',
-                        'IDS_information',
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
-                ),
-                Div(
-                    Div(
-                        'remarks',
-                        css_class="form_wrap"
-                    ),
-                    ButtonHolder(Submit('save', 'save')),
-                    css_class="remark_wrap"
-                ),
-                'file'
-            )
+                        Div(
+                          'file',
+                          ButtonHolder(Submit('save', 'save')),
+                            css_class="button-wrap"
+                         ),
+                          css_class="row "
+                      ),
+
+                 )
         )
 
     class Meta:
@@ -440,45 +435,31 @@ class ControlEventModelForm(forms.ModelForm):
                 "",
                 Div(
                     Div(
-                        'chinese_name',
-                        'english_name',
-                        css_class="form_wrap"
+                        'control_item',
+                        'control_date',
+                        css_class="column-wrap"
                     ),
                     Div(
-                        'id_number',
-
-                        css_class="form_wrap"
+                        'deadline',
+                        'complete_date',
+                        css_class="column-wrap"
                     ),
-                    css_class="related"
-                ),
-                Div(
-                    Div(
-                        'client',
-                        'country',
-                        css_class="form_wrap"
-                    ),
-
-                    Div(
-                        'post_address',
-                        'english_address',
-                        css_class="form_wrap"
-                    ),
-                    Div(
-                        'phone_number',
-                        'email',
-                        css_class="form_wrap"
-                    ),
-                    css_class="related"
+                        css_class="row"
                 ),
                 Div(
                     Div(
                         'remarks',
-                        css_class="form_wrap"
+                        css_class="column-wrap"
                     ),
-                    ButtonHolder(Submit('save', 'save')),
-                    css_class="remark_wrap"
-                )
-
+                        css_class="row"
+                ),
+                    Div(
+                        Div(
+                            ButtonHolder(Submit('save', 'save')),
+                            css_class="button-wrap"
+                        ),
+                            css_class="row"
+                    ),
             )
         )
 
