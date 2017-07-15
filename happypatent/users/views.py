@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render_to_response
 from django.http.response import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.utils import timezone
 from datetime import datetime
 from .models import User, CalendarEvent
 from .forms import UserProfileModelForm
@@ -53,6 +54,16 @@ def home(request):
 
 class DashBoardView(LoginRequiredMixin, TemplateView):
     template_name = "users/dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(DashBoardView, self).get_context_data(**kwargs)
+        # Get patents that have passed their deadline to warn users
+        kwargs["expire_events"] = ControlEvent.objects.filter(
+            Q(created_by=self.request.user) &
+            Q(complete_date__isnull=True) &
+            Q(deadline__lte=timezone.now())
+        ).order_by('deadline')
+        return kwargs
 
 
 class RetrieveCalendarEvent(LoginRequiredMixin, View):
