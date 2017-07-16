@@ -6,43 +6,48 @@
 
 {% block css %}
 <style>
-.pager {
-  padding-left: 0;
-  margin: 20px 0;
-  text-align: center;
-  list-style: none;
+
+.box{
+  border-top-color:#2DA4A4;;
 }
-.pager li {
-  display: inline;
+.box-body,
+.box-footer{
+  padding: 10px 15px 10px 15px;
 }
-.pager li > a,
-.pager li > span {
-  display: inline-block;
-  padding: 5px 14px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 15px;
+.blog-post-title {
+  font-size: 40px;
+  overflow-wrap:break-word;
+  color:#2BB4B4;
+ }
+.box-body .col-sm-10{
+ border-left: 1px solid #f4f4f5;
+ border-right:1px solid #f4f4f5;
 }
-.pager li > a:hover,
-.pager li > a:focus {
-  text-decoration: none;
-  background-color: #eee;
+.box-header.with-border{
+ padding: 15px 10px 10px 10px;
 }
-.pager .next > a,
-.pager .next > span {
-  float: right;
+.box-header.with-border h5{
+  margin-top:0;
+  margin-bottom:0;
 }
-.pager .previous > a,
-.pager .previous > span {
-  float: left;
+.credit-line{
+  display:flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  height:22.7px;
 }
-.pager .disabled > a,
-.pager .disabled > a:hover,
-.pager .disabled > a:focus,
-.pager .disabled > span {
-  color: #777;
-  cursor: not-allowed;
-  background-color: #fff;
+.credit-line > h5{
+  margin-top:5px;
+  margin-bottom:0;
+  margin-right:5px;
+}
+.pager > span{
+    position:relative;
+    top:6px;
+}
+.pager > li.next{
+    width:74px;
+    height:32px;
 }
 </style>
 {% endblock %}
@@ -52,52 +57,69 @@
 
 {% if object_list|length_is:'0' %}
 <div class="row">
-<div class="col-md-10 col-md-offset-1">
-<div class="box box-info">
-<div class="box-body">
-    <h2>No post has been submitted yet.</h2>
-    <p>Go to <a href="{% url "billboard:create" %}">Post Create</a> to create a new post.</p>
-</div>
-</div>
-</div>
+    <div class="col-md-10 col-md-offset-1">
+        <div class="box box-info">
+
+            <div class="box-body">
+                <h2>No post has been submitted yet.</h2>
+                <p>Go to <a href="{% url "billboard:create" %}">Post Create</a> to create a new post.</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% else %}
-
 {% for post in object_list %}
 <div class="row">
-<div class="col-md-10 col-md-offset-1">
-<div class="box box-info">
-<div class="box-body">
-    <h2>
-        <a href="{% url "billboard:detail" post.slug %}">{{ post.title }}</a>
-    </h2>
-    <hr>
-    {{ post.text|truncatechars_html:200|safe }}
-</div>
-<div class="box-footer">
-    <h5><small>Posted on {{ post.update }} by <a href="{% url "users:detail" post.author.username %}">{{ post.author.first_name }} {{ post.author.last_name }}</a></small></h5>
-</div>
-</div>
-</div>
+    <div class="col-md-10 col-md-offset-1">
+        <div class="box ">
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <h5>
+                            <a class="blog-post-title" href="{% url "billboard:detail" post.slug %}">{{ post.title }}</a>
+                        </h5>
+                        <div class="credit-line">
+                            <h5>
+                                <small>{{ post.update }} by <a href="{% url "users:detail" post.author.username %}"> {{ post.author.first_name }} {{ post.author.last_name }}</a></small>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        {{ post.text|truncatechars_html:200|safe }}
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+
+            </div>
+        </div>
+    </div>
 </div>
 {% endfor %}
 <!-- Pager -->
 <div class="row">
-<div class="col-md-10 col-md-offset-1">
-<ul class="pager">
-    {% if page_obj.has_previous %}
-    <li class="previous">
-        <a href="?page={{ page_obj.previous_page_number }}">&larr; Previous</a>
-    </li>
-    {% endif %}
-    <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
-    {% if page_obj.has_next %}
-    <li class="next">
-        <a href="?page={{ page_obj.next_page_number }}">Next &rarr;</a>
-    </li>
-    {% endif %}
-</ul>
-</div>
+    <div class="col-md-10 col-md-offset-1">
+        <ul class="pager">
+
+                {% if page_obj.has_previous %}
+                <li class="previous">
+                    <a href="?page={{ page_obj.previous_page_number }}">&larr; Previous</a>
+                </li>
+            {% endif %}
+
+                 <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+
+            {% if page_obj.has_next %}
+                <li class="next">
+                    <a href="?page={{ page_obj.next_page_number }}">Next &rarr;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
 </div>
 {% endif %}
 

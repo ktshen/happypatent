@@ -7,138 +7,178 @@
 {% block css %}
 <style>
 .blog-post-title {
-  margin-bottom: 5px;
   font-size: 40px;
   overflow-wrap:break-word;
+  margin-top:0;
+  margin-bottom:0;
+  color:#2BB4B4;
+ }
+.box{
+    border-top-color:#2DA4A4;;
 }
-.blog-post {
-  margin-bottom: 60px;
-  overflow-wrap:break-word;
+.credit-line{
+  display:flex;
+  justify-content: flex-start;
+  align-items: baseline;
 }
-.blog-main {
-  font-size: 18px;
-  line-height: 1.5;
+.credit-line > h5{
+  margin-top:5px;
+  margin-bottom:0;
+  margin-right:5px;
 }
-hr {
-    background-color: #cbdadb;
-    border: 0 none;
-    color: #cbdadb;
-    height: 1px;
-}
-.thumbnail {
-    padding:0px;
-}
-.panel {
-	position:relative;
-}
-.panel>.panel-heading:after,.panel>.panel-heading:before{
-	position:absolute;
-	top:11px;left:-16px;
-	right:100%;
-	width:0;
-	height:0;
-	display:block;
-	content:" ";
-	border-color:transparent;
-	border-style:solid solid outset;
-	pointer-events:none;
-}
-.panel>.panel-heading:after{
-	border-width:7px;
-	border-right-color:#f7f7f7;
-	margin-top:1px;
-	margin-left:2px;
-}
-.panel>.panel-heading:before{
-	border-right-color:#ddd;
-	border-width:8px;
+.credit-line > a {
+    padding-left: 5px;
+    border-left: 1px solid #f4f4f5;
 }
 
+.blog-post {
+  margin-bottom:10px;
+  overflow-wrap:break-word;
+  font-size: 16px;
+  line-height: 1.4;
+}
+h4{
+    margin-top:0;
+}
+hr {
+  background-color: #cbdadb;
+  border: 0 none;
+  color: #cbdadb;
+  height: 1px;
+}
+.box-body,
+.box-footer{
+  padding: 10px 15px 10px 15px;
+}
+textarea{
+  resize:none;
+  width:100%;
+  border-style:solid;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  border-radius:4px;
+  border-color:#ddd;
+  border-width:1px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.box-header.with-border{
+ padding: 15px 10px 10px 10px;
+}
+.box-body .col-sm-10{
+ border-left: 1px solid #f4f4f5;
+ border-right:1px solid #f4f4f5;
+}
+.avatar a >img{
+ float:left;
+ width: 40px;
+ height:40px;
+ margin-right:10px;
+}
+.panel {
+  position:relative;
+}
 </style>
 {% endblock %}
 
 {% block content %}
-
+ <!-- Blog Post Content Column -->
 <div class="row">
-    <!-- Blog Post Content Column -->
-    <div class="col-md-10 col-md-offset-1 blog-main">
-    <div class="box box-info">
+ <div class="col-md-10 col-md-offset-1 blog-main">
+  <div class="box ">
     <div class="box-header with-border">
-    <div class="pull-right">
-        {% if request.user == object.author %}
-        <a class="btn btn-warning" href="{% url "billboard:update" object.slug %}" role="button">Update</a>
-        <a class="btn btn-danger" id="remove-object">Remove</a>
-        <form action="{% url "billboard:remove" %}" method="post" id="remove-form">
-            {% csrf_token %}
-            <input type="hidden" name="slug" value="{{ object.slug }}">
-        </form>
-        {% endif %}
-    </div>
-    <h3 class="blog-post-title">{{ object.title }}</h3>
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <h5 class="blog-post-title">{{ object.title }}</h5>
+                <div class="credit-line">
+                    <h5 >
+                        <small>{{ object.update }} by <a href="{% url "users:detail" object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a></small>
+                     </h5>
+                    {% if request.user == object.author %}
+                     <a  href="{% url "billboard:update" object.slug %}" role="button">Update</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
     <div class="box-body">
-        <div class="blog-post">
-            <div>
-                {{ object.text | safe }}
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                 <div class="blog-post">
+                    <div>
+                        {{ object.text | safe }}
+                    </div>
+                 <ul>
+                    {% for file in object.files.all %}
+                    <li><h5><small><a href="{{ file.file.url }}" download>{{ file.filename }}</a></small></h5></li>
+                    {% endfor %}
+                 </ul>
+                 </div>
             </div>
-            <ul>
-                {% for file in object.files.all %}
-                <li><h5><small><a href="{{ file.file.url }}" download>{{ file.filename }}</a></small></h5></li>
-                {% endfor %}
-            </ul>
-
         </div>
     </div>
-    <div id="comment"></div>
     <div class="box-footer">
-        <h5>
-            <small>Posted on {{ object.update }} by <a href="{% url "users:detail" object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a></small>
-        </h5>
-    </div>
-
-    </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
-    <div class="box box-solid">
-        <div class="box-header with-border">
-          <h3 class="box-title text-blue">Comments ({{ comments|length }})</h3>
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+               {% if request.user == object.author %}
+                <a class="btn  pull-right btn-xs btn-default" id="remove-object">Remove</a>
+                <form action="{% url "billboard:remove" %}" method="post" id="remove-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="slug" value="{{ object.slug }}">
+                </form>
+               {% endif %}
+            </div>
         </div>
-        <div class="box-body">
-
+    </div>
+  </div>
+ </div>
+</div>
+    <!--Comment Section -->
+<div class="row">
+   <div class="col-md-10 col-md-offset-1">
+    <div class="box box-solid">
+          <div class="box-header with-border">
+              <div class="row">
+                  <div class="col-sm-10 col-sm-offset-1">
+                      <h3 class="box-title text-blue"><strong>Comments ({{ comments|length }})</strong></h3>
+                  </div>
+              </div>
+          </div>
+          <div class="box-body">
         {% for comment in comments %}
         <div class="row">
-            <div class="col-sm-1">
-                <div class="thumbnail">
-                    <a href="{{ comment.created_by.get_absolute_url }}"><img class="img-responsive user-photo" src="{% if comment.created_by.profile_pic %}{{ comment.created_by.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}"></a>
-                </div>
-            </div>
-            <div class="col-sm-5">
+            <div class="col-sm-10 col-sm-offset-1">
                 <div class="panel panel-default">
-                <div class="panel-heading">
-                    <strong><a href="{{ comment.created_by.get_absolute_url }}">{{ comment.created_by.first_name }} {{ comment.created_by.last_name }}</a></strong>
-                    <span class="text-muted"><small>commented at {{ comment.created }}</small></span>
-                </div>
-                <div class="panel-body">
-                    {{ comment.text }}
-                </div>
+                    <div class="panel-heading">
+                        <div class="avatar">
+                            <a href="{{ comment.created_by.get_absolute_url }}"><img class="img-responsive user-photo" src="{% if comment.created_by.profile_pic %}{{ comment.created_by.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}"></a>
+                            <strong><a href="{{ comment.created_by.get_absolute_url }}">{{ comment.created_by.first_name }} {{ comment.created_by.last_name }}</a></strong><br/>
+                            <span class="text-muted"><small>{{ comment.created }}</small></span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        {{ comment.text }}
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
-
-        <h4>Leave a Comment:</h4>
-        <form action="{% url "billboard:comment" object.slug %}" method="post" role="form">
-            {% csrf_token %}
-            <div class="form-group">
-                <textarea cols="60" id="id_text" maxlength="150" name="text" rows="5" required=""></textarea>
+          </div>
+        <div class="box-footer">
+            <div class="row ">
+                <div class="col-sm-10 col-sm-offset-1">
+                    <h4 class="text-blue"> <strong>Leave a Comment:</strong></h4>
+                    <form action="{% url "billboard:comment" object.slug %}" method="post" role="form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                        <textarea id="id_text" maxlength="150" name="text" rows="5" required=""></textarea>
+                    </div>
+                        <button type="submit" class="btn btn-info pull-right">Submit</button>
+                    </form>
+                </div>
             </div>
-            <button type="submit" class="btn btn-info">Submit</button>
-        </form>
         </div>
     </div>
-    </div>
+   </div>
 </div>
 {% endblock %}

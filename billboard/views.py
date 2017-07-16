@@ -51,6 +51,7 @@ class PostUpdateView(LoginRequiredMixin, FileAttachmentViewMixin, UpdateView):
 class PostListView(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 5
+    ordering = ['-update', '-created']
 
 
 @login_required

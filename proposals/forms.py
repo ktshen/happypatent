@@ -429,7 +429,6 @@ class ControlEventModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ControlEventModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-
         self.helper.layout = Layout(
             Fieldset(
                 "",
