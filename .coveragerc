@@ -1,5 +1,9 @@
 [run]
 include = happypatent/*
-omit = *migrations*, *tests*
+          proposals/*
+          billboard/*
+
+
+omit = *migrations*, *tests*, myenv/*,
 plugins =
     django_coverage_plugin

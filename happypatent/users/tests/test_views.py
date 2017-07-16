@@ -14,7 +14,6 @@ class BaseUserTestCase(TestCase):
     def setUp(self):
         self.user = self.make_user()
         self.factory = RequestFactory()
-        print("HI1")
 
 
 class TestUserRedirectView(BaseUserTestCase):
@@ -66,7 +65,7 @@ class TestUserUpdateView(BaseUserTestCase):
         )
 
 
-class Testhome(BaseUserTestCase):
+class homeTest(BaseUserTestCase):
     def test_login(self):
         response = self.get("users:home")
         self.assertTemplateUsed(response, "pages/home.html")
@@ -75,9 +74,9 @@ class Testhome(BaseUserTestCase):
         self.assertRedirects(response=response, expected_url=self.reverse("users:dashboard"))
 
 
-class TestCalendarEventMixin(object):
+class CalendarEventMixinTest(object):
     def setUp(self):
-        super(TestCalendarEventMixin, self).setUp()
+        super(CalendarEventMixinTest, self).setUp()
         self.current_time = timezone.now()
         CalendarEvent.objects.create(
             title="testevent",
@@ -100,7 +99,7 @@ class TestCalendarEventMixin(object):
         }
 
 
-class TestRetrieveCalendarEvent(TestCalendarEventMixin, BaseUserTestCase):
+class TestRetrieveCalendarEvent(CalendarEventMixinTest, BaseUserTestCase):
     def test_get(self):
         pass
 

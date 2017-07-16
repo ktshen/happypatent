@@ -230,7 +230,7 @@ class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, PatentMixin, Use
             try:
                 self.case_id = request.GET["case_id"]
             except KeyError:
-                return HttpResponseBadRequest()
+                return HttpResponseBadRequest("Please specify case id.")
         else:
             self.other_country = False
         return super(PatentCreateView, self).get(request, *args, **kwargs)
