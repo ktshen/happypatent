@@ -138,7 +138,6 @@ class UserAppendCreateViewMixin(object):
         if not self.object:
             self.object = form.save(commit=False)
         self.object.created_by = User.objects.get(username=self.request.user.username)
-        self.object.save()
         response = super(UserAppendCreateViewMixin, self).form_valid(form)
         return response
 
@@ -283,7 +282,8 @@ class ControlEventEditMixin(object):
             return {}
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
+        if not self.object:
+            self.object = form.save(commit=False)
         self.object.patent = get_object_or_404(Patent, case_id=form.cleaned_data["case_id"])
         return super(ControlEventEditMixin, self).form_valid(form)
 
@@ -294,7 +294,7 @@ class ControlEventEditMixin(object):
             return super(ControlEventEditMixin, self).get_success_url()
 
 
-class ControlEventCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin,
+class ControlEventCreateView(LoginRequiredMixin, SuccessMessageMixin, UserAppendCreateViewMixin,
                              ControlEventEditMixin, CreateView):
     model = ControlEvent
     template_name = "proposals/control_event_create.html"
