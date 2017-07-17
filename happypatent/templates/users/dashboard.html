@@ -37,8 +37,10 @@
               <tr>
                 <th>Case ID</th>
                 <th>Chinese Title</th>
+                {% if request|is_pc %}
                 <th>English Title</th>
                 <th>Control Date</th>
+                {% endif %}
                 <th>Deadline</th>
               </tr>
             </thead>
@@ -46,9 +48,11 @@
               {% for ev in expire_events %}
               <tr>
                 <td><a href="{{ ev.patent.get_absolute_url }}">{{ ev.patent.case_id }}</a></td>
-                  <td><a href="{{ ev.patent.get_absolute_url }}">{{ ev.patent.chinese_title }}</a></td>
+                <td><a href="{{ ev.patent.get_absolute_url }}">{{ ev.patent.chinese_title }}</a></td>
+                {% if request|is_pc %}
                 <td>{{ ev.patent.english_title }}</td>
                 <td><span class="label label-warning">{{ ev.control_date }}</span></td>
+                {% endif %}
                 <td><span class="label label-danger">{{ ev.deadline }}</span></td>
               </tr>
               {% endfor %}
