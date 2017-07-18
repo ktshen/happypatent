@@ -5,6 +5,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.utils import timezone
+from django.db import transaction
 from datetime import datetime
 from .models import User, CalendarEvent
 from .forms import UserProfileModelForm
@@ -15,6 +16,7 @@ from django.utils.timezone import utc
 DATE_FMT = "%a, %d %b %Y %X GMT"
 
 
+@transaction.non_atomic_requests
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     slug_field = 'username'
@@ -22,6 +24,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = 'username'
 
 
+@transaction.non_atomic_requests
 class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
@@ -45,6 +48,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return User.objects.get(username=self.request.user.username)
 
 
+@transaction.non_atomic_requests
 def home(request):
     if request.user.is_authenticated:
         return redirect("users:dashboard")
@@ -52,6 +56,7 @@ def home(request):
         return render_to_response("pages/home.html", context={})
 
 
+@transaction.non_atomic_requests
 class DashBoardView(LoginRequiredMixin, TemplateView):
     template_name = "users/dashboard.html"
 
@@ -66,6 +71,7 @@ class DashBoardView(LoginRequiredMixin, TemplateView):
         return kwargs
 
 
+@transaction.non_atomic_requests
 class RetrieveCalendarEvent(LoginRequiredMixin, View):
     def dispatch(self, request, *args, **kwargs):
         if not request.is_ajax():
@@ -191,6 +197,7 @@ def getClassName(obj):
     return None
 
 
+@transaction.non_atomic_requests
 class TimeLineAjaxView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):

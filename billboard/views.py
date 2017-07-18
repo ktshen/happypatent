@@ -1,18 +1,20 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from proposals.views import FileAttachmentViewMixin
 
 from .models import Post, User, Comment
 from .forms import PostModelForm, CommentModelForm
 
 
+@transaction.non_atomic_requests
 class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
     slug_field = "slug"
@@ -48,6 +50,7 @@ class PostUpdateView(LoginRequiredMixin, FileAttachmentViewMixin, UpdateView):
     slug_url_kwarg = "slug"
 
 
+@transaction.non_atomic_requests
 class PostListView(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 5

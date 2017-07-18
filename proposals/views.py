@@ -13,6 +13,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.db.models import Q
+from django.db import transaction
 from dateutil.relativedelta import relativedelta
 import geocoder
 
@@ -248,6 +249,7 @@ class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, PatentMixin, Use
         )
 
 
+@transaction.non_atomic_requests
 class PatentDetailView(LoginRequiredMixin, DetailView):
     model = Patent
     slug_field = "case_id"
@@ -262,6 +264,7 @@ class PatentUpdateView(LoginRequiredMixin, PatentMixin, FileAttachmentViewMixin,
     template_name = "proposals/patent_create.html"
 
 
+@transaction.non_atomic_requests
 class PatentListView(LoginRequiredMixin, ListView):
     model = Patent
     ordering = ['-update', '-created']
@@ -344,6 +347,7 @@ class AgentCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableRes
         )
 
 
+@transaction.non_atomic_requests
 class AgentDetailView(LoginRequiredMixin, DetailView):
     model = Agent
     slug_field = "agent_id"
@@ -358,6 +362,7 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
     form_class = AgentModelForm
 
 
+@transaction.non_atomic_requests
 class AgentListView(LoginRequiredMixin, ListView):
     model = Agent
     queryset = Agent.objects.all().order_by("country", "-created")
@@ -407,6 +412,7 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ClientModelForm
 
 
+@transaction.non_atomic_requests
 class ClientListView(LoginRequiredMixin, ListView):
     model = Client
 
@@ -464,6 +470,7 @@ class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessM
         )
 
 
+@transaction.non_atomic_requests
 class InventorDetailView(LoginRequiredMixin, DetailView):
     model = Inventor
 
@@ -474,6 +481,7 @@ class InventorUpdateView(LoginRequiredMixin, InventorEditMixin, UpdateView):
     form_class = InventorModelForm
 
 
+@transaction.non_atomic_requests
 class InventorListView(LoginRequiredMixin, ListView):
     model = Inventor
 
@@ -487,6 +495,7 @@ class InventorDeleteView(_DeleteView):
         return self.object.client.get_absolute_url()
 
 
+@transaction.non_atomic_requests
 class InventorSelect2View(AjaxSelect2View):
     model = Inventor
     search_fields = ["chinese_name__istartswith", "english_name__istartswith"]
@@ -498,6 +507,7 @@ class InventorSelect2View(AjaxSelect2View):
                                  .filter(kwargs["filter_query"])
 
 
+@transaction.non_atomic_requests
 class ChineseAddressToEnglishView(View):
     http_method_names = [u'get']
 
