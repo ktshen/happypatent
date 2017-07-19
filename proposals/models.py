@@ -20,6 +20,7 @@ class FileAttachment(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
+    @property
     def filename(self):
         return os.path.basename(self.file.name)
 

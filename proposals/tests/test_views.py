@@ -1,6 +1,14 @@
 from test_plus.test import TestCase
-from ..models import Patent
+from ..models import Patent, FileAttachment
+import os
+from ..utils import get_upload_path
 
+
+def generate_file():
+    f = open("test.txt", "w")
+    for i in range(10 ** 5):
+        f.write(str(i))
+    f.close()
 
 class PatentCreateViewTest(TestCase):
     def setUp(self):
@@ -46,3 +54,16 @@ class PatentCreateViewTest(TestCase):
         self.post(self.reverse("proposals:patent-create"), data=self.test_data)
         new_item = Patent.objects.first()
         self.assertEqual(new_item.final_patent_term.strftime(format="%Y-%m-%d"), "2017-07-31")
+
+    def test_file_attachment(self):
+        generate_file()
+        with open('test.txt') as fp:
+            self.test_data["file"] = fp
+            self.post(self.reverse("proposals:patent-create"), data=self.test_data)
+        try:
+            file = FileAttachment.objects.first()
+            self.assertTrue("test" in file.filename)
+            self.assertEqual(os.path.dirname(str(file.file)), os.path.dirname(get_upload_path(None, "test.txt")))
+        finally:
+            os.remove("test.txt")
+            os.remove(file.file.path)

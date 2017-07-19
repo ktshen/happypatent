@@ -6,7 +6,7 @@ from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder
 
 from .models import Employee, Patent, Agent, Client, Inventor, ControlEvent
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
-from .utils import file_validate, YES_OR_NO
+from .utils import file_validate
 
 
 class EmployeeModelForm(forms.ModelForm):

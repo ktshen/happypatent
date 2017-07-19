@@ -68,7 +68,8 @@ def get_upload_path(instance, filename):
 
 def file_validate(value):
     if value.size > settings.FILE_SIZE_LIMITATION:
-        raise ValidationError('File too large. Size should not exceed 10 MiB.')
+        raise ValidationError('File too large. Size should not exceed %d MiB.' %
+                              int(settings.FILE_SIZE_LIMITATION/10**6))
     file_ext = value.name.split('.')
     if len(file_ext) > 2:
         raise ValidationError('File\'s name should not contain more than 2 \'.\' (dots).')
