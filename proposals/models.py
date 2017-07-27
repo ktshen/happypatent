@@ -337,13 +337,17 @@ class ControlEvent(_BaseModel):
     patent = models.ForeignKey(to=Patent, on_delete=models.CASCADE, related_name="control_event", null=True)
 
     def __str__(self):
-        return str(self.patent) + " " + self.control_item
+        return "ControlEvent_" + str(self.patent) + "_" + self.control_item_verbal(self.control_item)
 
     def control_item_template(self):
         if self.control_item:
-            return dict(ControlEvent.CONTROL_ITEM_CHOICES)[self.control_item]
+            return self.control_item_verbal(self.control_item)
         else:
             return self.control_item
+
+    @staticmethod
+    def control_item_verbal(control_item):
+        return str(dict(ControlEvent.CONTROL_ITEM_CHOICES)[control_item])
 
 
 @python_2_unicode_compatible

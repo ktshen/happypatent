@@ -1,19 +1,14 @@
 from test_plus import TestCase
 from django.core.exceptions import ValidationError
-from ..models import Patent, Client, Agent
+from ..models import Agent, Inventor, ControlEvent
+from .factories import PatentFactory, ControlEventFactory, ClientFactory
 
 
 class PatentModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = cls.make_user(cls)
-        cls.test_data = {"case_id": "17P000",
-                         "chinese_title": "測試文件",
-                         "english_title": "testing patent",
-                         "country": 'US',
-                         "priority": 'no',
-                         "created_by": cls.user}
-        cls.patent = Patent.objects.create(**cls.test_data)
+        cls.patent = PatentFactory(created_by=cls.user)
 
     def test_fields_must_required(self):
         self.assertFalse(self.patent._meta.get_field("case_id").blank)
@@ -40,19 +35,7 @@ class ClientModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = cls.make_user(cls)
-        cls.test_data = {
-            'abbr_client': "test_abbr",
-            'client_ch_name': "測試",
-            'client_en_name': "test-client",
-            'country': "country",
-            'post_address': "test",
-            'phone_number': "0123456789",
-            'repr_chinese_name': "測試代表人",
-            'repr_english_name': "test_repr",
-            'primary_owner': "test-owner",
-            'created_by': cls.user
-        }
-        cls.client_model = Client.objects.create(**cls.test_data)
+        cls.client_model = ClientFactory(created_by=cls.user)
 
     def test_field_must_required(self):
         self.assertFalse(self.client_model._meta.get_field('abbr_client').blank)
@@ -69,7 +52,7 @@ class ClientModelTest(TestCase):
             self.fail("Client full_clean() method raise a ValidationError: %s" % e)
 
     def test__str__(self):
-        self.assertEqual(str(self.client_model), self.test_data["client_ch_name"])
+        self.assertEqual(str(self.client_model), "測試客戶")
 
     def test_client_name(self):
         self.assertEqual(self.client_model.name, self.client_model.client_ch_name)
@@ -109,3 +92,62 @@ class AgentTestCase(TestCase):
     def test_get_absolute_url(self):
         self.assertEqual(self.agent.get_absolute_url(), "/proposals/agent/1/detail/")
 
+
+class InventorTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = cls.make_user(cls)
+        c = ClientFactory(created_by=cls.user)
+        cls.test_data = {
+            'chinese_name': "測試資料",
+            'english_name': "test-1",
+            'country': "country",
+            'post_address': "Road-1",
+            'english_address': "Road-2",
+            'client': c,
+            'created_by': cls.user
+        }
+        cls.model = Inventor.objects.create(**cls.test_data)
+
+    def test_field_must_required(self):
+        self.assertFalse(self.model._meta.get_field('chinese_name').blank)
+        self.assertFalse(self.model._meta.get_field('english_name').blank)
+        self.assertFalse(self.model._meta.get_field('country').blank)
+        self.assertFalse(self.model._meta.get_field('post_address').blank)
+        self.assertFalse(self.model._meta.get_field('english_address').blank)
+        try:
+            self.model.full_clean()
+        except ValidationError as e:
+            self.fail("Inventor's full_clean() method raise a ValidationError: %s" % e)
+
+    def test__str__(self):
+        self.assertEqual(str(self.model), self.test_data["chinese_name"])
+
+    def test_get_absolute_url(self):
+        self.assertEqual(self.model.get_absolute_url(), "/proposals/inventor/1/detail/")
+
+
+class ControlEventTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = cls.make_user(cls)
+        patent = PatentFactory(created_by=cls.user)
+        cls.model = ControlEventFactory(patent=patent, created_by=cls.user)
+
+    def test_field_must_required(self):
+        self.assertFalse(self.model._meta.get_field('control_item').blank)
+        self.assertFalse(self.model._meta.get_field('control_date').blank)
+        self.assertFalse(self.model._meta.get_field('deadline').blank)
+        self.assertFalse(self.model._meta.get_field('patent').blank)
+        try:
+            self.model.full_clean()
+        except ValidationError as e:
+            self.fail("Control Event's full_clean() method raise a ValidationError: %s" % e)
+
+    def test__str__(self):
+        self.assertEqual(str(self.model), "ControlEvent_17P000_File new application")
+
+    def test_control_item_verbal(self):
+        self.assertEqual(str(dict(ControlEvent.CONTROL_ITEM_CHOICES)[self.model.control_item]),
+                         "File new application")
