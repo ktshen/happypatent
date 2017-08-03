@@ -6,32 +6,113 @@
 {% block content_title %}Patent{% endblock %}
 
 {% block css %}
- <style>
-   .box{
-        width:87%;
-        margin: 0 auto;
-        border-top-color: #2DA4A4;
+<style>
+.box{
+    width:87%;
+    margin: 0 auto;
+    border-top-color: #2DA4A4;
+}
+.box-header .box-title{
+   color: #2BB4B4;
+    margin-top:0;
+    margin-bottom:2px;
+    font-size:20px;
+}
+.table-responsive{
+    border:none;
+}
+table#list_table.table{
+    width:100%;
+}
+@media screen and (max-width: 650px) {
+
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    tr {
+        border: 1px solid #ccc;
+    }
+    table.table-bordered.dataTable tbody td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+    table.table-bordered.dataTable tbody td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+    }
+    table.table-bordered.dataTable tbody td:nth-of-type(1):before {
+        content: "Case ID:";
+    }
+    table.table-bordered.dataTable tbody td:nth-of-type(2):before {
+        content: "Chinese Title:";
+    }
+    table.table-bordered.dataTable tbody td:nth-of-type(3):before {
+        content: "English Title:";
+    }
+    table.table-bordered.dataTable tbody td:nth-of-type(4):before {
+        content: "Case Status:";
+    }
+{#	table.table-bordered.dataTable tbody td:nth-of-type(5):before { content: "Client:"; }#}
+    table.table-bordered.dataTable tbody td:nth-of-type(5):before {
+        content: "Agent:";
+    }
+    table.table-bordered.dataTable tbody td:nth-of-type(6):before {
+        content: "Country:";
+    }
+}
+@media screen and (max-width: 767px){
+    div.dataTables_wrapper div.dataTables_length,
+    div.dataTables_wrapper div.dataTables_info{
+        float:left;
+    }
+    div.dataTables_wrapper div.dataTables_filter,
+    div.dataTables_wrapper div.dataTables_paginate{
+        float:right;
+    }
+}
+@media screen and (max-width: 500px) {
+    div.dataTables_wrapper div.dataTables_length,
+    div.dataTables_wrapper div.dataTables_info,
+    div.dataTables_wrapper div.dataTables_filter,
+    div.dataTables_wrapper div.dataTables_paginate {
+        float: none;
     }
 
-    .box-header .box-title{
-        color: #2BB4B4;
-        margin-top:0.8%;
-        margin-bottom: 0;
+    div.dataTables_wrapper div.dataTables_paginate {
+        margin-left: -5px;
     }
- </style>
+    div.dataTables_wrapper div.dataTables_filter input{
+        width:155px;
+    }
 
-
+}
+</style>
 {% endblock css %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
+
         <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Your Patents</h3>
+        <div class="row">
+            <div class="col-sm-12 ">
+            <div class="box-header with-border">
+              <h3 class="box-title">All Patents</h3>
             </div>
-            <div class="box-body">
-              <table id="list_table" class="table table-bordered table-striped">
+            <div class="box-body ">
+            <div class="table-responsive">
+              <table id="list_table" class="table table-bordered table-striped" style="width:100%">
                 <thead>
                 <tr>
                   <th>Case ID</th>
@@ -39,7 +120,7 @@
                   <th>English Title</th>
                   {% if request|is_pc %}
                   <th>Case status</th>
-                  <th>Client</th>
+{#                  <th>Client</th>#}
                   <th>Agent</th>
                   <th>Country</th>
                   {% endif %}
@@ -53,7 +134,7 @@
                   <td>{{ patent.english_title }}</td>
                   {% if request|is_pc %}
                   <td>{% if patent.case_status %}{{ patent.case_status_template }}{% else %}None{% endif %}</td>
-                  <td>{% if patent.client %}<a href="{{ patent.client.get_absolute_url }}">{{ patent.client.abbr_client }}</a>{% else %}None{% endif %}</td>
+{#                  <td>{% if patent.client %}<a href="{{ patent.client.get_absolute_url }}">{{ patent.client.abbr_client }}</a>{% else %}None{% endif %}</td>#}
                   <td>{% if patent.agent %}<a href="{{ patent.agent.get_absolute_url }}">{{ patent.agent.agent_title }}</a>{% else %}None{% endif %}</td>
                   <td>{{ patent.country }}</td>
                   {% endif %}
@@ -62,10 +143,44 @@
                 </tbody>
               </table>
             </div>
+            </div>
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
         </div>
 </div>
+
+{#<script>#}
+{#$('table').each(function() {#}
+{#  var table = $(this); // cache table object#}
+{#  var head = table.find('thead th');#}
+{#  var rows = table.find('tbody tr').clone(); // appending afterwards does not break original table#}
+{##}
+{#  // create new table#}
+{#  var newtable = $(#}
+{#    '<table id="list_table_2" class="table table-bordered table-striped">' +#}
+{#    '  <tbody>' +#}
+{#    '  </tbody>' +#}
+{#    '</table>'#}
+{#  );#}
+{##}
+{#  // cache tbody where we'll be adding data#}
+{#  var newtable_tbody = newtable.find('tbody');#}
+{##}
+{#  rows.each(function(i) {#}
+{#    var cols = $(this).find('td');#}
+{#    var classname = i % 2 ? 'even' : 'odd';#}
+{#    cols.each(function(k) {#}
+{#      var new_tr = $('<tr class="' + classname + '"></tr>').appendTo(newtable_tbody);#}
+{#      new_tr.append(head.clone().get(k));#}
+{#      new_tr.append($(this));#}
+{#    });#}
+{#  });#}
+{##}
+{#  $(this).after(newtable);#}
+
+{##}
+{# $('#list_table_2').DataTable();#}
+{#</script>#}
 {% endblock content %}
 

@@ -22,12 +22,6 @@
      padding-top:63px;
      padding-left:15px;
 }
-.row > .column-wrap:first-child{
-     border-right: 1px solid #f4f4f5;
-}
-.row > .column-wrap:nth-child(2){
-     padding-left: 15px;
-}
 .column-wrap{
      width:50%;
      float:left;
@@ -43,18 +37,26 @@
 input.form-control{
      background-color: #ffffff;
 }
+.box-header.with-border.form-header{
+    padding-left:15px;
+}
+.blog-post-title {
+    font-size: 28px;
+    overflow-wrap:break-word;
+    color:#2BB4B4;
+ }
 .box{
-     width: 90%;
+     width: 83.333333%;
      margin: 0 auto;
      background: #ffffff;
-     padding: 30px;
+     padding: 0 30px 30px 30px;
      border-top-color: #2DA4A4;
 }
 @media screen and (max-width: 767px){
      .box{
-            width: 95%;
+            width: 91.666667%;
             margin: 0 auto;
-            padding: 15px;
+            padding: 0 15px 15px 15px 15px;
        }
       .column-wrap{
             float:none;
@@ -84,9 +86,12 @@ input.form-control{
     </style>
 {% endblock css%}
 {% block content %}
-
-   <div class="box">
+<div class="box">
+    <div class="box-header with-border form-header">
+        <h5 class="blog-post-title">
+            Create New Agent:
+        </h5>
+    </div>
     {% crispy form %}
-   </div>
-
+</div>
 {% endblock content %}

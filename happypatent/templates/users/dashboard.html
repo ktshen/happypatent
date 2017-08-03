@@ -17,6 +17,91 @@
     border-top-color:#3c8dbc;
     color: #3c8dbc;
 }
+hr{
+    margin-top:10px;
+    margin-bottom:5px;
+}
+#add-new-event{
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+#new-event {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+.external-event{
+    width:45%;
+    float:left;
+    margin-right:4px;
+}
+
+.form-control:focus{
+    border-color: #ccc;
+}
+.box{
+    border-top-color:#2DA4A4;
+    margin: 0 auto 20px auto;
+    width: 83.333333%;
+}
+a.fc-day-number{
+    color:#2BB4B4;
+    font-weight:400;
+}
+.fc td.fc-widget-content,
+.fc td.fc-widget-header{
+    border-width:1px;
+    border-style:solid;
+    border-color:#ddd;
+}
+@media screen and (max-width:1100px){
+    .external-event{
+        width:90%;
+    }
+}
+@media screen and (max-width: 767px) {
+    .box {
+        width: 91.666667%;
+    }
+    .external-event{
+         width:45%;
+    }
+}
+@media screen and (max-width:450px){
+    .fc-toolbar.fc-header-toolbar{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:space-around;
+    }
+    .fc-toolbar .fc-left{
+        float:none;
+    }
+    .fc-toolbar .fc-right{
+        float:none;
+    }
+    .fc-toolbar .fc-center{
+        width:50%;
+        margin:0 auto;
+    }
+    .fc .fc-toolbar > * > *{
+        float:none;
+    }
+    .fc-toolbar h2{
+        margin-top:10px;
+        margin-bottom:0;
+        font-size:24px;
+    }
+    a.fc-day-number{
+        font-weight:300;
+    }
+    .fc button{
+        height:initial;
+    }
+    .external-event{
+         width:90%;
+    }
+}
 
 </style>
 
@@ -65,74 +150,72 @@
   </div>
 </div>
 {% endif %}
-
-<div class="row">
-    <div class="col-md-9">
-        <div class="box box-danger">
+<div class="box  calendar-box">
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
             <div class="box-body pad">
                 <!-- THE CALENDAR -->
                 <div id='calendar'></div>
             </div>
-        </div>
-    </div>
-    {% if request|is_pc %}
-    <div class="col-md-3">
-          <div class="box box-danger">
-            <div class="box-header with-border">
-              <h3 class="box-title">Create Task</h3>
-            </div>
-            <div class="box-body">
-              {% csrf_token %}
-              <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
-                <ul class="fc-color-picker" id="color-chooser">
-                  <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
-                </ul>
-              </div>
-              <!-- /btn-group -->
-              <div class="input-group">
-                <input id="new-event" type="text" class="form-control" maxlength="50" placeholder="Task Title">
-                <div class="input-group-btn">
-                  <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Add</button>
+            {% if request|is_pc %}
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-7">
+                    <div class="box-header">
+                        <h5 class="box-title">Drag Task to Month</h5>
+                    </div>
+                    <div class="box-body">
+                        <div id="external-events">
+                        </div>
+                    </div>
                 </div>
-                <!-- /btn-group -->
-              </div>
-              <!-- /input-group -->
-            </div>
-          </div>
-          <div class="box box-danger">
+                    <div class="col-sm-5">
+                    <div class="box-header ">
+                        <h3 class="box-title">Create Task</h3>
+                    </div>
+                    <div class="box-body">
+                     {% csrf_token %}
+                    <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                        <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
+                        <ul class="fc-color-picker" id="color-chooser">
+                            <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-yellow" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-red" href="#"><i class="fa fa-square"></i></a></li>
+                        </ul>
+                    </div>
+                     <div class="input-group">
+                        <input id="new-event" type="text" class="form-control" maxlength="50" placeholder="Task Title">
+                        <div class="input-group-btn">
+                            <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Add</button>
+                        </div>                <!-- /btn-group -->
+                     </div>
+                </div>
+                </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+ </div>
+
+<div class="box ">
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
             <div class="box-header with-border">
-                <h5 class="box-title">Drag Task to Month</h5>
+                <h3 class="box-title">Activities</h3>
             </div>
             <div class="box-body">
-              <div id="external-events">
-              </div>
+                <div class="overlay" id="timeline-loading">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
+                <ul class="timeline">
+                </ul>
+                <button class="btn btn-primary btn-xs" id="timeline-loadmore">Load More</button>
             </div>
-          </div>
-    </div>
-    {% endif %}
-</div>
-<div class="row">
-<div class="col-md-8">
-    <div class="box box-info">
-      <div class="box-header with-border">
-          <h3 class="box-title">Activities</h3>
-      </div>
-      <div class="box-body">
-        <div class="overlay" id="timeline-loading">
-            <i class="fa fa-refresh fa-spin"></i>
         </div>
-        <ul class="timeline">
-        </ul>
-        <button class="btn btn-primary btn-xs" id="timeline-loadmore">Load More</button>
-      </div>
-  </div>
-</div>
+    </div>
 </div>
 
 <script>
@@ -157,11 +240,21 @@ $(document).ready(function() {
             center: 'title',
             right: 'prev,next'
         },
+        aspectRatio: function(){
+            var screenWidth=window.innerWidth;
+            if(screenWidth < 420){
+               console.log('1234');
+               return 0.56;
+            }
+            else
+               console.log('ghilll');
+               return 1.35;
+        },
         views: {
             listWeek: { buttonText: 'Week' },
             month: { buttonText: 'Month' }
         },
-        defaultView: 'listWeek',
+        defaultView: 'month',
         navLinks: true, // can click day/week names to navigate views
         editable: true,
         droppable: true,
@@ -383,19 +476,20 @@ $(document).ready(function() {
     var timeline_start = null;
     var timeline_end = null;
 
-    function random_bg_color(){
-        let color = ["bg-blue", "bg-red", "bg-aqua", "bg-yellow", "bg-purple",
-                 "bg-green", "bg-gray", "bg-maroon", "bg-teal", "bg-orange"];
-        return color[Math.floor(Math.random()*color.length)]
-    }
+{#    function bg_color_setter(data){#}
+{#        let color = ["bg-blue", "bg-red", "bg-aqua", "bg-yellow", "bg-purple",#}
+{#                 "bg-green", "bg-gray"];#}
+{#        if(data.object_type == null || )#}
+{#        return color[Math.floor(Math.random()*color.length)]#}
+{#    }#}
 
     var timeline_icon = {
-        "patent": "fa-file-text-o",
-        "agent": "fa-suitcase",
-        "employee": "fa-group",
-        "client": "fa-gg-circle",
-        "post": "glyphicon glyphicon-bullhorn",
-        "comment": "glyphicon glyphicon-comment",
+        "patent": "fa-file-text-o bg-blue",
+        "agent": "fa-suitcase bg-red",
+        "employee": "fa-group bg-green",
+        "client": "fa-gg-circle bg-purple",
+        "post": "glyphicon glyphicon-bullhorn bg-aqua",
+        "comment": "glyphicon glyphicon-comment bg-yellow",
     };
 
     function createTimeLineLabel(dt){
@@ -404,7 +498,7 @@ $(document).ready(function() {
         let li = $('<li/>', {
             class: "time-label"
         }).append($('<span/>', {
-            class: random_bg_color(),
+            class: "bg-teal",
             text:date[2]+ " " + date[1] + ", "+date[3]
         }));
         return li
@@ -416,9 +510,10 @@ $(document).ready(function() {
             timestamp: data.timestamp,
             id: data.id===undefined ? "" : data.id,
         });
-        let _icon = data.object_type === null? "fa-pencil" : timeline_icon[data.object_type] || "fa-pencil";
+        let _icon = data.object_type === null? "fa-pencil bg-gray" : timeline_icon[data.object_type] || "fa-pencil bg-grey";
+
         let icon = $('<i/>', {
-            class: "fa " + _icon + " " + random_bg_color()
+            class: "fa " + _icon
         });
         let item = $('<div/>', {
             class: "timeline-item"

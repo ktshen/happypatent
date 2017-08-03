@@ -67,13 +67,13 @@ class EmployeeModelForm(forms.ModelForm):
                         css_class="column-wrap"
                     ),
                     css_class="row"
-                ),
+            ),
+            Div(
                 Div(
-                    Div(
-                        ButtonHolder(Submit('save', 'save')),
-                        css_class="button-wrap"
-                    ),
-                    css_class="row"
+                    ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
+                    css_class="button-wrap"
+                ),
+                 css_class="row",
                 )
 
             )
@@ -182,7 +182,7 @@ class AgentModelForm(forms.ModelForm):
                 ),
                 Div(
                     Div(
-                        ButtonHolder(Submit('save', 'save')),
+                        ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
                         css_class="button-wrap"
                     ),
                     css_class="row"
@@ -260,7 +260,7 @@ class ClientModelForm(forms.ModelForm):
                 ),
                 Div(
                     Div(
-                        ButtonHolder(Submit('save', 'save')),
+                        ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
                         css_class="button-wrap"
                     ),
                     css_class="row"
@@ -299,99 +299,96 @@ class PatentModelForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset(
                 "",
-                Div(
                     Div(
-                        'case_id',
-                        'english_title',
-                        'chinese_title',
-                        'case_status',
-                        'application_type',
-                        'country',
-                        css_class="column-wrap "
-                    ),
+                        Div(
+                            'case_id',
+                            'english_title',
+                            'chinese_title',
+                            'case_status',
+                            'application_type',
+                            'country',
+                            css_class="column-wrap "
+                       ),
+                        Div(
+                            'client',
+                            'client_ref_no',
+                            'agent',
+                            'agent_ref_no',
+                            'inventor',
+                            css_class="column-wrap"
+                       ),
+                            css_class="row"
+                      ),
+                     Div(
+                        Div(
+                            'application_no',
+                            'filing_date',
+                            'request_examination',
+                            css_class="column-wrap"
+                        ),
+                        Div(
+                            'examination_date',
+                            'publication_date',
+                            'publication_no',
+                            css_class="column-wrap"
+                        ),
+                            css_class="row"
+                     ),
+                     Div(
+                         Div(
+                             'pre_decision_date',
+                             'pre_decision_no',
+                             're_examine_date',
+                             css_class="column-wrap"
+                         ),
+                         Div(
+                             'description_pages',
+                             'drawing_pages',
+                             'figures_number',
+                             css_class="column-wrap"
+                             ),
+                            css_class="row"
+                        ),
+                     Div(
+                        Div(
+                             'patent_date',
+                             'patent_no',
+                             'patent_term',
+                             'extended_days',
+                             'certificate_no',
+                             css_class="column-wrap"
+                         ),
+                         Div(
+                             'priority',
+                             'prio_country',
+                             'prio_application_no',
+                             'prio_filing_date',
+                             css_class="column-wrap"
+                         ),
+                            css_class="row"
+                     ),
                     Div(
-                        'client',
-                        'client_ref_no',
-                        'agent',
-                        'agent_ref_no',
-                        'inventor',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
+                        Div(
+                            'file_holder_position',
+                            'IDS_information',
+                            css_class="column-wrap"
+                        ),
 
+                        Div(
+                           'remarks',
+                            css_class="remark-column-wrap"
+                        ),
+                            css_class="row"
+                      ),
                     Div(
-                        'application_no',
-                        'filing_date',
-                        'request_examination',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'examination_date',
-                        'publication_date',
-                        'publication_no',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'pre_decision_date',
-                        'pre_decision_no',
-                        're_examine_date',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-
-                        'description_pages',
-                        'drawing_pages',
-                        'figures_number',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'patent_date',
-                        'patent_no',
-                        'patent_term',
-                        'extended_days',
-                        'certificate_no',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'priority',
-                        'prio_country',
-                        'prio_application_no',
-                        'prio_filing_date',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'file_holder_position',
-                        'IDS_information',
-                        css_class="column-wrap"
-                    ),
-
-                    Div(
-                        'remarks',
-                        css_class="remark-column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'file',
-                        ButtonHolder(Submit('save', 'save')),
-                        css_class="button-wrap"
-                    ),
-                    css_class="row "
-                ),
-
-            )
+                        Div(
+                          'file',
+                          ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
+                            css_class="button-wrap"
+                         ),
+                          css_class="row "
+                      ),
+                 )
         )
 
     class Meta:
@@ -456,8 +453,11 @@ class ControlEventModelForm(forms.ModelForm):
                 ),
                 Div(
                     Div(
-                        ButtonHolder(Submit('save', 'save')),
-                        css_class="button-wrap"
+                        Div(
+                            ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
+                            css_class="button-wrap"
+                        ),
+                            css_class="row"
                     ),
                     css_class="row"
                 ),

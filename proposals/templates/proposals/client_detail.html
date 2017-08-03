@@ -5,80 +5,94 @@
 {% block content_title %}Client{% endblock %}
 
 {% block css %}
-  <style>
-  #client-title{
+<style>
+#client-title{
   color: #2BB4B4;
-  margin-top:0.8%;
-  margin-bottom: 0;
+  margin-top:0;
+  margin-bottom:2px;
+  font-size:22px;
 }
-
-  #client-box{
-      border-top-color: #2DA4A4;
-      width: 87%;
-      margin: 0 auto;
-  }
-
-
-  .table.table-striped{
-      border: 2px solid #f9f9f9;
-  }
-
- .table-striped > tbody > tr:first-child >td{
-     border-top: 2px solid #f9f9f9
- }
-
-   .box-footer > h5:first-child{
-      float:left;
-      color: #777;
-  }
-
-  .box-footer > h5:first-child >a{
-      color: #2BB4B4;
-  }
-  .box-footer > h5:first-child >a:hover{
-      color: #2DA4A4;
-  }
-  .box-footer > h5:nth-child(2){
-      float:right;
-      color: #777;
-  }
-
-  .box-footer > h5:last-child{
-      float:right;
-      padding-right:3%;
-      color: #777;
-  }
-
-  .panel-default{
-      border: 2px solid #f9f9f9;
-      border-radius: 0px;
-      -webkit-box-shadow: none;
-              box-shadow: none;
-  }
-  .panel-default .panel-body{
-      border-top-color: #f9f9f9;
-      border-top-width: 2px;
-  }
-
-  .panel-default > .panel-heading {
-      background-color: #f9f9f9;
-      padding: 8px;
-      border-bottom: 1px solid #f9f9f9;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-
+#client-box{
+   border-top-color: #2DA4A4;
+   width: 83.33333%;
+   margin: 0 auto;
+}
+.table.table-striped{
+   border: 2px solid #f9f9f9;
+}
+.table-striped > tbody > tr:first-child >td{
+   border-top: 2px solid #f9f9f9
+}
+.box-footer > h5:first-child{
+   float:left;
+   color: #777;
+}
+.box-footer > h5:first-child >a{
+   color: #2BB4B4;
+}
+.box-footer > h5:first-child >a:hover{
+   color: #2DA4A4;
+}
+.box-footer > h5:nth-child(2){
+   float:right;
+   color: #777;
+}
+.box-footer > h5:last-child{
+   float:right;
+   padding-right:3%;
+   color: #777;
+}
+.panel-default{
+   border: 2px solid #f9f9f9;
+   border-radius: 0px;
+   -webkit-box-shadow: none;
+   box-shadow: none;
+}
+.panel-default .panel-body{
+   border-top-color: #f9f9f9;
+   border-top-width: 2px;
+}
+.panel-default > .panel-heading {
+   background-color: #f9f9f9;
+   padding: 8px;
+   border-bottom: 1px solid #f9f9f9;
+   border-top-left-radius: 0;
+   border-top-right-radius: 0;
+}
+.option-line{
+   float:right;
+   padding-left:5px;
+   position:relative;
+   top:5px;
+}
+.option-line > a {
+   border-right: 1px solid #f4f4f5;
+   margin-right:5px;
+   padding-right:5px;
+}
+hr{
+    margin-top:5px;
+    margin-bottom:0;
+}
+h3.inventor{
+    margin-top:10px;
+}
+@media screen and (max-width: 767px){
+    #client-box{
+        width: 91.666667%;
    }
+}
 </style>
 {% endblock css %}
 {% block content %}
 <div id="client-box" class="box box-info">
     <div class="box-header with-border">
       <h3 id="client-title" class="box-title ">{{ object.client_ch_name }}</h3>
-      <div class="pull-right">
-          <a class="btn btn-default" href="{% url "proposals:inventor-create" %}?client_id={{ object.client_id }}" role="button">Create Inventor</a>
+      <div class="option-line">
+          <a  href="{% url "proposals:inventor-create" %}?client_id={{ object.client_id }}" role="button">Create Inventor</a>
           {% if request.user == object.created_by  %}
-          <a class="btn btn-warning" href="{% url "proposals:client-update" object.client_id %}" role="button">Update</a>
-          <button class="btn btn-danger" id="remove-object">Remove</button>
+          <a href="{% url "proposals:client-update" object.client_id %}" role="button">Update</a>
+          <a id="remove-object">Remove</a>
           <form action="{% url "proposals:client-delete" %}" id="remove-form" method="post">
               {% csrf_token %}
               <input type="hidden" name="slug_field" value="{{ object.client_id }}">
@@ -221,7 +235,7 @@
         <hr>
         <div class="row">
             <div class="col-md-12">
-                <h3> <small>Inventor</small></h3>
+                <h3 class="inventor"> <small>Inventor</small></h3>
                 <hr>
                 <table id="list_table" class="table table-bordered table-striped">
                 <thead>

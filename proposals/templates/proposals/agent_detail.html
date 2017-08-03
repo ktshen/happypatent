@@ -3,72 +3,115 @@
 {% block content_title %}Agent{% endblock %}
 
 {% block css %}
-  <style>
-  #agent-title{
-  color: #2BB4B4;
-  margin-top:0.8%;
-  margin-bottom: 0;
+<style>
+#agent-title{
+    color: #2BB4B4;
+    margin-top:0;
+    margin-bottom: 2px;
+    font-size:25px;
 }
-
-  #agent-box{
-      border-top-color: #2DA4A4;
-      width: 87%;
-      margin: 0 auto;
-  }
-  .table.table-striped{
-      border: 2px solid #f9f9f9;
-  }
-
- .table-striped > tbody > tr:first-child >td{
-     border-top: 2px solid #f9f9f9
- }
-
-  .box-footer > h5:first-child{
-      float:left;
-      color: #777;
-  }
-
-  .box-footer > h5:first-child >a{
-      color: #2BB4B4;
-  }
-  .box-footer > h5:first-child >a:hover{
-      color: #2DA4A4;
-  }
-  .box-footer > h5:nth-child(2){
-      float:right;
-      color: #777;
-  }
-
-  .box-footer > h5:last-child{
-      float:right;
-      padding-right:3%;
-      color: #777;
-  }
-
-  .panel-default{
-      border: 2px solid #f9f9f9;
-      border-radius: 0px;
-      -webkit-box-shadow: none;
-              box-shadow: none;
-  }
-  .panel-default .panel-body{
-      border-top-color: #f9f9f9;
-      border-top-width: 2px;
-      padding:8px;
-      min-height: 36px;
-  }
-  .panel-default .panel-body >ul{
-      margin-bottom:0px;
-
-  }
-  .panel-default > .panel-heading {
-      background-color: #f9f9f9;
-      padding: 8px;
-      border-bottom: 1px solid #f9f9f9;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-
+#agent-box{
+    border-top-color: #2DA4A4;
+    width:  83.33333%%;
+    margin: 0 auto;
+}
+.table.table-striped{
+    border: 2px solid #f9f9f9;
+}
+.table-striped > tbody > tr:first-child >td{
+    border-top: 2px solid #f9f9f9
+}
+.box-footer > h5{
+    float:left;
+    color: #777;
+}
+.box-footer > h5 >a{
+    color: #2BB4B4;
+}
+.box-footer > h5 >a:hover{
+    color: #2DA4A4;
+}
+.box-footer > .create-time{
+    float:right;
+    display:flex;
+}
+.box-footer > .create-time >  h5 {
+    color: #777;
+}
+.box-footer > .create-time > h5:first-child {
+    margin-right: 10px;
+}
+.panel-default{
+    border: 2px solid #f9f9f9;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.panel-default .panel-body{
+    border-top-color: #f9f9f9;
+    border-top-width: 2px;
+    padding:8px;
+    min-height: 36px;
+}
+.panel-default .panel-body >ul{
+    margin-bottom:0;
+}
+.panel-default > .panel-heading {
+    background-color: #f9f9f9;
+    padding: 8px;
+    border-bottom: 1px solid #f9f9f9;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.option-line{
+    float:right;
+    padding-left:5px;
+    position:relative;
+    top:5px;
+}
+.option-line > a {
+    border-right: 1px solid #f4f4f5;
+    margin-right:5px;
+    padding-right:5px;
+}
+.option-line > a:first-child{
+    padding-left:10px;
+    border-left:1px solid #f4f4f5;
+}
+@media screen and (max-width: 767px){
+    #agent-box{
+        width: 91.666667%;
    }
+}
+@media screen and (max-width: 490px){
+   .option-line{
+       float:none;
+       padding-left:5px;
+       position:relative;
+       top:5px;
+       text-align:center;
+   }
+   #agent-title{
+       display:block;
+       text-align: center;
+     }
+    .box-footer > h5,
+    .box-footer > .create-time{
+        float: none;
+        position: relative;
+    }
+    .box-footer > h5{
+        margin-top:0;
+        top: -10px;
+        margin-bottom:0;
+        text-align: center;
+    }
+    .box-footer > .create-time{
+        top:-5px;
+        justify-content:center;
+        text-align:center
+    }
+}
 </style>
 {% endblock css %}
 
@@ -80,10 +123,10 @@
 <div id="agent-box" class="box box-info " style="border-top-color: #2DA4A4">
     <div class="box-header with-border">
       <h3 id="agent-title" class="box-title ">{{ object.agent_title }}</h3>
-      <div class="pull-right">
+      <div class="option-line">
           {% if request.user == object.created_by  %}
-          <a class="btn btn-warning" href="{% url "proposals:agent-update" object.agent_id %}" role="button">Update</a>
-          <button class="btn btn-danger" id="remove-object">Remove</button>
+          <a href="{% url "proposals:agent-update" object.agent_id %}" role="button">Update</a>
+          <a id="remove-object">Remove</a>
           <form action="{% url "proposals:agent-delete" %}" id="remove-form" method="post">
               {% csrf_token %}
               <input type="hidden" name="slug_field" value="{{ object.agent_id }}">
@@ -166,8 +209,10 @@
     </div>
     <div class="box-footer">
          <h5 ><br/>Created by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h5>
-         <h5 >Created:<br>{{ object.created }}</h5>
-         <h5 >Last updated:<br>{{ object.update }}</h5>
+         <div class="create-time">
+             <h5 >Created:<br>{{ object.created }}</h5>
+             <h5 >Last updated:<br>{{ object.update }}</h5>
+         </div>
     </div>
 </div>
 {% endblock content %}

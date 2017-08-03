@@ -22,7 +22,6 @@
       "info": true,
       "autoWidth": true
     });
-
     //Bootstrap datepicker
     $('.dateinput').datepicker({
         format: 'yyyy-mm-dd',

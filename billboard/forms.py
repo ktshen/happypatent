@@ -28,7 +28,7 @@ class PostModelForm(forms.ModelForm):
                 ),
                 Div(
                     Div(
-                        ButtonHolder(Submit('save', 'submit',css_class='btn btn-info pull-right')),
+                        ButtonHolder(Submit('save', 'submit',css_class='btn btn-primary pull-right')),
                         css_class='col-sm-12 '
                     ),
                     css_class='box-footer'
