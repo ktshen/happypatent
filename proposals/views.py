@@ -17,9 +17,9 @@ from django.db import transaction
 from dateutil.relativedelta import relativedelta
 import geocoder
 
-from .models import Employee, Patent, Agent, Client, User, FileAttachment, \
+from .models import Patent, Agent, Client, User, FileAttachment, \
                     Inventor, ControlEvent
-from .forms import EmployeeModelForm, PatentModelForm, ClientModelForm, \
+from .forms import PatentModelForm, ClientModelForm, \
                    AgentModelForm, InventorModelForm, ControlEventModelForm
 from .utils import CaseIDGenerator
 
@@ -150,43 +150,6 @@ class FileAttachmentViewMixin(object):
             instance = FileAttachment(file=file, content_object=self.object)
             instance.save()
         return response
-
-
-class EmployeeCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
-    model = Employee
-    template_name = 'proposals/employee_form.html'
-    form_class = EmployeeModelForm
-    success_message = "%(field)s was created successfully"
-
-    def get_success_message(self, cleaned_data):
-        if self.object.chinese_name:
-            field = self.object.chinese_name
-        elif self.object.english_name:
-            field = self.object.chinese_name
-        else:
-            field = self.object.employee_id
-        return self.success_message % dict(field=field)
-
-
-class EmployeeDetailView(LoginRequiredMixin, DetailView):
-    model = Employee
-
-
-class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
-    model = Employee
-    template_name = "proposals/employee_form.html"
-    form_class = EmployeeModelForm
-
-
-class EmployeeListView(LoginRequiredMixin, ListView):
-    model = Employee
-
-
-class EmployeeDeleteView(_DeleteView):
-    model = Employee
-    slug_field = 'pk'
-    slug_url_kwarg = 'pk'
-    success_url = reverse_lazy("proposals:employee-list")
 
 
 class PatentMixin(object):

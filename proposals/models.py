@@ -102,65 +102,6 @@ class Client(_BaseModel):
 
 
 @python_2_unicode_compatible
-class Employee(BaseProfileModel, _BaseModel):
-    GENDER_CHOICE = (
-        ('m', _('Male')),
-        ('f', _('Female'))
-    )
-    TITLE_ID = (
-        ('1', _('CEO')),
-        ('2', _('Director')),
-        ('3', _('Manager')),
-        ('4', _('Senior Engineer')),
-        ('5', _('Engineer')),
-    )
-
-    chinese_name = models.CharField(_("Chinese Name"),
-                                    max_length=30)
-
-    english_name = models.CharField(_('English Name'),
-                                    max_length=30)
-
-    employee_id = models.CharField(_('Employee_ID'),
-                                   max_length=30,
-                                   blank=True)
-    email = models.EmailField()
-
-    engagement_date = models.DateField(_('Engagement Date'),
-                                       default=timezone.now)
-
-    employer = models.ForeignKey(verbose_name=_('Employer'),
-                                 to=Client,
-                                 on_delete=models.SET_NULL,
-                                 null=True)
-
-    title_id = models.CharField(_('Title ID'), max_length=30, choices=TITLE_ID, blank=True)
-
-    def __str__(self):
-        return self.chinese_name
-
-    def get_absolute_url(self):
-        return reverse("proposals:employee-detail", args=[self.pk,])
-
-    @property
-    def employee_id(self):
-        """
-        Employee ID format: E0001, E1211, E29931 ....
-        :return:
-        """
-        e_id = str(self.pk)
-        if len(e_id) < 4:
-            e_id = '0' * (3 - len(e_id)) + e_id
-        return "E" + e_id
-
-    def title_id_template(self):
-        if self.title_id:
-            return dict(Employee.TITLE_ID)[self.title_id]
-        else:
-            return self.title_id
-
-
-@python_2_unicode_compatible
 class Inventor(_BaseModel):
     chinese_name = models.CharField(_('Chinese name'), max_length=50)
     english_name = models.CharField(_('English name (Last Name, First Name)'), max_length=50)

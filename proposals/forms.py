@@ -4,90 +4,9 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder
 
-from .models import Employee, Patent, Agent, Client, Inventor, ControlEvent
+from .models import Patent, Agent, Client, Inventor, ControlEvent
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
 from .utils import file_validate
-
-
-class EmployeeModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(EmployeeModelForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.layout = Layout(
-            Fieldset(
-                "",
-                Div(
-                    Div(
-                        'chinese_name',
-                        'english_name',
-                        'id_number',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'gender',
-                        'email',
-
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'home_number',
-                        'office_number',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'county',
-                        'address',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'engagement_date',
-                        'title_id',
-                        'spouse_name',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'education',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'experience',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'remarks',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-            ),
-            Div(
-                Div(
-                    ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
-                    css_class="button-wrap"
-                ),
-                 css_class="row",
-                )
-
-            )
-        )
-
-    class Meta:
-        model = Employee
-        fields = ('chinese_name', 'english_name', 'id_number', 'gender', 'email', 'county', 'address',
-                  'home_number', 'office_number', 'engagement_date', 'title_id',
-                  'spouse_name', 'education', 'experience', 'remarks')
-        widgets = {
-            "gender": MySelect2Widget(),
-            "title_id": MySelect2Widget(),
-        }
 
 
 class InventorModelForm(forms.ModelForm):

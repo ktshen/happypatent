@@ -9,7 +9,7 @@ from django.db import transaction
 from datetime import datetime
 from .models import User, CalendarEvent
 from .forms import UserProfileModelForm
-from proposals.models import Patent, Agent, Client, Employee, ControlEvent
+from proposals.models import Patent, Agent, Client, ControlEvent
 from billboard.models import Post, Comment
 from django.utils.timezone import utc
 
@@ -186,8 +186,6 @@ def getClassName(obj):
         return "client"
     elif isinstance(obj, Patent):
         return "patent"
-    elif isinstance(obj, Employee):
-        return "employee"
     elif isinstance(obj, Agent):
         return "agent"
     elif isinstance(obj, Comment):

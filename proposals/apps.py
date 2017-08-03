@@ -9,5 +9,4 @@ class ProposalsConfig(AppConfig):
         from actstream import registry
         registry.register(self.get_model('Patent'),
                           self.get_model('Client'),
-                          self.get_model('Employee'),
                           self.get_model('Agent'))

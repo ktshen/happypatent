@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Employee, Agent, Client,  Patent, Work, FileAttachment, ControlEvent
+from .models import Agent, Client,  Patent, Work, FileAttachment, ControlEvent
 
 
 @admin.register(FileAttachment)
@@ -20,15 +20,6 @@ class ClientModelAdmin(admin.ModelAdmin):
                         'status', 'created', 'update',)
     list_filter     = ('country', 'status', 'created', 'update',)
     ordering        = ('client_id', 'created', 'update', 'client_ch_name',)
-
-
-@admin.register(Employee)
-class EmployeeModelAdmin(admin.ModelAdmin):
-    date_hierarchy  = 'update'
-    list_display    = ('pk','chinese_name', 'english_name', 'employee_id', 'gender', 'created')
-    list_filter     = ('created', 'update',)
-    ordering        = ('created', 'update', 'chinese_name', 'english_name')
-    search_fields   = ('chinese_name', 'english_name', 'employee_id')
 
 
 @admin.register(Patent)
