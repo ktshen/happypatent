@@ -159,7 +159,7 @@ a.fc-day-number{
             </div>
             {% if request|is_pc %}
                 <hr/>
-                <div class="row">
+                <div class="row" id="calendar-event-bar">
                     <div class="col-sm-7">
                     <div class="box-header">
                         <h5 class="box-title">Drag Task to Month</h5>
@@ -352,10 +352,10 @@ $(document).ready(function() {
         },
         viewRender: function(view, element){
             if (view.type == "month") {
-                $("#new-event").attr({disabled: false});
+                $("#calendar-event-bar").show();
             }
             else if (view.type == "listWeek"){
-                $("#new-event").attr({disabled: true});
+                $("#calendar-event-bar").hide();
             }
         },
         eventDragStop: function( event, jsEvent, ui, view ) {
