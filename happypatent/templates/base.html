@@ -42,78 +42,75 @@
             table-layout: fixed;
             word-wrap: break-word;
         }
-        .panel-body, .box-body, .box-header {
-            overflow-wrap:break-word;
-        }
-        .ui-dialog-titlebar-close {
-            visibility: hidden;
-        }
-        .main-sidebar{
-            padding-top:0px;
-        }
-        .main-sidebar .bkg-holder{
-            height:50px;
+        .skin-blue-light .main-header .navbar .nav > li > a:hover,
+        .skin-blue-light .main-header .navbar .nav > li > a:active,
+        .skin-blue-light .main-header .navbar .nav > li > a:focus,
+        .skin-blue-light .main-header .navbar .nav .open > a:focus,
+        .skin-blue-light .main-header .navbar .nav .open > a,
+        .skin-blue-light .main-header .navbar .nav .open > a:hover,
+        .skin-blue-light .main-header .navbar .nav > .active > a,
+        .skin-blue-light .main-header .logo:hover{
             background-color:#39CCCC;
-            border-right:1px solid #fff6;
         }
-
+      .container.sub-navbar {
+          width:100%;
+          background-color:#ecf0f5;
+          display:flex;
+          justify-content: center;
+      }
+      .container.main-nav {
+           width:100%;
+      }
+        .skin-blue-light .content-wrapper {
+            border-left:none;
+        }
+        .fixed .content-wrapper {
+            padding-top:100px;
+            margin-left:0;
+        }
         .main-header .navbar {
-            margin-bottom: 0;
-            display: flex;
-            justify-content: space-between;
-
+            margin-left: 0;
         }
-        .navbar:after,.navbar:before{
-            content:normal;
+        .skin-blue-light .main-header .navbar .nav > li > a:focus.sub-navbar-menu,
+        .skin-blue-light .main-header .navbar .nav > li > a.sub-navbar-menu{
+            color:#2DA4A4;
+            background-color:transparent;
         }
-        .main-header .navbar-custom-menu,
-        .main-header .sidebar-toggle{
+        .skin-blue-light .main-header .navbar .nav > li > a:hover.sub-navbar-menu,
+        .skin-blue-light .main-header .navbar .nav .open > a.sub-navbar-menu{
+            color:#39CCCC;
+            top:-3px;
+            background-color:transparent;
+        }
+        .navbar-header{
             float:none;
+            display:flex;
+            justify-content:space-between;
+        }
+        .navbar-header .logo {
+            flex-grow: 2;
+            text-align: left;
         }
         .main-header .nonuser-navbar .navbar{
             padding-left:230px;
-            margin-left:0px;
+            margin-left:0;
         }
-        .content-header{
-            min-height: 40px;
-        }
-        .content-header > h1 {
-            position: relative;
-            top:-5px;
+        .navbar-nav > li {
+            padding:0 10px 0 10px;
         }
         .main-header .nonuser-navbar .logo > .logo-small {
                 display: none;
             }
-        @media(min-width: 0px ) {
-            .sidebar-mini.sidebar-collapse .main-header .logo,
-            .sidebar-mini.sidebar-collapse .main-header .logo > .logo-lg,
-            .main-header .logo {
-                -webkit-transition: none;
-                -o-transition: none;
-                transition: none;
-                display: block;
-                float: none;
-                height: 50px;
-                font-size: 20px;
-                line-height: 50px;
-                text-align: center;
-                width: 230px;
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                padding: 0 15px;
-                font-weight: 300;
-                overflow: hidden;
-            }
-        }
         @media(max-width:767px){
-            .main-header .navbar{
-                margin-left:0;
-            }
             .fixed .content-wrapper{
                 padding-top:50px;
             }
             .main-header .nonuser-navbar .navbar{
                 justify-content: center;
                 padding-left: 0;
+            }
+            #navbar-collapse {
+                width:100%;
             }
         }
         @media(max-width:442px) {
@@ -124,18 +121,10 @@
             .main-header .nonuser-navbar .logo {
                 width: 50px;
                 height: 50px;
-                padding: 0px 5px 5px 5px;
+                padding: 0 5px 5px 5px;
                 display:block;
             }
         }
-        @media(min-width:767px){
-            .main-header .sidebar-toggle{
-                visibility:hidden;
-            }
-        }
-
-
-{##ecf0f5#}
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -191,18 +180,17 @@
     {% if request.user.is_authenticated %}
     <div class="navbar-wrapper">
     <nav class="navbar navbar-static-top" role="navigation">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-        <span class="sr-only">Toggle navigation</span>
-      </a>
         <!-- Logo -->
-      <a href="{% url "users:home" %}" class="logo">
+        <div class="container main-nav">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+            <i class="fa fa-bars"></i>
+            </button>
+            <a href="{% url "users:home" %}" class="logo">
      <!-- logo for regular state and mobile devices -->
-{#      <span class="logo-small"><b>HP</b></span>#}
       <span class="logo-lg"><b>HAPPY</b>Patent</span>
     </a>
-          <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
+            <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
@@ -236,8 +224,75 @@
         </ul>
       </div>
 
+          </div>
+        </div>
+        <div class="container sub-navbar">
+            <div class="collapse navbar-collapse " id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a  class="sub-navbar-menu" href="{% url "users:dashboard" %}">
+                            <i class="fa fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="sub-navbar-menu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="glyphicon glyphicon-bullhorn"></i>
+                            <span>Billboard</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-down pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url "billboard:list" %}"><i class="fa fa-circle-o"></i> See All Posts</a></li>
+                            <li><a href="{% url "billboard:create" %}"><i class="fa fa-circle-o"></i> Create New Post</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="sub-navbar-menu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-file-text-o"></i>
+                            <span>Patents</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-down pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url "proposals:patent-list" %}"><i class="fa fa-circle-o"></i> All Patents</a></li>
+                            <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Create New Patent</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                         <a class="sub-navbar-menu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-suitcase"></i>
+                            <span>Agent</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-down pull-right"></i>
+                            </span>
+                         </a>
+                         <ul class="dropdown-menu">
+                            <li><a href="{% url "proposals:agent-list" %}"><i class="fa fa-circle-o"></i> See All Agents</a></li>
+                            <li><a href="{% url "proposals:agent-create" %}"><i class="fa fa-circle-o"></i> Create New Agent</a></li>
+                         </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="sub-navbar-menu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-gg-circle"></i>
+                                <span>Client</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-down pull-right"></i>
+                                </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url "proposals:client-list" %}"><i class="fa fa-circle-o"></i> See All Clients</a></li>
+                            <li><a href="{% url "proposals:client-create" %}"><i class="fa fa-circle-o"></i> Create New Client</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
     </div>
+        <!-- Navbar Right Menu -->
     {% else %}
     <div class="nonuser-navbar">
     <nav class="navbar navbar-static-top" role="navigation">
@@ -268,82 +323,11 @@
   </header>
 
     {% if request.user.is_authenticated %}
-        <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
-        <!--bkg-holder: main-header extension-->
-        <div class="bkg-holder"></div>
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-            <!-- Sidebar Menu -->
-          <ul class="sidebar-menu">
-            <li class="header"><b>Menu</b></li>
-            <!-- Optionally, you can add icons to the links -->
-            <li id="sidebar-dashboard">
-                <a href="{% url "users:dashboard" %}">
-                    <i class="fa fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="treeview" id="sidebar-billboard">
-                <a href="#"><i class="glyphicon glyphicon-bullhorn"></i> <span>Billboard</span>
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-
-                  <ul class="treeview-menu">
-                    <li><a href="{% url "billboard:list" %}"><i class="fa fa-circle-o"></i> See All Posts</a></li>
-                    <li><a href="{% url "billboard:create" %}"><i class="fa fa-circle-o"></i> Create New Post</a></li>
-                  </ul>
-            </li>
-            <li id="sidebar-patent">
-              <a href="#">
-                <i class="fa fa-file-text-o"></i>
-                <span>Application</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-
-              <ul class="treeview-menu">
-                  <li><a href="{% url "proposals:patent-list" %}"><i class="fa fa-circle-o"></i> All Applications</a></li>
-                  <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Create New Application</a></li>
-              </ul>
-            </li>
-            <li class="treeview" id="sidebar-client">
-                  <a href="#"><i class="fa fa-gg-circle"></i>
-                    <span>Client</span>
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul class="treeview-menu">
-                    <li><a href="{% url "proposals:client-list" %}"><i class="fa fa-circle-o"></i> See All Clients</a></li>
-                    <li><a href="{% url "proposals:client-create" %}"><i class="fa fa-circle-o"></i> Create New Client</a></li>
-                  </ul>
-            </li>
-            <li class="treeview" id="sidebar-agent">
-                <a href="#"><i class="fa fa-suitcase"></i> <span>Agent</span>
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-
-                  <ul class="treeview-menu">
-                    <li><a href="{% url "proposals:agent-list" %}"><i class="fa fa-circle-o"></i> See All Agents</a></li>
-                    <li><a href="{% url "proposals:agent-create" %}"><i class="fa fa-circle-o"></i> Create New Agent</a></li>
-                  </ul>
-            </li>
-          </ul>
-          <!-- /.sidebar-menu -->
-        </section>
-    <!-- /.sidebar -->
-    </aside>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" >
         <!-- Content Header (Page header) -->
         <section class="content-header">
-           <h1><small>{% block content_title %}{% endblock %}</small></h1>
+{#           <h1><small>{% block content_title %}{% endblock %}</small></h1>#}
             {% if messages %}
               {% for message in messages %}
                   <div class="alert alert-{{ message.tags }} alert-dismissible">
@@ -353,7 +337,6 @@
                   </div>
               {% endfor %}
           {% endif %}
-
         </section>
 
         <!-- Main content -->
@@ -381,7 +364,6 @@
             {% block inner %}
             {% endblock %}
         </div>
-    </div>
 {% endif %}
 </body>
 </html>

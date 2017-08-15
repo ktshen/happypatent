@@ -13,9 +13,12 @@
   font-size:22px;
 }
 #client-box{
-   border-top-color: #2DA4A4;
+   border-top-color: transparent;
    width: 83.33333%;
    margin: 0 auto;
+}
+#client-box > .box-header.with-border {
+    border-bottom: 1px solid #f4f4f4;
 }
 .table.table-striped{
    border: 2px solid #f9f9f9;
@@ -81,6 +84,19 @@ h3.inventor{
     #client-box{
         width: 91.666667%;
    }
+}
+@media screen and (max-width: 490px){
+    .option-line{
+       float:none;
+       padding-left:5px;
+       position:relative;
+       top:5px;
+       text-align:center;
+   }
+   #client-title{
+       display:block;
+       text-align: center;
+     }
 }
 </style>
 {% endblock css %}

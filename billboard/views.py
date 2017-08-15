@@ -53,7 +53,7 @@ class PostUpdateView(LoginRequiredMixin, FileAttachmentViewMixin, UpdateView):
 @transaction.non_atomic_requests
 class PostListView(LoginRequiredMixin, ListView):
     model = Post
-    paginate_by = 5
+    paginate_by = 6
     ordering = ['-update', '-created']
 
 

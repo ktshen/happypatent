@@ -12,9 +12,9 @@
   margin-top:0;
   margin-bottom:0;
   color:#2BB4B4;
- }
+}
 .box{
-    border-top-color:#2DA4A4;
+    border:none;
     margin: 0 auto 20px auto;
     width: 83.333333%;
 }
@@ -38,6 +38,13 @@
   overflow-wrap:break-word;
   font-size: 16px;
   line-height: 1.4;
+}
+.post-detail-box,
+.comment-box{
+    padding:10px;
+    float:left;
+    width:75%;
+    border-right:1px solid #f4f4f4;
 }
 h4{
     margin-top:0;
@@ -64,116 +71,117 @@ textarea{
   -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
+.box-header > h3,
+.box-footer >h4 {
+    color:#2BB4B4;
+}
 .box-header.with-border{
+ border:1px solid #f4f4f4;
  padding: 15px 10px 10px 10px;
+}
+.post-detail-row{
+
+    overflow:hidden;
 }
 .avatar a >img{
  float:left;
  width: 40px;
  height:40px;
  margin-right:10px;
+ border-radius:100%;
 }
 .panel {
   position:relative;
 }
+.panel-default{
+    border:none;
+    border-left:2px solid #2BB4B4;
+    border-radius:0;
+}
+.panel-default > .panel-heading{
+    border:none;
+    background-color:transparent;
+}
 @media screen and (max-width: 767px) {
     .box {
         width: 91.666667%;
+    }
+    .post-detail-box,
+    .comment-box{
+        width:100%;
     }
 }
 </style>
 {% endblock %}
 
 {% block content %}
- <!-- Blog Post Content Column -->
-<div class="box ">
-    <div class="box-header with-border">
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
+ <!-- Blog Post Content column -->
+<div class="box">
+    <div class="post-detail-row">
+        <div class="post-detail-box">
+            <div class="box-header with-border">
                 <h5 class="blog-post-title">{{ object.title }}</h5>
                 <div class="credit-line">
                     <h5 >
-                        <small>{{ object.update }} by <a href="{% url "users:detail" object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a></small>
-                     </h5>
-                    {% if request.user == object.author %}
-                     <a  href="{% url "billboard:update" object.slug %}" role="button">update </a>
-                     <a id="remove-object" role="button"> remove</a>
-                        <form action="{% url "billboard:remove" %}" method="post" id="remove-form">
-                            {% csrf_token %}
-                            <input type="hidden" name="slug" value="{{ object.slug }}">
-                        </form>
-                    {% endif %}
+                    <small>{{ object.update }} by <a href="{% url "users:detail" object.author.username %}">{{ object.author.first_name }} {{ object.author.last_name }}</a></small>
+                    </h5>
+                   {% if request.user == object.author %}
+                    <a  href="{% url "billboard:update" object.slug %}" role="button">update </a>
+                    <a id="remove-object" role="button"> remove</a>
+                    <form action="{% url "billboard:remove" %}" method="post" id="remove-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="slug" value="{{ object.slug }}">
+                    </form>
+                   {% endif %}
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="blog-post">
+                    <div>
+                    {{ object.text | safe }}
+                    </div>
+                    <ul>
+                        {% for file in object.files.all %}
+                        <li><h5><small><a href="{{ file.file.url }}" download>{{ file.filename }}</a></small></h5></li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    <div class="box-body">
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-                 <div class="blog-post">
-                    <div>
-                        {{ object.text | safe }}
-                    </div>
-                 <ul>
-                    {% for file in object.files.all %}
-                    <li><h5><small><a href="{{ file.file.url }}" download>{{ file.filename }}</a></small></h5></li>
-                    {% endfor %}
-                 </ul>
-                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="box-footer">
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-
-            </div>
-        </div>
-    </div>
-  </div>
     <!--Comment Section -->
-<div class="box box-solid">
-          <div class="box-header with-border">
-              <div class="row">
-                  <div class="col-sm-10 col-sm-offset-1">
-                      <h3 class="box-title text-blue"><strong>Comments ({{ comments|length }})</strong></h3>
-                  </div>
-              </div>
-          </div>
-          <div class="box-body">
-        {% for comment in comments %}
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
+    <div class="post-detail-row">
+        <div class="comment-box">
+            <div class="box-header ">
+                <h3 class="box-title">Comments ({{ comments|length }})</h3>
+            </div>
+            <div class="box-body">
+                {% for comment in comments %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="avatar">
                             <a href="{{ comment.created_by.get_absolute_url }}"><img class="img-responsive user-photo" src="{% if comment.created_by.profile_pic %}{{ comment.created_by.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}"></a>
-                            <strong><a href="{{ comment.created_by.get_absolute_url }}">{{ comment.created_by.first_name }} {{ comment.created_by.last_name }}</a></strong><br/>
+                            <a href="{{ comment.created_by.get_absolute_url }}">{{ comment.created_by.first_name }} {{ comment.created_by.last_name }}</a><br/>
                             <span class="text-muted"><small>{{ comment.created }}</small></span>
                         </div>
                     </div>
                     <div class="panel-body">
-                        {{ comment.text }}
+                          {{ comment.text }}
                     </div>
                 </div>
+                {% endfor %}
             </div>
-        </div>
-        {% endfor %}
-          </div>
-        <div class="box-footer">
-            <div class="row ">
-                <div class="col-sm-10 col-sm-offset-1">
-                    <h4 class="text-blue"> <strong>Leave a Comment:</strong></h4>
-                    <form action="{% url "billboard:comment" object.slug %}" method="post" role="form">
-                        {% csrf_token %}
-                        <div class="form-group">
+            <div class="box-footer">
+                <h4 > Leave a Comment:</h4>
+                <form action="{% url "billboard:comment" object.slug %}" method="post" role="form">
+                    {% csrf_token %}
+                    <div class="form-group">
                         <textarea id="id_text" maxlength="150" name="text" rows="5" required=""></textarea>
                     </div>
-                        <button type="submit" class="btn btn-info pull-right">Submit</button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-info pull-right">Submit</button>
+                </form>
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}
