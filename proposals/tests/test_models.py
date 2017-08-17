@@ -1,7 +1,7 @@
 from test_plus import TestCase
 from django.core.exceptions import ValidationError
 from ..models import Agent, Inventor, ControlEvent
-from .factories import PatentFactory, ControlEventFactory, ClientFactory
+from .factories import PatentFactory, ControlEventFactory
 
 
 class PatentModelTest(TestCase):
@@ -29,39 +29,6 @@ class PatentModelTest(TestCase):
 
     def test_unique_case_id(self):
         self.assertTrue(self.patent._meta.get_field("case_id").unique)
-
-
-class ClientModelTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.user = cls.make_user(cls)
-        cls.client_model = ClientFactory(created_by=cls.user)
-
-    def test_field_must_required(self):
-        self.assertFalse(self.client_model._meta.get_field('abbr_client').blank)
-        self.assertFalse(self.client_model._meta.get_field('client_ch_name').blank)
-        self.assertFalse(self.client_model._meta.get_field('client_en_name').blank)
-        self.assertFalse(self.client_model._meta.get_field('country').blank)
-        self.assertFalse(self.client_model._meta.get_field('post_address').blank)
-        self.assertFalse(self.client_model._meta.get_field('phone_number').blank)
-        self.assertFalse(self.client_model._meta.get_field('repr_chinese_name').blank)
-        self.assertFalse(self.client_model._meta.get_field('repr_english_name').blank)
-        try:
-            self.client_model.full_clean()
-        except ValidationError as e:
-            self.fail("Client full_clean() method raise a ValidationError: %s" % e)
-
-    def test__str__(self):
-        self.assertEqual(str(self.client_model), "測試客戶")
-
-    def test_client_name(self):
-        self.assertEqual(self.client_model.name, self.client_model.client_ch_name)
-
-    def test_get_absolute_url(self):
-        self.assertEqual(self.client_model.get_absolute_url(), "/proposals/client/1/detail/")
-
-    def test_client_pk(self):
-        self.assertEqual(self.client_model.pk, self.client_model.client_id)
 
 
 class AgentTestCase(TestCase):

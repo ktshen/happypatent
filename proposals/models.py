@@ -4,7 +4,6 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericRelation
@@ -46,62 +45,6 @@ class _BaseModel(models.Model):
 
 
 @python_2_unicode_compatible
-class Client(_BaseModel):
-    EMPLOYEE_AMOUNT = (
-        ('above', _('Above 500 employees')),
-        ('under', _('Under 500 employees')),
-    )
-    client_id = models.AutoField(_('Client\'s ID'), primary_key=True, editable=False)
-    abbr_client = models.CharField(_('Client\'s name in abbreviated form'), max_length=30)
-    client_ch_name = models.CharField(_('Client Chinese name'), max_length=50)
-    client_en_name = models.CharField(_('Client English name'), max_length=50)
-    country = models.CharField(_('Country'), max_length=50)
-    post_address = models.CharField(_('Post Office Address'), max_length=100)
-    english_address = models.CharField(_('English Address'), max_length=100, blank=True)
-    invoice_address = models.CharField(_('Invoice(Application form) address'), max_length=100, blank=True)
-    phone_number = models.CharField(_('Phone Number'), max_length=50)
-    fax_number = models.CharField(_('Fax Number'), max_length=50, blank=True)
-    contact_person_name = models.CharField(_('Contact Person\'s Name'), max_length=30, blank=True)
-    contact_person_title = models.CharField(_('Contact Person\'s Title'), max_length=30, blank=True)
-    contact_person_phone_number = models.CharField(_('Contact Person\'s Phone Number'), max_length=50, blank=True)
-    contact_person_email = models.EmailField(_('Contact Person\'s Email'), blank=True)
-    repr_chinese_name = models.CharField(_('Representative\'s Chinese name'), max_length=50)
-    repr_english_name = models.CharField(_('Representative\'s English name'), max_length=50)
-    vat_no = models.CharField(_('VAT No.'), max_length=30, blank=True)
-    number_employee = models.CharField(_('Number of employees'),
-                                       max_length=30,
-                                       choices=EMPLOYEE_AMOUNT,
-                                       blank=True)
-    primary_owner = models.CharField(_('Primary owner'), max_length=50)
-    secondary_owner = models.CharField(_('Secondary owner'), max_length=50, blank=True)
-    status = models.CharField(_('Status'), max_length=30, blank=True)
-
-    class Meta:
-        verbose_name = _('Applicant')
-        verbose_name_plural = _('Applicants')
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def name(self):
-        return self.client_ch_name
-
-    def get_absolute_url(self):
-        return reverse("proposals:client-detail", args=[self.client_id])
-
-    @property
-    def pk(self):
-        return self.client_id
-
-    def number_employee_template(self):
-        if self.number_employee:
-            return dict(Client.EMPLOYEE_AMOUNT)[self.number_employee]
-        else:
-            return self.number_employee
-
-
-@python_2_unicode_compatible
 class Inventor(_BaseModel):
     chinese_name = models.CharField(_('Chinese name'), max_length=50)
     english_name = models.CharField(_('English name (Last Name, First Name)'), max_length=50)
@@ -111,7 +54,6 @@ class Inventor(_BaseModel):
     phone_number = models.CharField(_('Phone Number'), max_length=50, blank=True)
     id_number = models.CharField(_('ID Number'), max_length=20, blank=True)
     email = models.EmailField(blank=True)
-    client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.chinese_name

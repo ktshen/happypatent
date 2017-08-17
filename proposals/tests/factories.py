@@ -1,5 +1,5 @@
 import factory
-from ..models import Patent, Client, ControlEvent
+from ..models import Patent, ControlEvent
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
@@ -23,20 +23,6 @@ class PatentFactory(factory.django.DjangoModelFactory):
     @factory.sequence
     def english_title(n):
         return "testing_patent-%d" % n
-
-
-class ClientFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = Client
-    abbr_client = "test_abbr"
-    client_ch_name = "測試客戶"
-    client_en_name = "test-client"
-    country = "country"
-    post_address = "test"
-    phone_number = "0123456789"
-    repr_chinese_name = "測試代表人"
-    repr_english_name = "test_repr"
-    primary_owner = "test-owner"
 
 
 class ControlEventFactory(factory.django.DjangoModelFactory):

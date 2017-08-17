@@ -17,10 +17,9 @@ from django.db import transaction
 from dateutil.relativedelta import relativedelta
 import geocoder
 
-from .models import Patent, Agent, Client, User, FileAttachment, \
+from .models import Patent, Agent, User, FileAttachment, \
                     Inventor, ControlEvent
-from .forms import PatentModelForm, ClientModelForm, \
-                   AgentModelForm, InventorModelForm, ControlEventModelForm
+from .forms import PatentModelForm, AgentModelForm, InventorModelForm, ControlEventModelForm
 from .utils import CaseIDGenerator
 
 
@@ -341,56 +340,6 @@ class AgentDeleteView(_DeleteView):
 class AgentSelect2View(AjaxSelect2View):
     model = Agent
     search_fields = ["agent_title__icontains"]
-
-
-class ClientCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,
-                       SuccessMessageMixin, CreateView):
-    model = Client
-    template_name = "proposals/client_create.html"
-    form_class = ClientModelForm
-    success_message = "%(client_ch_name)s was created successfully."
-
-    def get_success_message(self, cleaned_data):
-        return self.success_message % dict(
-            client_ch_name=self.object.client_ch_name,
-        )
-
-
-class ClientDetailView(LoginRequiredMixin, DetailView):
-    model = Client
-    slug_field = "client_id"
-    slug_url_kwarg = "client_id"
-
-    def get_context_data(self, **kwargs):
-        context = super(ClientDetailView, self).get_context_data(**kwargs)
-        context["inventor_list"] = Inventor.objects.filter(client=self.object).order_by("country")
-        return context
-
-
-class ClientUpdateView(LoginRequiredMixin, UpdateView):
-    model = Client
-    slug_field = "client_id"
-    slug_url_kwarg = "client_id"
-    template_name = "proposals/client_create.html"
-    form_class = ClientModelForm
-
-
-@transaction.non_atomic_requests
-class ClientListView(LoginRequiredMixin, ListView):
-    model = Client
-
-
-class ClientDeleteView(_DeleteView):
-    model = Client
-    slug_field = "client_id"
-    slug_url_kwarg = "client_id"
-    success_url = reverse_lazy("proposals:client-list")
-
-
-class ClientSelect2View(AjaxSelect2View):
-    model = Client
-    search_fields = ["client_en_name__icontains", "client_ch_name__icontains"]
-
 
 class InventorEditMixin(object):
     def get_initial(self):

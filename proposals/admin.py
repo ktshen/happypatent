@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Agent, Client,  Patent, Work, FileAttachment, ControlEvent
+from .models import Agent, Patent, Work, FileAttachment, ControlEvent
 
 
 @admin.register(FileAttachment)
@@ -11,15 +11,6 @@ class FileAttachmentModelAdmin(admin.ModelAdmin):
 @admin.register(Agent)
 class AgentModelAdmin(admin.ModelAdmin):
     pass
-
-
-@admin.register(Client)
-class ClientModelAdmin(admin.ModelAdmin):
-    date_hierarchy  = 'update'
-    list_display    = ('client_ch_name', 'client_en_name', 'country',
-                        'status', 'created', 'update',)
-    list_filter     = ('country', 'status', 'created', 'update',)
-    ordering        = ('client_id', 'created', 'update', 'client_ch_name',)
 
 
 @admin.register(Patent)

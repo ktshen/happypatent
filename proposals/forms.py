@@ -4,7 +4,7 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder
 
-from .models import Patent, Agent, Client, Inventor, ControlEvent
+from .models import Patent, Agent, Inventor, ControlEvent
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
 from .utils import file_validate
 
@@ -119,91 +119,6 @@ class AgentModelForm(forms.ModelForm):
         css = {
             'all': ('css/agent_create.css',)
         }
-
-
-class ClientModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ClientModelForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.layout = Layout(
-            Fieldset(
-                "",
-                Div(
-                    Div(
-                        'abbr_client',
-                        'client_ch_name',
-                        'client_en_name',
-                        'country',
-                        'status',
-                        'phone_number',
-                        'fax_number',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'post_address',
-                        'english_address',
-                        'invoice_address',
-                        'invoice_address',
-                        'vat_no',
-                        'number_employee',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'contact_person_name',
-                        'contact_person_title',
-                        'contact_person_phone_number',
-                        'contact_person_email',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'repr_chinese_name',
-                        'repr_english_name',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        'primary_owner',
-                        'secondary_owner',
-                        css_class="column-wrap"
-                    ),
-                    Div(
-                        'remarks',
-                        css_class="column-wrap"
-                    ),
-                    css_class="row"
-                ),
-                Div(
-                    Div(
-                        ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
-                        css_class="button-wrap"
-                    ),
-                    css_class="row"
-                )
-            )
-        )
-
-    class Meta:
-        model = Client
-        fields = ('abbr_client', 'client_ch_name', 'client_en_name', 'country',
-                  'post_address', 'english_address', 'invoice_address', 'phone_number',
-                  'fax_number', 'contact_person_name', 'contact_person_title',
-                  'contact_person_phone_number', 'contact_person_email', 'repr_chinese_name',
-                  'repr_english_name', 'vat_no', 'number_employee', 'primary_owner',
-                  'secondary_owner', 'status', 'remarks')
-        widgets = {
-            "number_employee": MySelect2Widget(),
-        }
-
-
-class AjaxClientModelForm(ClientModelForm):
-    def __init__(self, *args, **kwargs):
-        super(AjaxClientModelForm, self).__init__(*args, **kwargs)
-        self.helper.form_action = reverse("proposals:client-create")
 
 
 class PatentModelForm(forms.ModelForm):

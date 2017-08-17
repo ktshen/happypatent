@@ -15,15 +15,6 @@ urlpatterns = [
     url(r'^agent/delete/$', views.AgentDeleteView.as_view(), name='agent-delete'),
     url(r'^agent/select2/$', views.AgentSelect2View.as_view(), name='agent-select2'),
 
-    url(r'^client/create/$', views.ClientCreateView.as_view(), name='client-create'),
-    url(r'^client/(?P<client_id>\d+)/detail/$', views.ClientDetailView.as_view(),
-                                             name='client-detail'),
-    url(r'^client/(?P<client_id>\d+)/update/$', views.ClientUpdateView.as_view(),
-                                             name='client-update'),
-    url(r'^client/list/$', views.ClientListView.as_view(), name='client-list'),
-    url(r'^client/delete/$', views.ClientDeleteView.as_view(), name='client-delete'),
-    url(r'^client/select2/$', views.ClientSelect2View.as_view(), name='client-select2'),
-
     url(r'^patent/create/$', views.PatentCreateView.as_view(), name='patent-create'),
     url(r'^patent/(?P<case_id>[-\w]+)/detail/$', views.PatentDetailView.as_view(),
         name='patent-detail'),
