@@ -2,7 +2,7 @@ from django import forms
 from django.urls import reverse
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder
+from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder,Field
 
 from .models import Patent, Agent, Proposal, Inventor, ControlEvent
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
@@ -147,85 +147,132 @@ class PatentModelForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset(
                 "",
+                Div(
                     Div(
-                        Div(
-                            'case_id',
-                            'english_title',
-                            'chinese_title',
-                            'case_status',
-                            'application_type',
-                            'country',
-                            css_class="column-wrap "
-                       ),
-                        Div(
-                            'agent',
-                            'agent_ref_no',
-                            'inventor',
-                            css_class="column-wrap"
-                       ),
-                            css_class="row"
-                      ),
-                     Div(
-                        Div(
-                            'application_no',
-                            'filing_date',
-                            'request_examination',
-                            css_class="column-wrap"
-                        ),
-                        Div(
-                            'examination_date',
-                            'publication_date',
-                            'publication_no',
-                            css_class="column-wrap"
-                        ),
-                            css_class="row"
-                     ),
-                     Div(
-                         Div(
-                             'pre_decision_date',
-                             'pre_decision_no',
-                             're_examine_date',
-                             css_class="column-wrap"
-                         ),
-                         Div(
-                             'description_pages',
-                             'drawing_pages',
-                             'figures_number',
-                             css_class="column-wrap"
-                             ),
-                            css_class="row"
-                        ),
-                     Div(
-                        Div(
-                             'patent_date',
-                             'patent_no',
-                             'patent_term',
-                             'extended_days',
-                             'certificate_no',
-                             css_class="column-wrap"
-                         ),
-                         Div(
-                             'priority',
-                             'prio_country',
-                             'prio_application_no',
-                             'prio_filing_date',
-                             css_class="column-wrap"
-                         ),
-                            css_class="row"
-                     ),
+                        'case_id',
+                        'country',
+                        css_class="col-md-4 col-sm-6 "
+                    ),
                     Div(
-                        Div(
-                            'file_holder_position',
-                            'IDS_information',
-                            css_class="column-wrap"
+                        'english_title',
+                        'application_type',
+                        css_class="col-md-4 col-sm-6 "
+                    ),
+
+                    Div(
+                        'chinese_title',
+                        'case_status',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    css_class="row  green-border"
+                ),
+                Div(
+                    Div(
+                        'client',
+                        'inventor',
+                        css_class="col-md-4 col-sm-6 "
+                    ),
+                    Div(
+                        'client_ref_no',
+                        'agent_ref_no',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        'agent',
+                        css_class="col-md-4 col-sm-6 "
+                    ),
+                    css_class="row grey-border"
+                ),
+                Div(
+                    Div(
+                        'application_no',
+                        'publication_date',
+                        css_class="col-md-4 col-sm-6 "
+                    ),
+                    Div(
+                        'request_examination',
+                        'publication_no',
+                         css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                       'examination_date',
+                       'filing_date',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                        css_class="row green-border"
+                ),
+                Div(
+                    Div(
+                        'pre_decision_date',
+                        'description_pages',
+                        css_class="col-md-4 col-sm-6 "
+                    ),
+                    Div(
+                        'pre_decision_no',
+                        'drawing_pages',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        're_examine_date',
+                        'figures_number',
+                        css_class="col-md-4 col-sm-6 "
+                    ),
+                    css_class="row grey-border"
+                ),
+                Div(
+                    Div(
+                        'patent_date',
+                        'certificate_no',
+                        css_class="col-md-4 col-sm-6"
+                         ),
+                    Div(
+                        'patent_no',
+                        'extended_days',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        'patent_term',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                      css_class="row  green-border"
+                ),
+                Div(
+                    Div(
+                        'priority',
+                        'prio_filing_date',
+                        css_class="col-md-4 col-sm-6 "
+                    ),
+                    Div(
+                        'prio_country',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        'prio_application_no',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    css_class="row grey-border"
+                ),
+                Div(
+                    Div(
+                       'file_holder_position',
+
+                        css_class="col-md-4 col-sm-6 "
+                    ),
+                    css_class="row green-border"
+                ),
+                Div(
+                    Div(
+                        'IDS_information',
+                        css_class="col-md-6"
+                    ),
+                    Div(
+                       'remarks',
+                        css_class="col-md-6"
                         ),
 
-                        Div(
-                           'remarks',
-                            css_class="remark-column-wrap"
-                        ),
-                            css_class="row"
-                      ),
+                            css_class="row grey-border"
+                ),
+
                     Div(
                         Div(
                           'file',
