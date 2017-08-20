@@ -63,6 +63,34 @@ class Inventor(_BaseModel):
 
 
 @python_2_unicode_compatible
+class Proposal(_BaseModel):
+    APPRAISAL_RESULT_CHOICES = (
+        ('pass', _('Pass')),
+        ('fail', _('Fail')),
+        ('re-appraise', _('Re-appraise after supplements')),
+    )
+    proposal_no = models.CharField(_('Proposal No.'), max_length=50)
+    chinese_title = models.CharField(_('Chinese Title'), max_length=200)
+    english_title = models.CharField(_('English Title'), max_length=200)
+    inventors = models.ManyToManyField(verbose_name=_('Inventor'), to=Inventor)
+    department = models.CharField(_('Department'), blank=True, max_length=200)
+    category = models.CharField(_('Technique category'), blank=True, max_length=200)
+    proposal_date = models.DateField(_('Proposal Date'), blank=True, null=True)
+    country = models.CharField(_('Default Filing Countries'), blank=True, max_length=200)
+    abstract = models.TextField(_('Abstract'), blank=True)
+    performance = models.CharField(_('Applied field and performance'), blank=True, max_length=200)
+    appraisal_date = models.DateField(_('Appraisal date'), blank=True, null=True)
+    appraisal_result = models.CharField(_('Appraisal Results'), choices=APPRAISAL_RESULT_CHOICES, blank=True,
+                                        max_length=200)
+
+    def __str__(self):
+        return self.proposal_no
+
+    def get_absolute_url(self):
+        return reverse("proposals:proposal-detail", args=[self.pk])
+
+
+@python_2_unicode_compatible
 class Agent(_BaseModel):
     agent_id = models.AutoField(_('Agent\'s ID'), primary_key=True, editable=False)
     agent_title = models.CharField(_('Agent\'s title'), max_length=50, unique=True)
@@ -129,9 +157,6 @@ class Patent(_BaseModel):
                                         choices=APPLICATION_TYPE_CHOICES, blank=True)
     country = models.CharField(_('Country'), max_length=30,
                                choices=COUNTRY_CHOICES)
-
-    client = models.ForeignKey(to=Client, on_delete=models.SET_NULL, null=True, blank=True)
-    client_ref_no = models.CharField(_("Client Ref. No."), max_length=15, blank=True)
     inventor = models.ManyToManyField(verbose_name=_('Inventor'), to=Inventor, blank=True)
 
     case_status = models.CharField(_('Status'), max_length=30,

@@ -8,4 +8,6 @@ class ProposalsConfig(AppConfig):
         from proposals import signals
         from actstream import registry
         registry.register(self.get_model('Patent'),
-                          self.get_model('Agent'))
+                          self.get_model('Agent'),
+                          self.get_model('Inventor'),
+                          self.get_model('Proposal'))

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Agent, Patent, Work, FileAttachment, ControlEvent
+from .models import Agent, Patent, Proposal, FileAttachment, ControlEvent, Inventor
 
 
 @admin.register(FileAttachment)
@@ -10,6 +10,16 @@ class FileAttachmentModelAdmin(admin.ModelAdmin):
 
 @admin.register(Agent)
 class AgentModelAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Proposal)
+class ProposalModelAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Inventor)
+class InventorModelAdmin(admin.ModelAdmin):
     pass
 
 

@@ -27,15 +27,6 @@ $(document).ready(function() {
         PriorityDecision();
     });
 
-    //client and inventor
-    var s = $("#id_client").find('option[selected="selected"]').attr("value");
-    if(s===undefined || s==="-1" || s===''){
-        $("#id_inventor").prop("disabled", true);
-    }
-    $("#id_client").on("select2:select", function(e){
-        $("#id_inventor").prop("disabled", false);
-    });
-
     function manage_US(e){
         if(e===true){
             $("#div_id_extended_days").show();

@@ -4,21 +4,18 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder
 
-from .models import Patent, Agent, Inventor, ControlEvent
+from .models import Patent, Agent, Proposal, Inventor, ControlEvent
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
 from .utils import file_validate
 
 
 class InventorModelForm(forms.ModelForm):
-    client_id = forms.CharField(max_length=50, widget=forms.TextInput(attrs={"type": "hidden"}))
-
     def __init__(self, *args, **kwargs):
         super(InventorModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
             Fieldset(
                 "",
-                Div("client_id"),
                 Div(
                     Div(
                         'id_number',
@@ -121,6 +118,23 @@ class AgentModelForm(forms.ModelForm):
         }
 
 
+class ProposalModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProposalModelForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+    class Meta:
+        model = Proposal
+        fields = ('proposal_no', 'chinese_title', 'english_title', 'inventors', 'department', 'category',
+                  'proposal_date', 'country', 'abstract', 'performance', 'appraisal_date', 'appraisal_result',
+                  'remarks')
+        widgets = {
+            'inventors': AjaxSelect2MultipleWidget("proposals:inventor-select2"),
+            'appraisal_result': MySelect2Widget(),
+        }
+
+
 class PatentModelForm(forms.ModelForm):
     file = forms.FileField(label="Files",
                            widget=forms.ClearableFileInput(attrs={'multiple': True}),
@@ -144,8 +158,6 @@ class PatentModelForm(forms.ModelForm):
                             css_class="column-wrap "
                        ),
                         Div(
-                            'client',
-                            'client_ref_no',
                             'agent',
                             'agent_ref_no',
                             'inventor',
@@ -227,7 +239,7 @@ class PatentModelForm(forms.ModelForm):
 
     class Meta:
         model = Patent
-        fields = ('case_id', 'chinese_title', 'english_title', 'client', 'client_ref_no',
+        fields = ('case_id', 'chinese_title', 'english_title',
                   'application_type', 'country', 'request_examination', 'examination_date',
                   'inventor', 'case_status', 'filing_date', 'extended_days', 'patent_term', 'application_no',
                   'publication_date', 'publication_no', 'patent_date', 'patent_no', 'certificate_no',
@@ -237,9 +249,6 @@ class PatentModelForm(forms.ModelForm):
                   'IDS_information', 'remarks', 'file')
 
         widgets = {
-            'client': AjaxSelect2Widget("proposals:client-select2",
-                                        create_new=True,
-                                        create_new_url="proposals:client-create"),
             'agent': AjaxSelect2Widget("proposals:agent-select2",
                                        create_new=True,
                                        create_new_url="proposals:agent-create"),

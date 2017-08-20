@@ -9,7 +9,7 @@ from django.db import transaction
 from datetime import datetime
 from .models import User, CalendarEvent
 from .forms import UserProfileModelForm
-from proposals.models import Patent, Agent, Client, ControlEvent
+from proposals.models import Patent, Agent, ControlEvent, Proposal, Inventor
 from billboard.models import Post, Comment
 from django.utils.timezone import utc
 
@@ -182,9 +182,7 @@ def getClassName(obj):
     Use for timeline display icon.
     You should also add corresponding icon tag at js (var timeline_icon)
     """
-    if isinstance(obj, Client):
-        return "client"
-    elif isinstance(obj, Patent):
+    if isinstance(obj, Patent):
         return "patent"
     elif isinstance(obj, Agent):
         return "agent"
@@ -192,6 +190,10 @@ def getClassName(obj):
         return "comment"
     elif isinstance(obj, Post):
         return "post"
+    elif isinstance(obj, Proposal):
+        return "proposal"
+    elif isinstance(obj, Inventor):
+        return "inventor"
     return None
 
 

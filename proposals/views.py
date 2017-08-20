@@ -17,14 +17,15 @@ from django.db import transaction
 from dateutil.relativedelta import relativedelta
 import geocoder
 
-from .models import Patent, Agent, User, FileAttachment, \
-                    Inventor, ControlEvent
-from .forms import PatentModelForm, AgentModelForm, InventorModelForm, ControlEventModelForm
+from .models import Patent, Agent, User, FileAttachment, Proposal, \
+    Inventor, ControlEvent
+from .forms import PatentModelForm, AgentModelForm, InventorModelForm, ControlEventModelForm, \
+    ProposalModelForm
 from .utils import CaseIDGenerator
 
 
 def get_model_fields_data(obj):
-    return [(field.name, getattr(obj,field.name)) for field in obj._meta.fields]
+    return [(field.name, getattr(obj, field.name)) for field in obj._meta.fields]
 
 
 class _DeleteView(LoginRequiredMixin, DeleteView):
@@ -63,7 +64,7 @@ class AjaxSelect2View(LoginRequiredMixin, BaseListView):
             q = request.GET["q"]
         except KeyError:
             return HttpResponseBadRequest("No q in GET.")
-        qs = [Q(**{i:q}) for i in self.search_fields]
+        qs = [Q(**{i: q}) for i in self.search_fields]
         filter_query = qs.pop()
         for t in qs:
             filter_query |= t
@@ -83,9 +84,9 @@ class AjaxSelect2View(LoginRequiredMixin, BaseListView):
             ]
         elif "able_create_new" in request.GET and request.GET["able_create_new"] == "true":
             results.append({
-                    'id': -1,
-                    'text': "Create %s" % q
-                })
+                'id': -1,
+                'text': "Create %s" % q
+            })
         return JsonResponse({
             'items': results,
             'page': context['page_obj'].number
@@ -100,6 +101,7 @@ class AjaxableResponseMixin(object):
     Mixin to add AJAX support to a form.
     Must be used with an object-based FormView (e.g. CreateView)
     """
+
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             self.object = None
@@ -135,6 +137,7 @@ class AjaxableResponseMixin(object):
 
 class UserAppendCreateViewMixin(object):
     def form_valid(self, form):
+        print("SHIT")
         if not self.object:
             self.object = form.save(commit=False)
         self.object.created_by = User.objects.get(username=self.request.user.username)
@@ -341,40 +344,46 @@ class AgentSelect2View(AjaxSelect2View):
     model = Agent
     search_fields = ["agent_title__icontains"]
 
-class InventorEditMixin(object):
-    def get_initial(self):
-        if self.request.method == "GET":
-            if "client_id" in self.request.GET:
-                client_id = self.request.GET["client_id"]
-                client = Client.objects.get(client_id=client_id)
-                return {"client_id": client.client_id,
-                        "post_address": client.post_address,
-                        "english_address": client.english_address}
-            elif self.object and hasattr(self.object, "client"):
-                client_id = self.object.client.client_id
-                return {"client_id": client_id}
-            else:
-                return HttpResponseBadRequest("Can't find client_id.")
-        else:
-            return self.initial.copy()
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.client = get_object_or_404(Client, client_id=form.cleaned_data["client_id"])
-        return super(InventorEditMixin, self).form_valid(form)
+class ProposalCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,
+                         SuccessMessageMixin, CreateView):
+    model = Proposal
+    template_name = "proposals/proposal_create.html"
+    form_class = ProposalModelForm
+    success_message = "%(proposal_title)s was created successfully."
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % dict(
+            proposal_title=self.object.chinese_title,
+        )
 
 
-class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin,
-                         InventorEditMixin, CreateView):
+@transaction.non_atomic_requests
+class ProposalDetailView(LoginRequiredMixin, DetailView):
+    model = Proposal
+
+
+class ProposalUpdateView(LoginRequiredMixin, UpdateView):
+    model = Proposal
+    template_name = "proposals/proposal_create.html"
+    form_class = ProposalModelForm
+
+
+@transaction.non_atomic_requests
+class ProposalListView(LoginRequiredMixin, ListView):
+    model = Proposal
+
+
+class ProposalDeleteView(_DeleteView):
+    model = Proposal
+    success_url = reverse_lazy("proposals:proposal-list")
+
+
+class InventorCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, SuccessMessageMixin, CreateView):
     model = Inventor
     template_name = "proposals/inventor_create.html"
     form_class = InventorModelForm
     success_message = "%(chinese_name)s was created successfully."
-
-    def get(self, request, *args, **kwargs):
-        if not "client_id" in request.GET:
-            return HttpResponseBadRequest("No Client specified to create new inventor.")
-        return super(InventorCreateView, self).get(request, *args, **kwargs)
 
     def get_success_message(self, cleaned_data):
         return self.success_message % dict(
@@ -387,7 +396,7 @@ class InventorDetailView(LoginRequiredMixin, DetailView):
     model = Inventor
 
 
-class InventorUpdateView(LoginRequiredMixin, InventorEditMixin, UpdateView):
+class InventorUpdateView(LoginRequiredMixin, UpdateView):
     model = Inventor
     template_name = "proposals/inventor_create.html"
     form_class = InventorModelForm
@@ -413,10 +422,7 @@ class InventorSelect2View(AjaxSelect2View):
     search_fields = ["chinese_name__istartswith", "english_name__istartswith"]
 
     def get_queryset(self, *args, **kwargs):
-        if not self.request.GET["client_id"]:
-            return HttpResponseBadRequest("Need client_id to get the corresponding inventors.")
-        return self.model.objects.filter(client__client_id=self.request.GET["client_id"])\
-                                 .filter(kwargs["filter_query"])
+        return self.model.objects.filter(kwargs["filter_query"])
 
 
 @transaction.non_atomic_requests

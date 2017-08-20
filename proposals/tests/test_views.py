@@ -10,6 +10,7 @@ def generate_file():
         f.write(str(i))
     f.close()
 
+
 class PatentCreateViewTest(TestCase):
     def setUp(self):
         self.user = self.make_user()

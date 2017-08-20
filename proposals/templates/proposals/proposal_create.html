@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Proposal{% endblock %}
+{% block content_title %}Create New Proposal{% endblock %}
+
+{% block css %}
+<style>
+.form-group{
+     margin-bottom:5px;
+     width:95%;
+}
+.row{
+     margin-left:0;
+     margin-right:0;
+     border-bottom:1px solid #f4f4f5;
+     padding: 5px 0 15px 15px;
+}
+.remark-column-wrap{
+     width:50%;
+     float:left;
+     padding-top:63px;
+     padding-left:15px;
+}
+.column-wrap{
+     width:50%;
+     float:left;
+}
+.buttonHolder{
+     padding-top: 20px;
+     margin-right: 20px;
+}
+.button-wrap{
+     display:flex;
+     justify-content:flex-end;
+}
+input.form-control{
+     background-color: #ffffff;
+}
+.box-header.with-border.form-header{
+    padding-left:15px;
+}
+.blog-post-title {
+    font-size: 28px;
+    overflow-wrap:break-word;
+    color:#2BB4B4;
+ }
+.box{
+     width: 83.333333%;
+     margin: 0 auto;
+     background: #ffffff;
+     padding: 0 30px 30px 30px;
+     border-top-color: #2DA4A4;
+}
+@media screen and (max-width: 767px){
+     .box{
+            width: 91.666667%;
+            margin: 0 auto;
+            padding: 0 15px 15px 15px 15px;
+       }
+      .column-wrap{
+            float:none;
+            display:block;
+            width:100%
+        }
+        .remark-column-wrap{
+            width:100%;
+            float:none;
+            display:block;
+            padding:0;
+         }
+        .form-group{
+            width:100%;
+        }
+       .row > .column-wrap:first-child{
+            border-right: none;
+        }
+         .row > .column-wrap:nth-child(2){
+            padding-left:0;
+        }
+         .button-wrap{
+            display:block;
+         }
+    }
+
+    </style>
+{% endblock css%}
+{% block content %}
+<div class="box">
+    <div class="box-header with-border form-header">
+        <h5 class="blog-post-title">
+            Create New Proposal
+        </h5>
+    </div>
+    {% crispy form %}
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static "js/render-select2.js" %}"></script>
+{% endblock %}
