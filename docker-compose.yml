@@ -3,6 +3,7 @@ version: '2'
 volumes:
   postgres_data: {}
   postgres_backup: {}
+  caddy: {}
 
 services:
   postgres:
@@ -25,33 +26,16 @@ services:
       - ./media:/app/media
       - ./static:/app/static
 
-  nginx:
-    build: ./compose/nginx
+  caddy:
+    build: ./compose/caddy
     depends_on:
       - django
-      - certbot
-    env_file: .env
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
     volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
-      - /var/lib/letsencrypt:/var/lib/letsencrypt
-    volumes_from:
-      - django
-
-  certbot:
-    image: quay.io/letsencrypt/letsencrypt
-    command: bash -c "sleep 6 && certbot certonly -n --standalone -d happypatent.ddns.net --text --agree-tos --email bruce20036@gmail.com --server https://acme-v01.api.letsencrypt.org/directory --rsa-key-size 4096 --verbose --keep-until-expiring --standalone-supported-challenges http-01"
-    entrypoint: ""
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
-      - /var/lib/letsencrypt:/var/lib/letsencrypt
-    ports:
-      - "80"
-      - "443"
-    environment:
-      - TERM=xterm
+      - caddy:/root/.caddy
+    env_file: .env
 
   redis:
     image: redis:3.0
