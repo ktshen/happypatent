@@ -137,7 +137,6 @@ class AjaxableResponseMixin(object):
 
 class UserAppendCreateViewMixin(object):
     def form_valid(self, form):
-        print("SHIT")
         if not self.object:
             self.object = form.save(commit=False)
         self.object.created_by = User.objects.get(username=self.request.user.username)

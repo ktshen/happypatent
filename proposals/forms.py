@@ -168,12 +168,10 @@ class PatentModelForm(forms.ModelForm):
                 ),
                 Div(
                     Div(
-                        'client',
                         'inventor',
                         css_class="col-md-4 col-sm-6 "
                     ),
                     Div(
-                        'client_ref_no',
                         'agent_ref_no',
                         css_class="col-md-4 col-sm-6"
                     ),

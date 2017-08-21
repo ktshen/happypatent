@@ -171,14 +171,6 @@ color: #777;
             <div class="col-md-6">
                 <table class="table table-striped">
                 <tbody>
-                    <tr>
-                        <td><strong>Applicant</strong></td>
-                        <td>{% if object.client %}<a href="{{ object.client.get_absolute_url }}">{{ object.client.abbr_client }}</a>{% else %}None{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Client Ref. No.</strong></td>
-                        <td>{% if object.client_ref_no %}{{ object.client_ref_no}}{% else %}None{% endif %}</td>
-                    </tr>
                     {% for person in object.inventor.all %}
                         <tr>
                             <td><strong>Inventor({{ forloop.counter }})</strong></td>
