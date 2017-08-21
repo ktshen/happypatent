@@ -1,3 +1,3 @@
 #!/bin/sh
 python /app/manage.py collectstatic --noinput
-/usr/local/bin/gunicorn config.wsgi -w 2 -b unix:/app/media/gunicorn.sock --worker-class=gevent --chdir=/app --access-logfile -
+/usr/local/bin/gunicorn config.wsgi -w 4 -b 0.0.0.0:5000 --chdir=/app --worker-class=gevent

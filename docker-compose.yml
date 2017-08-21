@@ -21,10 +21,10 @@ services:
       - postgres
       - redis
     command: /gunicorn.sh
-    env_file: .env
     volumes:
       - ./media:/app/media
       - ./static:/app/static
+    env_file: .env
 
   caddy:
     build: ./compose/caddy
@@ -35,6 +35,8 @@ services:
       - "0.0.0.0:443:443"
     volumes:
       - caddy:/root/.caddy
+      - ./media:/var/www/app/media
+      - ./static:/var/www/app/static
     env_file: .env
 
   redis:
