@@ -69,7 +69,7 @@ class Proposal(_BaseModel):
         ('fail', _('Fail')),
         ('re-appraise', _('Re-appraise after supplements')),
     )
-    proposal_no = models.CharField(_('Proposal No.'), max_length=50)
+    proposal_id = models.CharField(_('Proposal ID'), max_length=50, blank=True)
     chinese_title = models.CharField(_('Chinese Title'), max_length=200)
     english_title = models.CharField(_('English Title'), max_length=200)
     inventors = models.ManyToManyField(verbose_name=_('Inventor'), to=Inventor)
@@ -84,7 +84,7 @@ class Proposal(_BaseModel):
                                         max_length=200)
 
     def __str__(self):
-        return self.proposal_no
+        return self.proposal_id
 
     def get_absolute_url(self):
         return reverse("proposals:proposal-detail", args=[self.pk])
@@ -256,6 +256,10 @@ class ControlEvent(_BaseModel):
     @staticmethod
     def control_item_verbal(control_item):
         return str(dict(ControlEvent.CONTROL_ITEM_CHOICES)[control_item])
+
+    class Meta:
+        verbose_name = "Application"
+        verbose_name_plural = "Applications"
 
 
 @python_2_unicode_compatible

@@ -177,8 +177,6 @@ class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, PatentMixin, Use
                 "english_title": patent.english_title,
                 "inventor": patent.inventor.all()
             }
-            if patent.client:
-                init["client"] = patent.client
         else:
             init = {"case_id": CaseIDGenerator().get_latest_id()}
         return init
@@ -355,6 +353,18 @@ class ProposalCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, Ajaxable
         return self.success_message % dict(
             proposal_title=self.object.chinese_title,
         )
+
+    def form_valid(self, form):
+        response = super(ProposalCreateView, self).form_valid(form)
+        self.object.proposal_id = self.create_proposal_id(self.object)
+        self.object.save()
+        return response
+
+    @staticmethod
+    def create_proposal_id(object):
+        if not hasattr(object, "pk"):
+            raise AttributeError("No pk attribute for Proposal object.")
+        return "A{:04}".format(object.pk)
 
 
 @transaction.non_atomic_requests

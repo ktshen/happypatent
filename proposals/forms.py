@@ -126,7 +126,7 @@ class ProposalModelForm(forms.ModelForm):
 
     class Meta:
         model = Proposal
-        fields = ('proposal_no', 'chinese_title', 'english_title', 'inventors', 'department', 'category',
+        fields = ('chinese_title', 'english_title', 'inventors', 'department', 'category',
                   'proposal_date', 'country', 'abstract', 'performance', 'appraisal_date', 'appraisal_result',
                   'remarks')
         widgets = {

@@ -76,9 +76,6 @@
                         page: params.page,
                         able_create_new: $(this).attr("able-create-new")
                     };
-                    if ($(this).attr("id")=="id_inventor"){
-                        d.client_id = $("#id_client").select2('data')[0].id;
-                    }
                     return d;
                 },
                 processResults: function (data, params) {

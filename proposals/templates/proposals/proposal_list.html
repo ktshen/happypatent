@@ -33,7 +33,7 @@
               <table id="list_table" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Proposal No.</th>
+                  <th>Proposal ID</th>
                   <th>Chinese Title</th>
                   <th>English Title</th>
                 </tr>
@@ -41,7 +41,7 @@
                 <tbody>
                 {% for object in object_list %}
                 <tr>
-                  <td><a href="{{ object.get_absolute_url }}">{{ object.proposal_no }}</a></td>
+                  <td><a href="{{ object.get_absolute_url }}">{{ object.proposal_id }}</a></td>
                   <td>{{ object.chinese_title }}</td>
                   <td>{{ object.english_title }}</td>
                 </tr>

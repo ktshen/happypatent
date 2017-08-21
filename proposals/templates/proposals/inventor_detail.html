@@ -143,10 +143,6 @@
                         <td>{{ object.english_name }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Client</strong></td>
-                        <td><a href="{{ object.client.get_absolute_url }}">{{ object.client }}</a></td>
-                    </tr>
-                    <tr>
                         <td><strong>ID Number</strong></td>
                         <td>{% if object.id_number %}{{ object.id_number }}{% else %}None{% endif %}</td>
                     </tr>
