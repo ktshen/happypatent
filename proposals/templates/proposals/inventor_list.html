@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load user_agents %}
+{% block title %}Inventors{% endblock %}
+{% block content_title %}Inventors{% endblock %}
+
+{% block css %}
+ <style>
+.box{
+    width:87%;
+    margin: 0 auto;
+    border-top-color: #2DA4A4;
+}
+.box-header .box-title{
+    color: #2BB4B4;
+    margin-top:0;
+    margin-bottom:2px;
+    font-size:20px;
+}
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">All Inventors</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="list_table" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Chinese name</th>
+                  <th>English name</th>
+                  <th>Country</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for object in object_list %}
+                <tr>
+                  <td><a href="{{ object.get_absolute_url }}">{{ object.chinese_name }}</a></td>
+                  <td>{{ object.english_name }}</td>
+                  <td>{{ object.country }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+      </div>
+    </div>
+</div>
+{% endblock content %}
+
