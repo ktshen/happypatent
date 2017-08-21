@@ -8,9 +8,9 @@
 {% block css %}
 <style>
 .box{
-    width:87%;
+    width:83.33333%;
     margin: 0 auto;
-    border-top-color: #2DA4A4;
+    border-top-color:transparent;
 }
 .box-header .box-title{
    color: #2BB4B4;
@@ -24,13 +24,27 @@
 table#list_table.table{
     width:100%;
 }
+input.form-control{
+    border:none;
+    border-bottom:1px solid #d2d6de;
+}
+@media screen and (max-width: 767px){
+    div.dataTables_wrapper div.dataTables_length,
+    div.dataTables_wrapper div.dataTables_info{
+        float:left;
+    }
+    div.dataTables_wrapper div.dataTables_filter,
+    div.dataTables_wrapper div.dataTables_paginate{
+        float:right;
+    }
+    .box{
+        width: 91.666667%;
+   }
+}
 @media screen and (max-width: 650px) {
-
-    /* Force table to not be like tables anymore */
     table, thead, tbody, th, td, tr {
         display: block;
     }
-    /* Hide table headers (but not display: none;, for accessibility) */
     thead tr {
         position: absolute;
         top: -9999px;
@@ -65,22 +79,11 @@ table#list_table.table{
     table.table-bordered.dataTable tbody td:nth-of-type(4):before {
         content: "Case Status:";
     }
-{#	table.table-bordered.dataTable tbody td:nth-of-type(5):before { content: "Client:"; }#}
     table.table-bordered.dataTable tbody td:nth-of-type(5):before {
         content: "Agent:";
     }
     table.table-bordered.dataTable tbody td:nth-of-type(6):before {
         content: "Country:";
-    }
-}
-@media screen and (max-width: 767px){
-    div.dataTables_wrapper div.dataTables_length,
-    div.dataTables_wrapper div.dataTables_info{
-        float:left;
-    }
-    div.dataTables_wrapper div.dataTables_filter,
-    div.dataTables_wrapper div.dataTables_paginate{
-        float:right;
     }
 }
 @media screen and (max-width: 500px) {
@@ -103,84 +106,48 @@ table#list_table.table{
 {% endblock css %}
 
 {% block content %}
-
-        <div class="box">
-        <div class="row">
-            <div class="col-sm-12 ">
+<div class="box">
+    <div class="row">
+        <div class="col-sm-12 ">
             <div class="box-header with-border">
               <h3 class="box-title">All Applications</h3>
             </div>
             <div class="box-body ">
-            <div class="table-responsive">
-              <table id="list_table" class="table table-bordered table-striped" style="width:100%">
-                <thead>
-                <tr>
-                  <th>Case ID</th>
-                  <th>Chinese Title</th>
-                  <th>English Title</th>
-                  {% if request|is_pc %}
-                  <th>Case status</th>
-{#                  <th>Client</th>#}
-                  <th>Agent</th>
-                  <th>Country</th>
-                  {% endif %}
-                </tr>
-                </thead>
-                <tbody>
-                {% for patent in object_list %}
-                <tr>
-                  <td><a href="{{ patent.get_absolute_url }}">{{ patent.case_id }}</a></td>
-                  <td><a href="{{ patent.get_absolute_url }}">{{ patent.chinese_title }}</a></td>
-                  <td>{{ patent.english_title }}</td>
-                  {% if request|is_pc %}
-                  <td>{% if patent.case_status %}{{ patent.case_status_template }}{% else %}None{% endif %}</td>
-{#                  <td>{% if patent.client %}<a href="{{ patent.client.get_absolute_url }}">{{ patent.client.abbr_client }}</a>{% else %}None{% endif %}</td>#}
-                  <td>{% if patent.agent %}<a href="{{ patent.agent.get_absolute_url }}">{{ patent.agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                  <td>{{ patent.country }}</td>
-                  {% endif %}
-                </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
+                <div class="table-responsive">
+                    <table id="list_table" class="table table-bordered table-striped" >
+                        <thead>
+                            <tr>
+                                <th>Case ID</th>
+                                <th>Chinese Title</th>
+                                <th>English Title</th>
+                                {% if request|is_pc %}
+                                <th>Case status</th>
+                                <th>Agent</th>
+                                <th>Country</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patent in object_list %}
+                            <tr>
+                                <td><a href="{{ patent.get_absolute_url }}">{{ patent.case_id }}</a></td>
+                                <td><a href="{{ patent.get_absolute_url }}">{{ patent.chinese_title }}</a></td>
+                                <td>{{ patent.english_title }}</td>
+                                {% if request|is_pc %}
+                                <td>{% if patent.case_status %}{{ patent.case_status_template }}{% else %}None{% endif %}</td>
+                                <td>{% if patent.agent %}<a href="{{ patent.agent.get_absolute_url }}">{{ patent.agent.agent_title }}</a>{% else %}None{% endif %}</td>
+                                <td>{{ patent.country }}</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
         </div>
+          <!-- /.box -->
+    </div>
 </div>
-
-{#<script>#}
-{#$('table').each(function() {#}
-{#  var table = $(this); // cache table object#}
-{#  var head = table.find('thead th');#}
-{#  var rows = table.find('tbody tr').clone(); // appending afterwards does not break original table#}
-{##}
-{#  // create new table#}
-{#  var newtable = $(#}
-{#    '<table id="list_table_2" class="table table-bordered table-striped">' +#}
-{#    '  <tbody>' +#}
-{#    '  </tbody>' +#}
-{#    '</table>'#}
-{#  );#}
-{##}
-{#  // cache tbody where we'll be adding data#}
-{#  var newtable_tbody = newtable.find('tbody');#}
-{##}
-{#  rows.each(function(i) {#}
-{#    var cols = $(this).find('td');#}
-{#    var classname = i % 2 ? 'even' : 'odd';#}
-{#    cols.each(function(k) {#}
-{#      var new_tr = $('<tr class="' + classname + '"></tr>').appendTo(newtable_tbody);#}
-{#      new_tr.append(head.clone().get(k));#}
-{#      new_tr.append($(this));#}
-{#    });#}
-{#  });#}
-{##}
-{#  $(this).after(newtable);#}
-
-{##}
-{# $('#list_table_2').DataTable();#}
-{#</script>#}
 {% endblock content %}
 

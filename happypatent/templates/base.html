@@ -38,10 +38,7 @@
     {% endblock %}
     {% endcompress %}
     <style>
-        table {
-            table-layout: fixed;
-            word-wrap: break-word;
-        }
+
         .skin-blue-light .main-header .navbar .nav > li > a:hover,
         .skin-blue-light .main-header .navbar .nav > li > a:active,
         .skin-blue-light .main-header .navbar .nav > li > a:focus,
@@ -91,12 +88,15 @@
             flex-grow: 2;
             text-align: left;
         }
+        .skin-blue-light .main-header .navbar .dropdown-menu li a{
+            color: #777;
+        }
+        .skin-blue-light .main-header .navbar .dropdown-menu li a:hover{
+            background-color: #ddd;
+        }
         .main-header .nonuser-navbar .navbar{
             padding-left:230px;
             margin-left:0;
-        }
-        .navbar-nav > li {
-            padding:0 10px 0 10px;
         }
         .main-header .nonuser-navbar .logo > .logo-small {
                 display: none;
@@ -244,8 +244,8 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url "billboard:list" %}"><i class="fa fa-circle-o"></i> See All Posts</a></li>
-                            <li><a href="{% url "billboard:create" %}"><i class="fa fa-circle-o"></i> Create New Post</a></li>
+                            <li><a href="{% url "billboard:list" %}">See All Posts</a></li>
+                            <li><a href="{% url "billboard:create" %}">Create New Post</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -257,8 +257,8 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url "proposals:patent-list" %}"><i class="fa fa-circle-o"></i> All Applications</a></li>
-                            <li><a href="{% url "proposals:patent-create" %}"><i class="fa fa-circle-o"></i> Create New Application</a></li>
+                            <li><a href="{% url "proposals:patent-list" %}">See All Applications</a></li>
+                            <li><a href="{% url "proposals:patent-create" %}">Create New Application</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -270,8 +270,8 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url "proposals:proposal-list" %}"><i class="fa fa-circle-o"></i> See All Proposals</a></li>
-                            <li><a href="{% url "proposals:proposal-create" %}"><i class="fa fa-circle-o"></i> Create New Proposal</a></li>
+                            <li><a href="{% url "proposals:proposal-list" %}">See All Proposals</a></li>
+                            <li><a href="{% url "proposals:proposal-create" %}">Create New Proposal</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -283,8 +283,8 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url "proposals:inventor-list" %}"><i class="fa fa-circle-o"></i> See All Inventors</a></li>
-                            <li><a href="{% url "proposals:inventor-create" %}"><i class="fa fa-circle-o"></i> Create New Inventor</a></li>
+                            <li><a href="{% url "proposals:inventor-list" %}">See All Inventors</a></li>
+                            <li><a href="{% url "proposals:inventor-create" %}">Create New Inventor</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -296,8 +296,8 @@
                             </span>
                          </a>
                          <ul class="dropdown-menu">
-                            <li><a href="{% url "proposals:agent-list" %}"><i class="fa fa-circle-o"></i> See All Agents</a></li>
-                            <li><a href="{% url "proposals:agent-create" %}"><i class="fa fa-circle-o"></i> Create New Agent</a></li>
+                            <li><a href="{% url "proposals:agent-list" %}">See All Agents</a></li>
+                            <li><a href="{% url "proposals:agent-create" %}">Create New Agent</a></li>
                          </ul>
                     </li>
                 </ul>

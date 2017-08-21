@@ -18,36 +18,44 @@ class InventorModelForm(forms.ModelForm):
                 "",
                 Div(
                     Div(
-                        'id_number',
+
                         'chinese_name',
+                        'phone_number',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
                         'english_name',
-                        css_class="column-wrap"
+                        'id_number',
+
+                        css_class="col-md-4 col-sm-6"
                     ),
                     Div(
                         'country',
+
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    css_class="row green-border"
+                ),
+                Div(
+                    Div(
                         'post_address',
                         'english_address',
-                        css_class="column-wrap"
+                        'email',
+                        css_class="col-md-8 col-sm-8"
                     ),
-                    css_class="row"
+                    css_class="row grey-border"
                 ),
                 Div(
-                    Div(
-                        'phone_number',
-                        'email',
-                        css_class="column-wrap"
-
-                    ),
                     Div(
                         'remarks',
-                        css_class="column-wrap"
+                        css_class="col-md-8 col-sm-8"
                     ),
-                    css_class="row"
+                    css_class="row green-border"
                 ),
                 Div(
                     Div(
-                        ButtonHolder(Submit('save', 'save')),
-                        css_class="button-wrap"
+                        ButtonHolder(Submit('save', 'save',css_class='btn btn-primary')),
+                        css_class="col-md-1 pull-right"
                     ),
                     css_class="row"
                 )
@@ -70,39 +78,54 @@ class AgentModelForm(forms.ModelForm):
                 Div(
                     Div(
                         'agent_title',
-                        'country',
-                        'address',
-
-                        css_class="column-wrap"
+                        'contact_person_phone_number',
+                        css_class="col-md-4 col-sm-6"
                     ),
                     Div(
-                        'beneficiary_name',
-                        'remittance_bank',
-                        'beneficiary_no',
-                        css_class="column-wrap"
+                        'country',
+                        css_class="col-md-4 col-sm-6"
                     ),
-                    css_class="row"
-                ),
-                Div(
                     Div(
                         'contact_person_name',
-                        'contact_person_phone_number',
-                        'contact_person_email',
-                        css_class="column-wrap"
+                        css_class="col-md-4 col-sm-6"
                     ),
                     Div(
-                        'remarks',
-                        css_class="column-wrap"
+                        'contact_person_email',
+
+                        css_class="col-md-8 col-sm-8"
                     ),
-                    css_class="row"
+                    Div(
+                        'address',
+                        css_class="col-md-8"
+                    ),
+                    css_class="row green-border"
                 ),
                 Div(
                     Div(
-                        ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
-                        css_class="button-wrap"
+                        'beneficiary_name',
+                        css_class="col-md-4 col-sm-6"
                     ),
-                    css_class="row"
-                )
+                    Div(
+                        'remittance_bank',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        'beneficiary_no',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    css_class="row grey-border"
+                ),
+                Div(
+                    Div(
+                        'remarks',
+                        css_class="col-md-8 col-sm-8"
+                    ),
+                    css_class="row green-border"
+                ),
+                Div(
+                    ButtonHolder(Submit('save', 'save', css_class='btn btn-primary')),
+                    css_class="col-md-1 pull-right"
+                ),
             )
         )
 
@@ -122,7 +145,58 @@ class ProposalModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProposalModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.layout=Layout(
+            Fieldset(
+                "",
+                Div(
+                    Div(
+                        'proposal_no',
+                        'inventors',
+                        'proposal_date',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        'chinese_title',
+                        'country',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        'english_title',
+                        'department',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    css_class="row green-border",
+                ),
+                Div(
+                    Div(
+                        'category',
+                        'appraisal_result',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        'performance',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    Div(
+                        'appraisal_date',
+                        css_class="col-md-4 col-sm-6"
+                    ),
+                    css_class="row grey-border"
+                ),
+                Div(
+                    Div(
+                        'abstract',
+                        css_class="col-md-6 col-sm-8"
+                    ),
+                    Div(
+                        'remarks',
+                        css_class="col-md-6 col-sm-8"
+                    ),
+                    css_class="row green-border"
+                )
+            )
+        )
+        self.helper.add_input(Submit('save', 'save'))
 
     class Meta:
         model = Proposal
@@ -274,8 +348,8 @@ class PatentModelForm(forms.ModelForm):
                     Div(
                         Div(
                           'file',
-                          ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
-                            css_class="button-wrap"
+                          ButtonHolder(Submit('save', 'save',css_class='btn btn-primary')),
+                            css_class="col-md-4"
                          ),
                           css_class="row "
                       ),
@@ -342,7 +416,7 @@ class ControlEventModelForm(forms.ModelForm):
                 Div(
                     Div(
                         Div(
-                            ButtonHolder(Submit('save', 'save',css_class='btn btn-primary pull-right')),
+                            ButtonHolder(Submit('save', 'save',css_class='btn btn-primary ')),
                             css_class="button-wrap"
                         ),
                             css_class="row"

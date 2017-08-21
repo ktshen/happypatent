@@ -8,48 +8,124 @@
 {% block css %}
  <style>
 .box{
-    width:87%;
+    width:83.33333%;
     margin: 0 auto;
-    border-top-color: #2DA4A4;
+    border-top-color:transparent;
 }
 .box-header .box-title{
-    color: #2BB4B4;
+   color: #2BB4B4;
     margin-top:0;
     margin-bottom:2px;
     font-size:20px;
+}
+.table-responsive{
+    border:none;
+}
+table#list_table.table{
+    width:100%;
+}
+input.form-control{
+    border:none;
+    border-bottom:1px solid #d2d6de;
+}
+ @media screen and (max-width: 767px){
+    div.dataTables_wrapper div.dataTables_length,
+    div.dataTables_wrapper div.dataTables_info{
+        float:left;
+    }
+    div.dataTables_wrapper div.dataTables_filter,
+    div.dataTables_wrapper div.dataTables_paginate{
+        float:right;
+    }
+    .box{
+        width: 91.666667%;
+   }
+}
+@media screen and (max-width: 650px) {
+
+    /* Force table to not be like tables anymore */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    tr {
+        border: 1px solid #ccc;
+    }
+    table.table-bordered.dataTable tbody td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+    table.table-bordered.dataTable tbody td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+    }
+    table.table-bordered.dataTable tbody td:nth-of-type(1):before {
+        content: "Proposal Number:";
+    }
+    table.table-bordered.dataTable tbody td:nth-of-type(2):before {
+        content: "Chinese Title:";
+    }
+    table.table-bordered.dataTable tbody td:nth-of-type(3):before {
+        content: "English Title:";
+    }
+}
+@media screen and (max-width: 500px) {
+    div.dataTables_wrapper div.dataTables_length,
+    div.dataTables_wrapper div.dataTables_info,
+    div.dataTables_wrapper div.dataTables_filter,
+    div.dataTables_wrapper div.dataTables_paginate {
+        float: none;
+    }
+    div.dataTables_wrapper div.dataTables_paginate {
+        margin-left: -5px;
+    }
+    div.dataTables_wrapper div.dataTables_filter input{
+        width:155px;
+    }
 }
 </style>
 {% endblock css %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">All Proposals</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table id="list_table" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>Proposal ID</th>
-                  <th>Chinese Title</th>
-                  <th>English Title</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for object in object_list %}
-                <tr>
-                  <td><a href="{{ object.get_absolute_url }}">{{ object.proposal_id }}</a></td>
-                  <td>{{ object.chinese_title }}</td>
-                  <td>{{ object.english_title }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
-      </div>
+<div class="box">
+    <div class="row">
+        <div class="col-sm-12 ">
+            <div class="box-header with-border">
+                <h3 class="box-title">All Proposals</h3>
+            <div class="box-body ">
+                <div class="table-responsive">
+                    <table id="list_table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Proposal Number</th>
+                                <th>Chinese Title</th>
+                                <th>English Title</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for object in object_list %}
+                            <tr>
+                                <td><a href="{{ object.get_absolute_url }}">{{ object.proposal_no }}</a></td>
+                                <td>{{ object.chinese_title }}</td>
+                                <td>{{ object.english_title }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+             </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
