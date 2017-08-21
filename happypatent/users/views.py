@@ -68,7 +68,7 @@ class DashBoardView(LoginRequiredMixin, TemplateView):
             Q(created_by=self.request.user) &
             Q(complete_date__isnull=True) &
             Q(deadline__lte=timezone.now() + relativedelta(days=7))
-        ).order_by('+deadline')
+        ).order_by('deadline')
         return kwargs
 
 
