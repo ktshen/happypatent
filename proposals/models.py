@@ -89,6 +89,12 @@ class Proposal(_BaseModel):
     def get_absolute_url(self):
         return reverse("proposals:proposal-detail", args=[self.pk])
 
+    def appraisal_result_template(self):
+        if self.appraisal_result:
+            return dict(Proposal.APPRAISAL_RESULT_CHOICES)[self.appraisal_result]
+        else:
+            return self.appraisal_result
+
 
 @python_2_unicode_compatible
 class Agent(_BaseModel):
@@ -146,7 +152,7 @@ class Patent(_BaseModel):
         ('10', _('Administrative litigation')),
         ('11', _('Paying issue fee')),
         ('12', _('Patent allowed')),
-        ('13', _('Client abandon')),
+        ('13', _('Abandoned')),
         ('14', _('Invalidation examination')),
     )
 

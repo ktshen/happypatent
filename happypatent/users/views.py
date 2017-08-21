@@ -12,6 +12,7 @@ from .forms import UserProfileModelForm
 from proposals.models import Patent, Agent, ControlEvent, Proposal, Inventor
 from billboard.models import Post, Comment
 from django.utils.timezone import utc
+from dateutil.relativedelta import relativedelta
 
 DATE_FMT = "%a, %d %b %Y %X GMT"
 
@@ -62,12 +63,12 @@ class DashBoardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         kwargs = super(DashBoardView, self).get_context_data(**kwargs)
-        # Get patents that have passed their deadline to warn users
+        # Warning modal: Get patents that are almost due.
         kwargs["expire_events"] = ControlEvent.objects.filter(
             Q(created_by=self.request.user) &
             Q(complete_date__isnull=True) &
-            Q(deadline__lte=timezone.now())
-        ).order_by('deadline')
+            Q(deadline__lte=timezone.now() + relativedelta(days=7))
+        ).order_by('+deadline')
         return kwargs
 
 

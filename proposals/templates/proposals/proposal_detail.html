@@ -157,12 +157,16 @@
             <div class="col-md-6">
                 <table class="table table-striped">
                 <tbody>
-                    <tr>
-                        <td><strong>Inventors</strong></td>
-                        {% for inventor in object.inventors.all %}
-                            <td>{{ inventor }}</td>
-                        {% endfor %}
-                    </tr>
+                    {% for person in object.inventors.all %}
+                        <tr>
+                            <td><strong>Inventor({{ forloop.counter }})</strong></td>
+                            <td><a href="{{ person.get_absolute_url }}">{{ person.chinese_name }}</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td><strong>No inventor in this list.</strong></td>
+                        </tr>
+                    {% endfor %}
                     <tr>
                         <td><strong>Department</strong></td>
                         <td>{% if object.department %}{{ object.department }}{% else %}None{% endif %}</td>
@@ -198,7 +202,7 @@
                     </tr>
                     <tr>
                         <td><strong>Appraisal Results</strong></td>
-                        <td>{% if object.appraisal_result %}{{ object.appraisal_result }}{% else %}None{% endif %}</td>
+                        <td>{% if object.appraisal_result %}{{ object.appraisal_result_template }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Abstract</strong></td>
