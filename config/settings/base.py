@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     'actstream',
     'django_user_agents',
     'ckeditor',
+    'watson',
 ]
 
 # Apps specific for this project go here.
@@ -82,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'watson.middleware.SearchContextMiddleware',
 ]
 
 # MIGRATIONS CONFIGURATION

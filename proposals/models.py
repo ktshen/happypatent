@@ -151,7 +151,7 @@ class Patent(_BaseModel):
         ('9', _('Re-appeal')),
         ('10', _('Administrative litigation')),
         ('11', _('Paying issue fee')),
-        ('12', _('Patent allowed')),
+        ('12', _('Allowed')),
         ('13', _('Abandoned')),
         ('14', _('Invalidation examination')),
     )
