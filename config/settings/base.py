@@ -316,11 +316,11 @@ FILE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png', "doc", "docx", "pdf", "ppt", "tx
 USER_AGENTS_CACHE = 'default'
 
 # SETTINGS FOR HAYSTACK
+# Use whoosh for local searching
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
-        'INDEX_NAME': 'haystack',
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': ROOT_DIR('whoosh_index'),
     },
 }
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
