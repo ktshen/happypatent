@@ -167,6 +167,7 @@ class BaseDataTableAjaxMixin(ListView):
     The original idea is getting HTML through method GET and and collecting data source through method POST
     """
     table_fields = []
+    paginate_by = 10
 
     def post(self, request, *args, **kwargs):
         searching = False
@@ -398,9 +399,10 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
 
 
 @transaction.non_atomic_requests
-class AgentListView(LoginRequiredMixin, ListView):
+class AgentListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Agent
     queryset = Agent.objects.all().order_by("country", "-created")
+    table_fields = ["agent_title", "country", 'contact_person_name', 'contact_person_email']
 
 
 class AgentDeleteView(_DeleteView):
@@ -452,8 +454,9 @@ class ProposalUpdateView(LoginRequiredMixin, UpdateView):
 
 
 @transaction.non_atomic_requests
-class ProposalListView(LoginRequiredMixin, ListView):
+class ProposalListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Proposal
+    table_fields = ['proposal_no', 'chinese_title', 'english_title']
 
 
 class ProposalDeleteView(_DeleteView):
@@ -485,8 +488,9 @@ class InventorUpdateView(LoginRequiredMixin, UpdateView):
 
 
 @transaction.non_atomic_requests
-class InventorListView(LoginRequiredMixin, ListView):
+class InventorListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Inventor
+    table_fields = ['chinese_name', 'english_name', 'country']
 
 
 class InventorDeleteView(_DeleteView):

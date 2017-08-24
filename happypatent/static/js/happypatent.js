@@ -13,15 +13,26 @@
         }
     });
 
-    // Datatable initialize
-    // $('#list_table').DataTable({
-    //   "paging": true,
-    //   "lengthChange": true,
-    //   "searching": true,
-    //   "ordering": false,
-    //   "info": true,
-    //   "autoWidth": true
-    // });
+    // Datatable initialize.
+    // Primarily for model's listview
+    $('#list_table').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": false,
+      "info": true,
+      "autoWidth": true,
+       serverSide: true,
+       ajax: {
+           "url": '.',
+           "type": "POST",
+           "data": function ( d ) {
+              return $.extend( {}, d, {
+                "csrfmiddlewaretoken": jQuery("[name=csrfmiddlewaretoken]").val()
+              } );
+            }
+       }
+    });
     //Bootstrap datepicker
     $('.dateinput').datepicker({
         format: 'yyyy-mm-dd',

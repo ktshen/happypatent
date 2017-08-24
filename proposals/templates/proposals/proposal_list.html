@@ -106,6 +106,7 @@ input.form-control{
             <div class="box-body ">
                 <div class="table-responsive">
                     <table id="list_table" class="table table-bordered table-striped">
+                        {% csrf_token %}
                         <thead>
                             <tr>
                                 <th>Proposal Number</th>
@@ -113,15 +114,6 @@ input.form-control{
                                 <th>English Title</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for object in object_list %}
-                            <tr>
-                                <td><a href="{{ object.get_absolute_url }}">{{ object.proposal_no }}</a></td>
-                                <td>{{ object.chinese_title }}</td>
-                                <td>{{ object.english_title }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
                     </table>
                 </div>
              </div>

@@ -126,18 +126,6 @@ input.form-control{
                                 <th>Country</th>
                             </tr>
                         </thead>
-{#                        <tbody>#}
-{#                            {% for patent in object_list %}#}
-{#                            <tr>#}
-{#                                <td><a href="{{ patent.get_absolute_url }}">{{ patent.case_id }}</a></td>#}
-{#                                <td><a href="{{ patent.get_absolute_url }}">{{ patent.chinese_title }}</a></td>#}
-{#                                <td>{{ patent.english_title }}</td>#}
-{#                                <td>{% if patent.case_status %}{{ patent.case_status_template }}{% else %}None{% endif %}</td>#}
-{#                                <td>{% if patent.agent %}<a href="{{ patent.agent.get_absolute_url }}">{{ patent.agent.agent_title }}</a>{% else %}None{% endif %}</td>#}
-{#                                <td>{{ patent.country }}</td>#}
-{#                            </tr>#}
-{#                            {% endfor %}#}
-{#                        </tbody>#}
                     </table>
                 </div>
             </div>
@@ -147,24 +135,7 @@ input.form-control{
     </div>
 </div>
 <script>
-    $('#list_table').DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": false,
-      "info": true,
-      "autoWidth": true,
-       serverSide: true,
-       ajax: {
-           "url": $('#list_table').attr("url"),
-           "type": "POST",
-           "data": function ( d ) {
-              return $.extend( {}, d, {
-                "csrfmiddlewaretoken": jQuery("[name=csrfmiddlewaretoken]").val()
-              } );
-            }
-       }
-    });
+
 </script>
 {% endblock content %}
 

@@ -107,6 +107,7 @@ input.form-control{
             <div class="box-body ">
                 <div class="table-responsive">
                     <table id="list_table" class="table table-bordered table-striped">
+                        {% csrf_token %}
                         <thead>
                             <tr>
                                 <th>Agent title</th>
@@ -115,16 +116,6 @@ input.form-control{
                                 <th>Email</th>
                             </tr>
                         </thead>
-                        <tbody>
-                        {% for agent in object_list %}
-                            <tr>
-                                <td><a href="{{ agent.get_absolute_url }}">{{ agent.agent_title }}</a></td>
-                                <td>{{ agent.country }}</td>
-                                <td>{{ agent.contact_person_name }}</td>
-                                <td>{% if agent.contact_person_email %}{{ agent.contact_person_email }}{% else %}None{% endif %}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
                     </table>
                 </div>
             </div>

@@ -31,6 +31,7 @@
             <!-- /.box-header -->
             <div class="box-body">
               <table id="list_table" class="table table-bordered table-striped">
+                {% csrf_token %}
                 <thead>
                 <tr>
                   <th>Chinese name</th>
@@ -38,15 +39,6 @@
                   <th>Country</th>
                 </tr>
                 </thead>
-                <tbody>
-                {% for object in object_list %}
-                <tr>
-                  <td><a href="{{ object.get_absolute_url }}">{{ object.chinese_name }}</a></td>
-                  <td>{{ object.english_name }}</td>
-                  <td>{{ object.country }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
               </table>
             </div>
       </div>
