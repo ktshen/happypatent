@@ -456,7 +456,7 @@ class ProposalUpdateView(LoginRequiredMixin, UpdateView):
 @transaction.non_atomic_requests
 class ProposalListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Proposal
-    table_fields = ['proposal_no', 'chinese_title', 'english_title']
+    table_fields = ['proposal_id', 'chinese_title', 'english_title']
 
 
 class ProposalDeleteView(_DeleteView):
