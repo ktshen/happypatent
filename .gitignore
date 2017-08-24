@@ -86,3 +86,5 @@ postgres_data/
 # Reactjs
 webpack-stats.json
 assets/bundles/
+
+whoosh_index/

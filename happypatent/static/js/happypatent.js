@@ -14,14 +14,14 @@
     });
 
     // Datatable initialize
-    $('#list_table').DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": false,
-      "info": true,
-      "autoWidth": true
-    });
+    // $('#list_table').DataTable({
+    //   "paging": true,
+    //   "lengthChange": true,
+    //   "searching": true,
+    //   "ordering": false,
+    //   "info": true,
+    //   "autoWidth": true
+    // });
     //Bootstrap datepicker
     $('.dateinput').datepicker({
         format: 'yyyy-mm-dd',

@@ -55,7 +55,7 @@ THIRD_PARTY_APPS = [
     'actstream',
     'django_user_agents',
     'ckeditor',
-    'watson',
+    'haystack',
 ]
 
 # Apps specific for this project go here.
@@ -308,7 +308,7 @@ SELECT2_CSS = "css/empty.css"
 IMAGE_SIZE_LIMITATION = 5242880
 IMAGE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png']
 
-#Upload File Limitation
+# Upload File Limitation
 FILE_SIZE_LIMITATION = 10485760
 FILE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png', "doc", "docx", "pdf", "ppt", "txt", "wps", "tar", "zip",
                            "xml", "xlsx", "xltx", "rar", "gzip"]
@@ -316,6 +316,12 @@ FILE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png', "doc", "docx", "pdf", "ppt", "tx
 # django-user_agents settings
 USER_AGENTS_CACHE = 'default'
 
-
-
-
+# SETTINGS FOR HAYSTACK
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

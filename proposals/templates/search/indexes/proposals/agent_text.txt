@@ -1,0 +1,14 @@
+{{ object.agent_id }}
+{{ object.agent_title }}
+{{ object.country }}
+{{ object.address }}
+{{ object.beneficiary_name }}
+{{ object.remittance_bank  }}
+{{ object.beneficiary_no }}
+{{ object.contact_person_name }}
+{{ object.contact_person_phone_number }}
+{{ object.contact_person_email }}
+{{ object.remarks }}
+{{ object.created | date:"SHORT_DATETIME_FORMAT" }}
+{{ object.created_by.get_username }}
+{{ object.created_by.get_full_name }}

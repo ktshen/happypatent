@@ -12,9 +12,10 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Model
 from django.db import transaction
 from dateutil.relativedelta import relativedelta
+from haystack.query import SearchQuerySet, RelatedSearchQuerySet
 import geocoder
 
 from .models import Patent, Agent, User, FileAttachment, Proposal, \
@@ -29,6 +30,8 @@ def get_model_fields_data(obj):
 
 
 class _DeleteView(LoginRequiredMixin, DeleteView):
+    """ Base View for deleting models."""
+
     http_method_names = [u'post']
     success_message = "%(field)s was deleted successfully."
 
@@ -56,6 +59,10 @@ class _DeleteView(LoginRequiredMixin, DeleteView):
 
 
 class AjaxSelect2View(LoginRequiredMixin, BaseListView):
+    """
+    Base view for searching manytomany field or foreignkey field.
+    Should be used with AjaxSelect2Mixin in widget.py
+    """
     search_fields = []
     paginate_by = 10
 
@@ -101,7 +108,6 @@ class AjaxableResponseMixin(object):
     Mixin to add AJAX support to a form.
     Must be used with an object-based FormView (e.g. CreateView)
     """
-
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             self.object = None
@@ -136,6 +142,7 @@ class AjaxableResponseMixin(object):
 
 
 class UserAppendCreateViewMixin(object):
+    """ Append the user to created_by field for each model's creation inherited from _BaseModel """
     def form_valid(self, form):
         if not self.object:
             self.object = form.save(commit=False)
@@ -145,12 +152,76 @@ class UserAppendCreateViewMixin(object):
 
 
 class FileAttachmentViewMixin(object):
+    """ Create a FileAttachment for model """
     def form_valid(self, form):
         response = super(FileAttachmentViewMixin, self).form_valid(form)
         for file in self.request.FILES.getlist('file'):
             instance = FileAttachment(file=file, content_object=self.object)
             instance.save()
         return response
+
+
+class BaseDataTableAjaxMixin(ListView):
+    """
+    JQUERY DataTable's source
+    The original idea is getting HTML through method GET and and collecting data source through method POST
+    """
+    table_fields = []
+
+    def post(self, request, *args, **kwargs):
+        searching = False
+
+        if not request.is_ajax():
+            return HttpResponseBadRequest("AJAX ONLY.")
+        if request.POST["search[value]"]:
+            self.object_list = self.haystack_search(request.POST["search[value]"])
+            searching = True
+        else:
+            self.object_list = self.model._default_manager.all()
+        paginator = self.get_paginator(self.object_list, self.paginate_by)
+        page = paginator.page(self.get_page_num())
+        data = self.get_data(page, searching)
+        response = {
+            'draw': request.POST['draw'],
+            'recordsTotal': paginator.count,
+            'recordsFiltered': paginator.count,
+            'data': data
+        }
+        return JsonResponse(data=response, safe=False)
+
+    def get_data(self, page, searching=False):
+        data = []
+        for item in page.object_list:
+            if searching:
+                item = item.object
+            row = []
+            for field in self.table_fields:
+                attr = getattr(item, field)
+                if callable(attr) :
+                    attr = str(attr())
+                if not attr:
+                    attr = "None"
+                if isinstance(attr, Model):
+                    attr = self.wrapped_with_url(str(attr), attr.get_absolute_url())
+                else:
+                    if not isinstance(attr, str):
+                        attr = str(attr)
+                    if field == self.table_fields[0]:
+                        attr = self.wrapped_with_url(attr, item.get_absolute_url())
+                row.append(attr)
+            data.append(row)
+        return data
+
+    def get_page_num(self):
+        return int(((int(self.request.POST["start"]))/self.paginate_by)+1)
+
+    @staticmethod
+    def wrapped_with_url(string, url):
+        return '<a href="{0}">{1}</a>'.format(url, string)
+
+    def haystack_search(self, query):
+        return SearchQuerySet().models(self.model).auto_query(query).load_all()
+
 
 
 class PatentMixin(object):
@@ -227,9 +298,11 @@ class PatentUpdateView(LoginRequiredMixin, PatentMixin, FileAttachmentViewMixin,
 
 
 @transaction.non_atomic_requests
-class PatentListView(LoginRequiredMixin, ListView):
+class PatentListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Patent
     ordering = ['-update', '-created']
+    paginate_by = 10
+    table_fields = ["case_id", "chinese_title", "english_title", "case_status_template", "agent", "country"]
 
 
 class PatentDeleteView(_DeleteView):

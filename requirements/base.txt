@@ -52,7 +52,7 @@ django-activity-stream==0.6.3
 pyyaml==3.12
 ua-parser==0.7.3
 user-agents==1.1.0
-https://github.com/selwin/django-user_agents/archive/master.zip
+django-user-agents==0.3.2
 
 # ckeditor
 django-ckeditor==5.2.2
@@ -60,6 +60,6 @@ django-ckeditor==5.2.2
 python-dateutil==2.6.0
 geocoder==1.23.1
 
-django-watson==1.4.0
+elasticsearch==2.4.1
 
 

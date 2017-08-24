@@ -1,0 +1,12 @@
+{{ object.chinese_name }}
+{{ object.english_name }}
+{{ object.country }}
+{{ object.post_address }}
+{{ object.english_address }}
+{{ object.phone_number  }}
+{{ object.id_number }}
+{{ object.email }}
+{{ object.remarks }}
+{{ object.created | date:"SHORT_DATETIME_FORMAT" }}
+{{ object.created_by.get_username }}
+{{ object.created_by.get_full_name }}

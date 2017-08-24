@@ -20,6 +20,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - elasticsearch
     command: /gunicorn.sh
     volumes:
       - ./media:/app/media
@@ -41,3 +42,11 @@ services:
 
   redis:
     image: redis:3.0
+
+  elasticsearch:
+    image: elasticsearch:2.4.6-alpine
+    volumes:
+      - ./esdata:/data
+      - ./eslogs:logs
+
+

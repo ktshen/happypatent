@@ -114,33 +114,30 @@ input.form-control{
             </div>
             <div class="box-body ">
                 <div class="table-responsive">
-                    <table id="list_table" class="table table-bordered table-striped" >
+                    <table id="list_table" class="table table-bordered table-striped" url="{% url "proposals:patent-list" %}">
+                        {% csrf_token %}
                         <thead>
                             <tr>
                                 <th>Case ID</th>
                                 <th>Chinese Title</th>
                                 <th>English Title</th>
-                                {% if request|is_pc %}
                                 <th>Case status</th>
                                 <th>Agent</th>
                                 <th>Country</th>
-                                {% endif %}
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for patent in object_list %}
-                            <tr>
-                                <td><a href="{{ patent.get_absolute_url }}">{{ patent.case_id }}</a></td>
-                                <td><a href="{{ patent.get_absolute_url }}">{{ patent.chinese_title }}</a></td>
-                                <td>{{ patent.english_title }}</td>
-                                {% if request|is_pc %}
-                                <td>{% if patent.case_status %}{{ patent.case_status_template }}{% else %}None{% endif %}</td>
-                                <td>{% if patent.agent %}<a href="{{ patent.agent.get_absolute_url }}">{{ patent.agent.agent_title }}</a>{% else %}None{% endif %}</td>
-                                <td>{{ patent.country }}</td>
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
+{#                        <tbody>#}
+{#                            {% for patent in object_list %}#}
+{#                            <tr>#}
+{#                                <td><a href="{{ patent.get_absolute_url }}">{{ patent.case_id }}</a></td>#}
+{#                                <td><a href="{{ patent.get_absolute_url }}">{{ patent.chinese_title }}</a></td>#}
+{#                                <td>{{ patent.english_title }}</td>#}
+{#                                <td>{% if patent.case_status %}{{ patent.case_status_template }}{% else %}None{% endif %}</td>#}
+{#                                <td>{% if patent.agent %}<a href="{{ patent.agent.get_absolute_url }}">{{ patent.agent.agent_title }}</a>{% else %}None{% endif %}</td>#}
+{#                                <td>{{ patent.country }}</td>#}
+{#                            </tr>#}
+{#                            {% endfor %}#}
+{#                        </tbody>#}
                     </table>
                 </div>
             </div>
@@ -149,5 +146,29 @@ input.form-control{
           <!-- /.box -->
     </div>
 </div>
+<script>
+    $('#list_table').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": false,
+      "info": true,
+      "autoWidth": true,
+       serverSide: true,
+       ajax: {
+           "url": $('#list_table').attr("url"),
+           "type": "POST",
+           "data": function ( d ) {
+              return $.extend( {}, d, {
+                "csrfmiddlewaretoken": jQuery("[name=csrfmiddlewaretoken]").val()
+              } );
+            }
+       }
+    });
+</script>
 {% endblock content %}
+
+{% block javascript %}
+
+{% endblock %}
 

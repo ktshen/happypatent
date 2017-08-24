@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^proposals/', include('proposals.urls', namespace="proposals", app_name="proposals")),
     url(r'^billboard/', include('billboard.urls', namespace="billboard", app_name="billboard")),
+    url(r'^search/', include('haystack.urls')),
     url(r'', include('happypatent.users.urls', namespace='users')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

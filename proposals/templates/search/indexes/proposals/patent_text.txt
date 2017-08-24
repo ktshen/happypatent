@@ -1,0 +1,35 @@
+{{ object.case_id }}
+{{ object.chinese_title }}
+{{ object.english_title }}
+{{ object.application_type_template }}
+{{ object.country_template }}
+{{ object.case_status_template }}
+{{ object.examination_date | date:"SHORT_DATE_FORMAT" }}
+{% for obj in object.inventor.all %}
+    {{ obj.chinese_name }}
+    {{ obj.english_name }}
+{% endfor %}
+{{ object.case_status_template }}
+{{ object.filing_date | date:"SHORT_DATE_FORMAT" }}
+{{ object.patent_term | date:"SHORT_DATE_FORMAT" }}
+{{ object.application_no }}
+{{ object.publication_date | date:"SHORT_DATE_FORMAT" }}
+{{ object.publication_no }}
+{{ object.patent_date | date:"SHORT_DATE_FORMAT" }}
+{{ object.patent_no }}
+{{ object.final_patent_term | date:"SHORT_DATE_FORMAT" }}
+{{ object.certificate_no }}
+{{ object.agent.agent_id }}
+{{ object.agent.agent_title }}
+{{ object.agent_ref_no }}
+{{ object.pre_decision_date | date:"SHORT_DATE_FORMAT" }}
+{{ object.pre_decision_no }}
+{{ object.re_examine_date | date:"SHORT_DATE_FORMAT" }}
+{{ object.prio_application_no }}
+{{ object.prio_filing_date | date:"SHORT_DATE_FORMAT" }}
+{{ object.file_holder_position }}
+{{ object.IDS_information }}
+{{ object.remarks }}
+{{ object.created | date:"SHORT_DATETIME_FORMAT" }}
+{{ object.created_by.get_username }}
+{{ object.created_by.get_full_name }}

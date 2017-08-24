@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from watson.admin import SearchAdmin
 from .models import Agent, Patent, Proposal, FileAttachment, ControlEvent, Inventor
 
 

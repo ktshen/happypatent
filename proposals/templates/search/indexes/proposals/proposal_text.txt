@@ -1,0 +1,19 @@
+{{ object.proposal_id }}
+{{ object.chinese_title }}
+{{ object.english_title }}
+{% for obj in inventors %}
+    {{ obj.chinese_name }}
+    {{ obj.english_name }}
+{% endfor %}
+{{ object.department }}
+{{ object.category }}
+{{ object.proposal_date | date:"SHORT_DATE_FORMAT" }}
+{{ object.country }}
+{{ object.abstract }}
+{{ object.performance }}
+{{ object.appraisal_date | date:"SHORT_DATE_FORMAT" }}
+{{ object.appraisal_result }}
+{{ object.remarks }}
+{{ object.created | date:"SHORT_DATETIME_FORMAT" }}
+{{ object.created_by.get_username }}
+{{ object.created_by.get_full_name }}

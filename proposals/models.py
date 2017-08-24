@@ -224,6 +224,12 @@ class Patent(_BaseModel):
         else:
             return self.application_type
 
+    def country_template(self):
+        if self.country:
+            return str(dict(Patent.COUNTRY_CHOICES)[self.country])
+        else:
+            return self.country
+
 
 @python_2_unicode_compatible
 class ControlEvent(_BaseModel):
