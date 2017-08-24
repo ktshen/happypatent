@@ -47,6 +47,6 @@ services:
     image: elasticsearch:2.4.6-alpine
     volumes:
       - ./esdata:/data
-      - ./eslogs:logs
+      - ./eslogs:/logs
 
 
