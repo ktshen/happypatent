@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load highlight %}
 
 {% block title %}Search{% endblock %}
 {% block content_title %}Search{% endblock %}
@@ -85,7 +84,7 @@ em {
     <h2>Search for {{ query }}. Total results: {{ total_num }}</h2>
     {% for result in page_obj.object_list %}
         <h3><a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a></h3>
-        {% for item in result.hightlighted %}
+        {% for item in result.highlighted %}
             <p>{{ item | safe }}</p>
         {% endfor %}
     {% empty %}
