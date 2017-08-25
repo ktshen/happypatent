@@ -1,56 +1,27 @@
 from django.shortcuts import redirect
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 from django.views.generic.list import BaseListView
 from django.views.generic.base import View
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.utils import timezone
-from django.db.models import Q, Model
+from django.db.models import Q
 from django.db import transaction
 from dateutil.relativedelta import relativedelta
-from haystack.query import SearchQuerySet
 import geocoder
+from happypatent.base.views import BaseDeleteView, BaseDataTableAjaxMixin
 from fileattachments.views import FileAttachmentViewMixin
 from .models import Patent, Agent, User, Proposal, Inventor, ControlEvent
 from .forms import PatentModelForm, AgentModelForm, InventorModelForm, ControlEventModelForm, \
     ProposalModelForm
-
-
-class _DeleteView(LoginRequiredMixin, DeleteView):
-    """ Base View for deleting models."""
-
-    http_method_names = [u'post']
-    success_message = "%(field)s was deleted successfully."
-
-    def post(self, request, *args, **kwargs):
-        try:
-            self.kwargs[self.slug_url_kwarg] = request.POST["slug_field"]
-        except KeyError:
-            return HttpResponseBadRequest()
-        return self.delete(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if not request.user == self.object.created_by:
-            return HttpResponseBadRequest("You have no privilege to delete this item")
-        success_url = self.get_success_url()
-        self.object_name = str(self.object)
-        self.object.delete()
-        return HttpResponseRedirect(success_url)
-
-    def get_success_message(self, cleaned_data):
-        if self.object_name:
-            return self.success_message % dict(field=self.object_name)
-        else:
-            return "Delete Successfully."
 
 
 class AjaxSelect2View(LoginRequiredMixin, BaseListView):
@@ -146,69 +117,6 @@ class UserAppendCreateViewMixin(object):
         return response
 
 
-class BaseDataTableAjaxMixin(ListView):
-    """
-    JQUERY DataTable's source
-    The original idea is getting HTML through method GET and and collecting data source through method POST
-    """
-    table_fields = []
-    paginate_by = 10
-
-    def post(self, request, *args, **kwargs):
-        searching = False
-
-        if not request.is_ajax():
-            return HttpResponseBadRequest("AJAX ONLY.")
-        if request.POST["search[value]"]:
-            self.object_list = self.haystack_search(request.POST["search[value]"])
-            searching = True
-        else:
-            self.object_list = self.model._default_manager.all()
-        paginator = self.get_paginator(self.object_list, self.paginate_by)
-        page = paginator.page(self.get_page_num())
-        data = self.get_data(page, searching)
-        response = {
-            'draw': request.POST['draw'],
-            'recordsTotal': paginator.count,
-            'recordsFiltered': paginator.count,
-            'data': data
-        }
-        return JsonResponse(data=response, safe=False)
-
-    def get_data(self, page, searching=False):
-        data = []
-        for item in page.object_list:
-            if searching:
-                item = item.object
-            row = []
-            for field in self.table_fields:
-                attr = getattr(item, field)
-                if callable(attr) :
-                    attr = str(attr())
-                if not attr:
-                    attr = "None"
-                if isinstance(attr, Model):
-                    attr = self.wrapped_with_url(str(attr), attr.get_absolute_url())
-                else:
-                    if not isinstance(attr, str):
-                        attr = str(attr)
-                    if field == self.table_fields[0]:
-                        attr = self.wrapped_with_url(attr, item.get_absolute_url())
-                row.append(attr)
-            data.append(row)
-        return data
-
-    def get_page_num(self):
-        return int(((int(self.request.POST["start"]))/self.paginate_by)+1)
-
-    @staticmethod
-    def wrapped_with_url(string, url):
-        return '<a href="{0}">{1}</a>'.format(url, string)
-
-    def haystack_search(self, query):
-        return SearchQuerySet().models(self.model).auto_query(query).load_all()
-
-
 class CaseIDGenerator(object):
     """
     - Class that helps model 'Patent' to process latest case id.
@@ -223,7 +131,7 @@ class CaseIDGenerator(object):
 
     @staticmethod
     def build_case_id(year, num):
-        return "{0}P{0:04}".format(year, num)
+        return "{0}P{1:04}".format(year, num)
 
     def search_latest_id(self):
         qs = Patent.objects.filter(
@@ -303,7 +211,7 @@ class PatentUpdateView(LoginRequiredMixin, PatentMixin, FileAttachmentViewMixin,
     slug_field = "case_id"
     slug_url_kwarg = "case_id"
     form_class = PatentModelForm
-    template_name = "proposals/patent_create.html"
+    template_name = "proposals/patent_update.html"
 
 
 @transaction.non_atomic_requests
@@ -314,7 +222,7 @@ class PatentListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     table_fields = ["case_id", "chinese_title", "english_title", "case_status_template", "agent", "country"]
 
 
-class PatentDeleteView(_DeleteView):
+class PatentDeleteView(BaseDeleteView):
     model = Patent
     slug_field = "case_id"
     slug_url_kwarg = "case_id"
@@ -369,7 +277,7 @@ class ControlEventUpdateView(LoginRequiredMixin, SuccessMessageMixin, ControlEve
         return super(ControlEventUpdateView, self).get(request, *args, **kwargs)
 
 
-class ControlEventDeleteView(_DeleteView):
+class ControlEventDeleteView(BaseDeleteView):
     model = ControlEvent
     slug_field = 'pk'
     slug_url_kwarg = 'pk'
@@ -402,7 +310,7 @@ class AgentUpdateView(LoginRequiredMixin, UpdateView):
     model = Agent
     slug_field = "agent_id"
     slug_url_kwarg = "agent_id"
-    template_name = "proposals/agent_create.html"
+    template_name = "proposals/agent_update.html"
     form_class = AgentModelForm
 
 
@@ -413,7 +321,7 @@ class AgentListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     table_fields = ["agent_title", "country", 'contact_person_name', 'contact_person_email']
 
 
-class AgentDeleteView(_DeleteView):
+class AgentDeleteView(BaseDeleteView):
     model = Agent
     slug_field = 'agent_id'
     slug_url_kwarg = 'agent_id'
@@ -457,7 +365,7 @@ class ProposalDetailView(LoginRequiredMixin, DetailView):
 
 class ProposalUpdateView(LoginRequiredMixin, UpdateView):
     model = Proposal
-    template_name = "proposals/proposal_create.html"
+    template_name = "proposals/proposal_update.html"
     form_class = ProposalModelForm
 
 
@@ -467,7 +375,7 @@ class ProposalListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     table_fields = ['proposal_id', 'chinese_title', 'english_title']
 
 
-class ProposalDeleteView(_DeleteView):
+class ProposalDeleteView(BaseDeleteView):
     model = Proposal
     success_url = reverse_lazy("proposals:proposal-list")
 
@@ -491,7 +399,7 @@ class InventorDetailView(LoginRequiredMixin, DetailView):
 
 class InventorUpdateView(LoginRequiredMixin, UpdateView):
     model = Inventor
-    template_name = "proposals/inventor_create.html"
+    template_name = "proposals/inventor_update.html"
     form_class = InventorModelForm
 
 
@@ -501,7 +409,7 @@ class InventorListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     table_fields = ['chinese_name', 'english_name', 'country']
 
 
-class InventorDeleteView(_DeleteView):
+class InventorDeleteView(BaseDeleteView):
     model = Inventor
     slug_field = 'pk'
     slug_url_kwarg = 'pk'

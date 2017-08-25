@@ -88,6 +88,10 @@
             flex-grow: 2;
             text-align: left;
         }
+        .navbar-header form> .input-group{
+            display:flex;
+            top:7px;
+        }
         .skin-blue-light .main-header .navbar .dropdown-menu li a{
             color: #777;
         }
@@ -150,6 +154,8 @@
 <!-- Jquery Datatable -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+<!-- jQuery ajax form -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
 <!-- FastClick -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 {% compress js %}
@@ -175,7 +181,6 @@
 
   <!-- Main Header -->
   <header class="main-header">
-
     <!-- Header Navbar -->
     {% if request.user.is_authenticated %}
     <div class="navbar-wrapper">
@@ -187,43 +192,49 @@
             <i class="fa fa-bars"></i>
             </button>
             <a href="{% url "users:home" %}" class="logo">
-     <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>HAPPY</b>Patent</span>
-    </a>
-            <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- User Account Menu -->
-          <li class="dropdown user user-menu">
-            <!-- Menu Toggle Button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <!-- The user image in the navbar-->
-              <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="user-image" alt="User Image">
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+             <!-- logo for regular state and mobile devices -->
+              <span class="logo-lg"><b>HAPPY</b>Patent</span>
             </a>
-            <ul class="dropdown-menu">
-              <!-- The user image in the menu -->
-              <li class="user-header">
-                <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="img-circle" alt="User Image">
-                <p>
-                  {{ request.user.username }}
-                  <small>Last login at {{ user.last_login }}</small>
-                </p>
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="{% url "users:detail" request.user.username %}" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                  <a href="{% url 'account_logout' %}" class="btn btn-default btn-flat">Sign out</a>
-                </div>
+            <!-- Search Bar -->
+            <form action="/search" method="get" >
+              <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search...">
+              </div>
+            </form>
+            <!-- End Search -->
+            <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- User Account Menu -->
+              <li class="dropdown user user-menu">
+                <!-- Menu Toggle Button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <!-- The user image in the navbar-->
+                  <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="user-image" alt="User Image">
+                  <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                  <span class="hidden-xs">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- The user image in the menu -->
+                  <li class="user-header">
+                    <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="img-circle" alt="User Image">
+                    <p>
+                      {{ request.user.username }}
+                      <small>Last login at {{ user.last_login }}</small>
+                    </p>
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a href="{% url "users:detail" request.user.username %}" class="btn btn-default btn-flat">Profile</a>
+                    </div>
+                    <div class="pull-right">
+                      <a href="{% url 'account_logout' %}" class="btn btn-default btn-flat">Sign out</a>
+                    </div>
+                  </li>
+                </ul>
               </li>
             </ul>
-          </li>
-        </ul>
-      </div>
-
+          </div>
           </div>
         </div>
         <div class="container sub-navbar">
@@ -299,6 +310,15 @@
                             <li><a href="{% url "proposals:agent-list" %}">See All Agents</a></li>
                             <li><a href="{% url "proposals:agent-create" %}">Create New Agent</a></li>
                          </ul>
+                    </li>
+                    <li class="dropdown">
+                         <a class="sub-navbar-menu" href="{% url "fileattachments:files-list" %}"  aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-file-word-o "></i>
+                            <span>Files</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-down pull-right"></i>
+                            </span>
+                         </a>
                     </li>
                 </ul>
             </div>

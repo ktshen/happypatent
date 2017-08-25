@@ -408,7 +408,18 @@ color: #777;
                   <div class="panel-body">
                     <ul>
                         {% for file in object.files.all %}
-                        <li><h5><a href="{{ file.file.url }}" download > {{ file.filename }}</a></h5></li>
+                        <li>
+                            <h5>
+                                <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                                <span class="pull-right-container">
+                                    <a class="fa fa-trash-o pull-right remove-objects" form_id="#remove-files-{{ forloop.counter }}"></a>
+                                    <form action="{% url "files:files-delete" %}" id="remove-files-{{ forloop.counter }}" ajax method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="slug_field" value="{{ file.pk }}">
+                                    </form>
+                                </span>
+                            </h5>
+                        </li>
                         {% endfor %}
                     </ul>
                   </div>

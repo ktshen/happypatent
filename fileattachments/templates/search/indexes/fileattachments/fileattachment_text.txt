@@ -1,6 +1,5 @@
 {{ object.filename }}
 {{ object.related_object_name }}
-{{ object.remarks }}
 {{ object.created | date:"SHORT_DATETIME_FORMAT" }}
 {% if object.created_by %}
     {{ object.created_by.get_username }}

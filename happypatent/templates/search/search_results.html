@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% load highlight %}
+
+{% block title %}Search{% endblock %}
+{% block content_title %}Search{% endblock %}
+
+{% block css %}
+<style>
+.post-row {
+    overflow:hidden;
+}
+
+.post-box{
+    padding:10px;
+    width:50%;
+    float:left;
+}
+.box{
+   border-top:none;
+   margin: 0 auto 20px auto;
+   width: 83.333333%;
+}
+.box-body{
+  padding: 10px 15px 10px 15px;
+}
+.blog-post-title {
+  font-size: 30px;
+  overflow-wrap:break-word;
+  color:#2BB4B4;
+ }
+.box-header.with-border{
+  padding: 15px 10px 10px 10px;
+  border:1px solid #f4f4f4;
+}
+.box-header.with-border h5{
+  margin-top:0;
+  margin-bottom:0;
+}
+.credit-line{
+  display:flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  height:22.7px;
+}
+.credit-line > h5{
+  margin-top:5px;
+  margin-bottom:0;
+  margin-right:5px;
+}
+.pager{
+    margin: 0 auto 20px auto;
+    width: 83.333333%;
+}
+.pager > span{
+    position:relative;
+    top:6px;
+}
+.pager > li.next{
+    width:74px;
+    height:32px;
+}
+@media screen and (max-width: 767px) {
+    .box,
+    .pager{
+        width: 91.666667%;
+    }
+    .post-box{
+    width:100%;
+    }
+}
+
+em {
+    font-style: italic;
+    font-weight: bold;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="box">
+<div class="post-row">
+{% if query %}
+    <h2>Search for {{ query }}. Total results: {{ total_num }}</h2>
+    {% for result in page_obj.object_list %}
+        <h3><a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a></h3>
+        {% for k, v in result.highlighted.items %}
+            {% if k == "text" %}
+                {% for item in v %}
+                    {{ item | safe }}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% empty %}
+        <p>No results found.</p>
+    {% endfor %}
+{% else %}
+    {# Show some example queries to run, maybe query syntax, something else? #}
+{% endif %}
+</div>
+</div>
+<!-- Pager -->
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <ul class="pager">
+
+                {% if page_obj.has_previous %}
+                <li class="previous">
+                    <a href="?q={{ query }}&amp;page={{ page_obj.previous_page_number }}">&larr; Previous</a>
+                </li>
+            {% endif %}
+
+                 <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+
+            {% if page_obj.has_next %}
+                <li class="next">
+                    <a href="?q={{ query }}&amp;page={{ page_obj.next_page_number }}">Next &rarr;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+

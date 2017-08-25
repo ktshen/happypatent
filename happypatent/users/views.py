@@ -1,11 +1,12 @@
 from django.core.urlresolvers import reverse
-from django.views.generic import DetailView, RedirectView, UpdateView, TemplateView, View
-from django.shortcuts import redirect, render_to_response
-from django.http.response import HttpResponse, JsonResponse
+from django.views.generic import DetailView, RedirectView, UpdateView, TemplateView, View, FormView
+from django.shortcuts import redirect, render_to_response, render
+from django.http.response import HttpResponse, JsonResponse, HttpResponseBadRequest, Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.utils import timezone
 from django.db import transaction
+from django.core.paginator import InvalidPage, Paginator
 from datetime import datetime
 from .models import User, CalendarEvent
 from .forms import UserProfileModelForm
@@ -13,6 +14,7 @@ from proposals.models import Patent, Agent, ControlEvent, Proposal, Inventor
 from billboard.models import Post, Comment
 from django.utils.timezone import utc
 from dateutil.relativedelta import relativedelta
+from haystack.forms import HighlightedSearchForm
 
 DATE_FMT = "%a, %d %b %Y %X GMT"
 
@@ -230,3 +232,51 @@ class TimeLineAjaxView(LoginRequiredMixin, View):
             }
             response.append(e)
         return JsonResponse(response, safe=False)
+
+
+class GeneralSearchView(LoginRequiredMixin, View):
+    results_per_page = 10
+
+    def get(self, request, *args, **kwargs):
+        if not request.GET['q']:
+            context = {"form": HighlightedSearchForm()}
+            return render(request, "search/search.html", context=context)
+        self.form = HighlightedSearchForm(request.GET, load_all=True)
+        if self.form.is_valid():
+            self.results = self.form.search()
+        else:
+            return HttpResponseBadRequest()
+        self.total = self.results.count()
+        context = self.get_context()
+        return render(request, "search/search_results.html", context=context )
+
+    def build_page(self):
+        try:
+            page_no = int(self.request.GET.get('page', 1))
+        except (TypeError, ValueError):
+            raise Http404("Not a valid number for page.")
+
+        if page_no < 1:
+            raise Http404("Pages should be 1 or greater.")
+
+        paginator = Paginator(self.results, self.results_per_page)
+
+        try:
+            page = paginator.page(page_no)
+        except InvalidPage:
+            raise Http404("No such page!")
+
+        return (paginator, page)
+
+    def get_context(self):
+        (paginator, page) = self.build_page()
+        context = {
+            'query': self.request.GET['q'],
+            'page_obj': page,
+            'paginator': paginator,
+            'total_num': self.total
+        }
+        return context
+
+
+

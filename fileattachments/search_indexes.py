@@ -1,3 +1,4 @@
+import os
 from django.template import loader
 from django.template import Context
 from tika import unpack
@@ -11,7 +12,6 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable):
     related_object_name = indexes.CharField(model_attr="content_object")
     created = indexes.DateTimeField(model_attr='created')
     created_by = indexes.CharField(model_attr="created_by", null=True)
-    remarks = indexes.CharField(model_attr="remarks")
 
     def get_model(self):
         return FileAttachment
@@ -27,7 +27,16 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable):
 
     @staticmethod
     def extract_file_contents(file_path):
-        return unpack.from_file(file_path)
+        # tika-python has a bug when the file name is not english, so we need to rename the file before
+        # extracting. After that, we can change it back to its original filename
+        dir, basename = os.path.split(file_path)
+        filename, ext = basename.rsplit(".", 1)
+        temp_path = os.path.join(dir, "temp." + ext)
+        os.rename(file_path, temp_path)
+        data = unpack.from_file(temp_path)
+        os.rename(temp_path, file_path)
+        data["metadata"]["resourceName"] = file_path
+        return data
 
     def prepare_related_object(self, obj):
         return str(obj)

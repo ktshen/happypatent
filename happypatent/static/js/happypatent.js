@@ -58,7 +58,19 @@
             modal: true,
             buttons: {
                 "Delete": {
-                    click: function() {$(form_id).submit();},
+                    click: function() {
+                        let ajax = $(form_id).attr("ajax")
+                        if(typeof ajax !== typeof undefined && ajax !== false){
+                            $(form_id).ajaxSubmit({
+                                success: function(){
+                                    $(".ui-dialog").remove();
+                                    location.reload();
+                                }
+                            });
+                        }
+                        else
+                            $(form_id).submit();
+                    },
                     class: "btn btn-danger",
                     text: "Delete"
                 },

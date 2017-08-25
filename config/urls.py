@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from happypatent.users.views import GeneralSearchView
 
 urlpatterns = [
     url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about'),
@@ -15,7 +16,8 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^proposals/', include('proposals.urls', namespace="proposals", app_name="proposals")),
     url(r'^billboard/', include('billboard.urls', namespace="billboard", app_name="billboard")),
-    url(r'^search/', include('haystack.urls')),
+    url(r'^files/', include('fileattachments.urls', namespace="files", app_name="fileattachments")),
+    url(r'^search/$', GeneralSearchView.as_view(), name="search-view"),
     url(r'', include('happypatent.users.urls', namespace='users')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
