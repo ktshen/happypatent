@@ -1,5 +1,5 @@
 from django import forms
-from proposals.utils import file_validate
+from fileattachments.utils import file_validate
 from .models import Post, Comment
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout,Fieldset,Div,ButtonHolder

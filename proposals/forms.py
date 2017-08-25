@@ -1,12 +1,9 @@
 from django import forms
-from django.urls import reverse
-
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder,Field
-
+from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder
 from .models import Patent, Agent, Proposal, Inventor, ControlEvent
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
-from .utils import file_validate
+from fileattachments.utils import file_validate
 
 
 class InventorModelForm(forms.ModelForm):

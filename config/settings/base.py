@@ -65,6 +65,7 @@ LOCAL_APPS = [
     # Your stuff: custom apps go here
     'proposals',
     'billboard',
+    'fileattachments',
 
 ]
 

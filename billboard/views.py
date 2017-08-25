@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from proposals.views import FileAttachmentViewMixin
+from fileattachments.views import FileAttachmentViewMixin
 
 from .models import Post, User, Comment
 from .forms import PostModelForm, CommentModelForm

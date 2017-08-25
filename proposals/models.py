@@ -1,73 +1,23 @@
 from __future__ import unicode_literals
-import os
 from django.db import models
 from django.urls.base import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericRelation
 from happypatent.users.models import BaseProfileModel, User
-from .utils import YES_OR_NO, get_upload_path
+from happypatent.base.models import BaseModel
+from fileattachments.models import FileAttachment
+
+
+YES_OR_NO = (
+    ('yes', 'Yes'),
+    ('no', 'No')
+)
 
 
 @python_2_unicode_compatible
-class _BaseModel(models.Model):
-    remarks = models.TextField(_('Remarks'), blank=True)
-
-    created_by = models.ForeignKey(verbose_name=_("Created by"),
-                                   to=User,
-                                   on_delete=models.SET_NULL,
-                                   null=True)
-
-    created = models.DateTimeField(_('Created Time'),
-                                   auto_now_add=True)
-
-    update = models.DateTimeField(_('Latest Update'),
-                                  auto_now=True,
-                                  null=True)
-
-    class Meta:
-        abstract = True
-
-
-@python_2_unicode_compatible
-class FileAttachment(_BaseModel):
-    """
-    - This Model can be attached to any models with any amount you like.
-    - Models that would be attached to should have a GenericRelation field.
-    - To get the model object attached by this FileAttachment can be done by content_object attribute.
-    """
-    file = models.FileField(upload_to=get_upload_path)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
-    created = models.DateTimeField(_('Created Time'), auto_now_add=True, null=True)
-
-    @property
-    def filename(self):
-        return os.path.basename(self.file.name)
-
-    def get_absolute_url(self):
-        pass
-
-    @property
-    def file_url(self):
-        return self.file.url
-
-    @property
-    def file_path(self):
-        return self.file.path
-
-    def related_object_name(self):
-        return str(self.content_object)
-
-    def __str__(self):
-        return "Attaching %s to %s" % (self.filename, str(self.content_object))
-
-
-@python_2_unicode_compatible
-class Inventor(_BaseModel):
+class Inventor(BaseModel):
     chinese_name = models.CharField(_('Chinese name'), max_length=50)
     english_name = models.CharField(_('English name (Last Name, First Name)'), max_length=50)
     country = models.CharField(_('Country'), max_length=50)
@@ -85,7 +35,7 @@ class Inventor(_BaseModel):
 
 
 @python_2_unicode_compatible
-class Proposal(_BaseModel):
+class Proposal(BaseModel):
     APPRAISAL_RESULT_CHOICES = (
         ('pass', _('Pass')),
         ('fail', _('Fail')),
@@ -120,7 +70,7 @@ class Proposal(_BaseModel):
 
 
 @python_2_unicode_compatible
-class Agent(_BaseModel):
+class Agent(BaseModel):
     agent_id = models.AutoField(_('Agent\'s ID'), primary_key=True, editable=False)
     agent_title = models.CharField(_('Agent\'s title'), max_length=50, unique=True)
     country = models.CharField(_('Country'), max_length=50)
@@ -144,7 +94,7 @@ class Agent(_BaseModel):
 
 
 @python_2_unicode_compatible
-class Patent(_BaseModel):
+class Patent(BaseModel):
     APPLICATION_TYPE_CHOICES = (
         ('invention', _('Invention')),
         ('utility', _('Utility')),
@@ -255,7 +205,7 @@ class Patent(_BaseModel):
 
 
 @python_2_unicode_compatible
-class ControlEvent(_BaseModel):
+class ControlEvent(BaseModel):
     CONTROL_ITEM_CHOICES = (
         ('1', _('File new application')),
         ('2', _('File Chinese description')),
@@ -298,7 +248,7 @@ class ControlEvent(_BaseModel):
 
 
 @python_2_unicode_compatible
-class Work(_BaseModel):
+class Work(BaseModel):
     WORK_TYPE_ID_CHOICES = (
         ('1', _('File new application')),
         ('2', _('File document')),

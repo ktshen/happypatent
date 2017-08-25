@@ -12,21 +12,16 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.contrib import messages
+from django.utils import timezone
 from django.db.models import Q, Model
 from django.db import transaction
 from dateutil.relativedelta import relativedelta
 from haystack.query import SearchQuerySet
 import geocoder
-
-from .models import Patent, Agent, User, FileAttachment, Proposal, \
-    Inventor, ControlEvent
+from fileattachments.views import FileAttachmentViewMixin
+from .models import Patent, Agent, User, Proposal, Inventor, ControlEvent
 from .forms import PatentModelForm, AgentModelForm, InventorModelForm, ControlEventModelForm, \
     ProposalModelForm
-from .utils import CaseIDGenerator
-
-
-def get_model_fields_data(obj):
-    return [(field.name, getattr(obj, field.name)) for field in obj._meta.fields]
 
 
 class _DeleteView(LoginRequiredMixin, DeleteView):
@@ -151,17 +146,6 @@ class UserAppendCreateViewMixin(object):
         return response
 
 
-class FileAttachmentViewMixin(object):
-    """ Create a FileAttachment for model """
-    def form_valid(self, form):
-        response = super(FileAttachmentViewMixin, self).form_valid(form)
-        for file in self.request.FILES.getlist('file'):
-            attachment = FileAttachment(file=file, content_object=self.object)
-            attachment.created_by = self.request.user
-            attachment.save()
-        return response
-
-
 class BaseDataTableAjaxMixin(ListView):
     """
     JQUERY DataTable's source
@@ -225,6 +209,35 @@ class BaseDataTableAjaxMixin(ListView):
         return SearchQuerySet().models(self.model).auto_query(query).load_all()
 
 
+class CaseIDGenerator(object):
+    """
+    - Class that helps model 'Patent' to process latest case id.
+    - Case ID Format: <year> P <case no.>.  Example: '17P010', '18P1101'
+    """
+    @property
+    def current_year(self):
+        return timezone.now().strftime("%Y")[-2:]
+
+    def get_latest_id(self):
+        return self.search_latest_id()
+
+    @staticmethod
+    def build_case_id(year, num):
+        return "{0}P{0:04}".format(year, num)
+
+    def search_latest_id(self):
+        qs = Patent.objects.filter(
+            Q(case_id__startswith=self.current_year) &
+            Q(created__year=timezone.now().year)
+        )
+        max_num = 0
+        for p in qs:
+            s = int(p.case_id.split("P")[1].split("-")[0]) + 1
+            if s > max_num:
+                max_num = s
+        return self.build_case_id(self.current_year, max_num)
+
+
 class PatentMixin(object):
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -252,11 +265,6 @@ class PatentCreateView(LoginRequiredMixin, SuccessMessageMixin, PatentMixin, Use
         else:
             init = {"case_id": CaseIDGenerator().get_latest_id()}
         return init
-
-    def get_context_data(self, **kwargs):
-        context = super(PatentCreateView, self).get_context_data(**kwargs)
-        context["files"] = FileAttachment.objects.filter()
-        return context
 
     def get(self, request, *args, **kwargs):
         if "other_country" in request.GET and request.GET["other_country"] == "true":

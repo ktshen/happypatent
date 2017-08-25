@@ -6,9 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.urls.base import reverse
 from django.contrib.contenttypes.fields import GenericRelation
-
 from ckeditor.fields import RichTextField
-from proposals.models import FileAttachment
+from fileattachments.models import FileAttachment
 from happypatent.users.models import User
 
 
