@@ -6,10 +6,7 @@
     {{ object.created_by.get_full_name }}
 {% endif %}
 
-{% for k, v in metadata.items %}
-    {% for val in v %}
-        {{ k }}: {{ val|safe }}
-    {% endfor %}
-{% endfor %}
+
+
 
 {{ content |striptags|safe }}

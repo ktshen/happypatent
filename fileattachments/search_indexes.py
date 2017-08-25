@@ -21,7 +21,6 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable):
         extracted_data = self.extract_file_contents(obj.file_path)
         t = loader.select_template(('search/indexes/fileattachments/fileattachment_text.txt',))
         data['text'] = t.render(Context({'object': obj,
-                                         'metadata': extracted_data["metadata"],
                                          'content': extracted_data["content"]}))
         return data
 
@@ -35,7 +34,6 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable):
         os.rename(file_path, temp_path)
         data = unpack.from_file(temp_path)
         os.rename(temp_path, file_path)
-        data["metadata"]["resourceName"] = file_path
         return data
 
     def prepare_related_object(self, obj):
