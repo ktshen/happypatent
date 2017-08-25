@@ -17,7 +17,7 @@
     // Primarily for model's listview
     $('#list_table').DataTable({
       "paging": true,
-      "lengthChange": true,
+      "lengthChange": false,
       "searching": true,
       "ordering": false,
       "info": true,

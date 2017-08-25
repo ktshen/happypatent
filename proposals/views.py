@@ -15,7 +15,7 @@ from django.contrib import messages
 from django.db.models import Q, Model
 from django.db import transaction
 from dateutil.relativedelta import relativedelta
-from haystack.query import SearchQuerySet, RelatedSearchQuerySet
+from haystack.query import SearchQuerySet
 import geocoder
 
 from .models import Patent, Agent, User, FileAttachment, Proposal, \
@@ -156,8 +156,9 @@ class FileAttachmentViewMixin(object):
     def form_valid(self, form):
         response = super(FileAttachmentViewMixin, self).form_valid(form)
         for file in self.request.FILES.getlist('file'):
-            instance = FileAttachment(file=file, content_object=self.object)
-            instance.save()
+            attachment = FileAttachment(file=file, content_object=self.object)
+            attachment.created_by = self.request.user
+            attachment.save()
         return response
 
 
@@ -222,7 +223,6 @@ class BaseDataTableAjaxMixin(ListView):
 
     def haystack_search(self, query):
         return SearchQuerySet().models(self.model).auto_query(query).load_all()
-
 
 
 class PatentMixin(object):

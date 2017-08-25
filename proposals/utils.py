@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.core.cache import cache
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from uuid import uuid4
 
 from proposals import models
 
@@ -63,7 +64,7 @@ class CaseIDGenerator(object):
 
 
 def get_upload_path(instance, filename):
-    return 'files/%s/%s' % (timezone.now().strftime("%Y-%m-%d"), filename)
+    return 'files/%s/%s/%s' % (timezone.now().strftime("%Y-%m-%d"), uuid4().hex[:6], filename)
 
 
 def file_validate(value):

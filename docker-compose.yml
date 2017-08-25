@@ -21,6 +21,7 @@ services:
       - postgres
       - redis
       - elasticsearch
+      - tika
     command: /gunicorn.sh
     volumes:
       - ./media:/app/media
@@ -51,4 +52,5 @@ services:
     expose:
       - "9200"
 
-
+  tika:
+    build: ./compose/tika

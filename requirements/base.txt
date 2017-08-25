@@ -62,5 +62,6 @@ geocoder==1.23.1
 
 elasticsearch==2.4.1
 django-haystack==2.6.1
+tika==1.15
 
 
