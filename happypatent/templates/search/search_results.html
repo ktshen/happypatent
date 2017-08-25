@@ -85,12 +85,8 @@ em {
     <h2>Search for {{ query }}. Total results: {{ total_num }}</h2>
     {% for result in page_obj.object_list %}
         <h3><a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a></h3>
-        {% for k, v in result.highlighted.items %}
-            {% if k == "text" %}
-                {% for item in v %}
-                    {{ item | safe }}
-                {% endfor %}
-            {% endif %}
+        {% for item in result.hightlighted %}
+            <p>{{ item | safe }}</p>
         {% endfor %}
     {% empty %}
         <p>No results found.</p>
