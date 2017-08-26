@@ -302,6 +302,10 @@ CKEDITOR_CONFIGS = {
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
+
+SHORT_DATE_FORMAT = 'Y-m-d'
+SHORT_DATETIME_FORMAT = 'Y-m-d P'
+
 SELECT2_CSS = "css/empty.css"
 
 # Upload Image Limitation

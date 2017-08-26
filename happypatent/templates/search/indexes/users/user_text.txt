@@ -1,0 +1,16 @@
+{{ object.username }}
+{{ object.get_full_name }}
+{{ object.id_number }}
+{{ object.first_name }}
+{{ object.last_name }}
+{{ object.gender_template }}
+{{ object.email }}
+{{ object.county }}
+{{ object.address }}
+{{ object.home_number }}
+{{ object.mobile_number }}
+{{ object.office_number }}
+{{ object.spouse_name }}
+{{ object.education }}
+{{ object.experience }}
+{{ object.remarks }}

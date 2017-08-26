@@ -186,7 +186,7 @@
                 <tbody>
                     <tr>
                         <td><strong>Proposal Date</strong></td>
-                        <td>{% if object.proposal_date %}{{ object.proposal_date }}{% else %}None{% endif %}</td>
+                        <td>{% if object.proposal_date %}{{ object.proposal_date|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Default Filing Countries</strong></td>
@@ -196,9 +196,15 @@
                         <td><strong>Applied field and performance</strong></td>
                         <td>{% if object.performance %}{{ object.performance }}{% else %}None{% endif %}</td>
                     </tr>
+                </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                <tbody>
                     <tr>
                         <td><strong>Appraisal date</strong></td>
-                        <td>{% if object.appraisal_date %}{{ object.appraisal_date }}{% else %}None{% endif %}</td>
+                        <td>{% if object.appraisal_date %}{{ object.appraisal_date|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Appraisal Results</strong></td>
@@ -210,6 +216,31 @@
                     </tr>
                 </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Files</strong></div>
+                  <div class="panel-body">
+                    <ul>
+                        {% for file in object.files.all %}
+                        <li>
+                            <h5>
+                                <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                                <span class="pull-right-container">
+                                    <a class="fa fa-trash-o pull-right remove-objects" form_id="#remove-files-{{ forloop.counter }}"></a>
+                                    <form action="{% url "files:files-delete" %}" id="remove-files-{{ forloop.counter }}" ajax method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="slug_field" value="{{ file.pk }}">
+                                    </form>
+                                </span>
+                            </h5>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="panel panel-default">

@@ -1,0 +1,10 @@
+{{ obj.title }}
+{{ obj.text }}
+{% if object.author %}
+    {{ object.author.get_username }}
+    {{ object.author.get_full_name }}
+{% endif %}
+{% for file in object.files.all %}
+    {{ file.filename }}
+{% endfor %}
+{{ object.created | date:"SHORT_DATETIME_FORMAT" }}

@@ -220,15 +220,15 @@ color: #777;
                 </tr>
                 <tr>
                     <td><strong>Control Date({{ forloop.counter }})</strong></td>
-                    <td>{{ event.control_date }}</td>
+                    <td>{{ event.control_date|date:"SHORT_DATE_FORMAT" }}</td>
                 </tr>
                 <tr>
                     <td><strong>Deadline({{ forloop.counter }})</strong></td>
-                    <td>{{ event.deadline }}</td>
+                    <td>{{ event.deadline|date:"SHORT_DATE_FORMAT" }}</td>
                 </tr>
                 <tr>
                     <td><strong>Complete Date({{ forloop.counter }})</strong></td>
-                    <td>{% if event.complete_date %}{{ event.complete_date }}{% else %}None{% endif %}</td>
+                    <td>{% if event.complete_date %}{{ event.complete_date|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                 </tr>
                 {% if event.remarks %}
                 <tr>
@@ -261,7 +261,7 @@ color: #777;
                     </tr>
                     <tr>
                         <td><strong>Filing Date</strong></td>
-                        <td>{{ object.filing_date }}</td>
+                        <td>{{ object.filing_date|date:"SHORT_DATE_FORMAT" }}</td>
                     </tr>
                     <tr>
                         <td><strong>Request Examination</strong></td>
@@ -273,7 +273,7 @@ color: #777;
                     </tr>
                     <tr>
                         <td><strong>Publication Date</strong></td>
-                        <td>{% if object.publication_date %}{{ object.publication_date }}{% else %}None{% endif %}</td>
+                        <td>{% if object.publication_date %}{{ object.publication_date|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Publication No.</strong></td>
@@ -290,7 +290,7 @@ color: #777;
                 <tbody>
                     <tr>
                         <td><strong>Date of preliminary decision</strong></td>
-                        <td>{% if object.pre_decision_date %}{{ object.pre_decision_date }}{% else %}None{% endif %}</td>
+                        <td>{% if object.pre_decision_date %}{{ object.pre_decision_date|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Preliminary decision No.</strong></td>
@@ -298,7 +298,7 @@ color: #777;
                     </tr>
                     <tr>
                         <td><strong>Date of re-examination</strong></td>
-                        <td>{% if object.re_examine_date %}{{ object.re_examine_date}}{% else %}None{% endif %}</td>
+                        <td>{% if object.re_examine_date %}{{ object.re_examine_date|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -329,7 +329,7 @@ color: #777;
                 <tbody>
                     <tr>
                         <td><strong>Date of patent</strong></td>
-                        <td>{% if object.patent_date %}{{ object.patent_date }}{% else %}None{% endif %}</td>
+                        <td>{% if object.patent_date %}{{ object.patent_date|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                     </tr>
                     <tr>
                         <td><strong>Patent No.</strong></td>
@@ -338,12 +338,12 @@ color: #777;
                     {% if object.country == "US" %}
                     <tr>
                         <td><strong>Final Patent Term.</strong></td>
-                        <td>{% if object.final_patent_term %}{{ object.final_patent_term }}{% else %}None{% endif %}</td>
+                        <td>{% if object.final_patent_term %}{{ object.final_patent_term|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                     </tr>
                     {% else %}
                     <tr>
                         <td><strong>Patent Term.</strong></td>
-                        <td>{% if object.patent_term %}{{ object.patent_term }}{% else %}None{% endif %}</td>
+                        <td>{% if object.patent_term %}{{ object.patent_term|date:"SHORT_DATE_FORMAT" }}{% else %}None{% endif %}</td>
                     </tr>
                     {% endif %}
                     {% if object.country == "US" %}
@@ -377,7 +377,7 @@ color: #777;
                     </tr>
                     <tr>
                         <td><strong>(Priority) Filing Date</strong></td>
-                        <td>{{ object.prio_filing_date }}</td>
+                        <td>{{ object.prio_filing_date|date:"SHORT_DATE_FORMAT" }}</td>
                     </tr>
                     {% endif %}
                 </tbody>

@@ -14,6 +14,9 @@
 {{ object.appraisal_date | date:"SHORT_DATE_FORMAT" }}
 {{ object.appraisal_result }}
 {{ object.remarks }}
+{% for file in object.files.all %}
+    {{ file.filename }}
+{% endfor %}
 {{ object.created | date:"SHORT_DATETIME_FORMAT" }}
 {{ object.created_by.get_username }}
 {{ object.created_by.get_full_name }}

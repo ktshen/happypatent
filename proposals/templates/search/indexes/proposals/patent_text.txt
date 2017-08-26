@@ -30,6 +30,9 @@
 {{ object.file_holder_position }}
 {{ object.IDS_information }}
 {{ object.remarks }}
+{% for file in object.files.all %}
+    {{ file.filename }}
+{% endfor %}
 {{ object.created | date:"SHORT_DATETIME_FORMAT" }}
 {{ object.created_by.get_username }}
 {{ object.created_by.get_full_name }}

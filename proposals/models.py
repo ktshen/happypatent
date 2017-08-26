@@ -25,6 +25,7 @@ class Inventor(BaseModel):
     english_address = models.CharField(_('English Address'), max_length=100)
     phone_number = models.CharField(_('Phone Number'), max_length=50, blank=True)
     id_number = models.CharField(_('ID Number'), max_length=20, blank=True)
+    department = models.CharField(_('Department'), max_length=100, blank=True)
     email = models.EmailField(blank=True)
 
     def __str__(self):
@@ -57,7 +58,7 @@ class Proposal(BaseModel):
     files = GenericRelation(FileAttachment, related_query_name='proposal')
 
     def __str__(self):
-        return self.chinese_title
+        return self.proposal_id
 
     def get_absolute_url(self):
         return reverse("proposals:proposal-detail", args=[self.pk])

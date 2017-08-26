@@ -333,8 +333,8 @@ class AgentSelect2View(AjaxSelect2View):
     search_fields = ["agent_title__icontains"]
 
 
-class ProposalCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, AjaxableResponseMixin,
-                         SuccessMessageMixin, CreateView):
+class ProposalCreateView(LoginRequiredMixin, UserAppendCreateViewMixin, FileAttachmentViewMixin,
+                         AjaxableResponseMixin, SuccessMessageMixin, CreateView):
     model = Proposal
     template_name = "proposals/proposal_create.html"
     form_class = ProposalModelForm
@@ -363,7 +363,7 @@ class ProposalDetailView(LoginRequiredMixin, DetailView):
     model = Proposal
 
 
-class ProposalUpdateView(LoginRequiredMixin, UpdateView):
+class ProposalUpdateView(LoginRequiredMixin, FileAttachmentViewMixin, UpdateView):
     model = Proposal
     template_name = "proposals/proposal_update.html"
     form_class = ProposalModelForm

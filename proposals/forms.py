@@ -28,7 +28,7 @@ class InventorModelForm(forms.ModelForm):
                     ),
                     Div(
                         'country',
-
+                        'department',
                         css_class="col-md-4 col-sm-6"
                     ),
                     css_class="row green-border"
@@ -61,7 +61,7 @@ class InventorModelForm(forms.ModelForm):
 
     class Meta:
         model = Inventor
-        fields = ('chinese_name', 'english_name', 'country', 'post_address',
+        fields = ('chinese_name', 'english_name', 'country', 'post_address', 'department',
                   'english_address', 'phone_number', 'id_number', 'email', 'remarks')
 
 
@@ -139,6 +139,11 @@ class AgentModelForm(forms.ModelForm):
 
 
 class ProposalModelForm(forms.ModelForm):
+    file = forms.FileField(label="Files",
+                           widget=forms.ClearableFileInput(attrs={'multiple': True}),
+                           validators=[file_validate],
+                           required=False)
+
     def __init__(self, *args, **kwargs):
         super(ProposalModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -190,16 +195,24 @@ class ProposalModelForm(forms.ModelForm):
                         css_class="col-md-6 col-sm-8"
                     ),
                     css_class="row green-border"
+                ),
+                Div(
+                    Div(
+                        'file',
+                        ButtonHolder(Submit('save', 'save', css_class='btn btn-primary')),
+                        css_class="col-md-4"
+                    ),
+                    css_class="row "
                 )
+
             )
         )
-        self.helper.add_input(Submit('save', 'save'))
 
     class Meta:
         model = Proposal
         fields = ('chinese_title', 'english_title', 'inventors', 'department', 'category',
                   'proposal_date', 'country', 'abstract', 'performance', 'appraisal_date', 'appraisal_result',
-                  'remarks')
+                  'remarks', 'file')
         widgets = {
             'inventors': AjaxSelect2MultipleWidget("proposals:inventor-select2"),
             'appraisal_result': MySelect2Widget(),
