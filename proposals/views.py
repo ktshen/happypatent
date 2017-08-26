@@ -319,6 +319,7 @@ class AgentListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Agent
     queryset = Agent.objects.all().order_by("country", "-created")
     table_fields = ["agent_title", "country", 'contact_person_name', 'contact_person_email']
+    ordering = ['-update', '-created']
 
 
 class AgentDeleteView(BaseDeleteView):
@@ -373,6 +374,7 @@ class ProposalUpdateView(LoginRequiredMixin, FileAttachmentViewMixin, UpdateView
 class ProposalListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Proposal
     table_fields = ['proposal_id', 'chinese_title', 'english_title']
+    ordering = ['-update', '-created']
 
 
 class ProposalDeleteView(BaseDeleteView):
@@ -407,6 +409,7 @@ class InventorUpdateView(LoginRequiredMixin, UpdateView):
 class InventorListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Inventor
     table_fields = ['chinese_name', 'english_name', 'country']
+    ordering = ['-update', '-created']
 
 
 class InventorDeleteView(BaseDeleteView):

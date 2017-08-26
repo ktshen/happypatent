@@ -51,7 +51,9 @@ class BaseDataTableAjaxMixin(ListView):
             self.object_list = self.haystack_search(request.POST["search[value]"])
             searching = True
         else:
-            self.object_list = self.model._default_manager.all().order_by(*self.ordering)
+            self.object_list = self.model._default_manager.all()
+            if self.ordering:
+                self.object_list.order_by(*self.ordering)
         paginator = self.get_paginator(self.object_list, self.paginate_by)
         page = paginator.page(self.get_page_num())
         data = self.get_data(page, searching)
