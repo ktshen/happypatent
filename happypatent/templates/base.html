@@ -38,7 +38,6 @@
     {% endblock %}
     {% endcompress %}
     <style>
-
         .skin-blue-light .main-header .navbar .nav > li > a:hover,
         .skin-blue-light .main-header .navbar .nav > li > a:active,
         .skin-blue-light .main-header .navbar .nav > li > a:focus,
@@ -130,7 +129,6 @@
             }
         }
     </style>
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -154,8 +152,6 @@
 <!-- Jquery Datatable -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
-<!-- jQuery ajax form -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
 <!-- FastClick -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 {% compress js %}
@@ -169,6 +165,10 @@
 <script src="{% static "plugins/slimScroll/jquery.slimscroll.min.js" %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static "dist/js/app.js" %}"></script>
+<!-- jQuery-File-Upload -->
+<script src="{% static "js/jquery.fileupload.js" %}"></script>
+<script src="{% static "js/jquery.ui.widget.js" %}"></script>
+<script src="{% static "js/jquery.iframe-transport.js" %}"></script>
 <!-- Happypatent Project Specific -->
 <script src="{% static "js/happypatent.js" %}"></script>
 {% endcompress %}
@@ -203,38 +203,38 @@
             </form>
             <!-- End Search -->
             <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-              <!-- User Account Menu -->
-              <li class="dropdown user user-menu">
-                <!-- Menu Toggle Button -->
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <!-- The user image in the navbar-->
-                  <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="user-image" alt="User Image">
-                  <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                  <span class="hidden-xs">{{ request.user.first_name }} {{ request.user.last_name }}</span>
-                </a>
-                <ul class="dropdown-menu">
-                  <!-- The user image in the menu -->
-                  <li class="user-header">
-                    <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="img-circle" alt="User Image">
-                    <p>
-                      {{ request.user.username }}
-                      <small>Last login at {{ user.last_login }}</small>
-                    </p>
-                  </li>
-                  <!-- Menu Footer-->
-                  <li class="user-footer">
-                    <div class="pull-left">
-                      <a href="{% url "users:detail" request.user.username %}" class="btn btn-default btn-flat">Profile</a>
-                    </div>
-                    <div class="pull-right">
-                      <a href="{% url 'account_logout' %}" class="btn btn-default btn-flat">Sign out</a>
-                    </div>
+                <ul class="nav navbar-nav">
+                  <!-- User Account Menu -->
+                  <li class="dropdown user user-menu">
+                    <!-- Menu Toggle Button -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      <!-- The user image in the navbar-->
+                      <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="user-image" alt="User Image">
+                      <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                      <span class="hidden-xs">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <!-- The user image in the menu -->
+                      <li class="user-header">
+                        <img src="{% if request.user.profile_pic %}{{ request.user.profile_pic.url }}{% else %}{% static "img/blank-profile.png" %}{% endif %}" class="img-circle" alt="User Image">
+                        <p>
+                          {{ request.user.username }}
+                          <small>Last login at {{ user.last_login }}</small>
+                        </p>
+                      </li>
+                      <!-- Menu Footer-->
+                      <li class="user-footer">
+                        <div class="pull-left">
+                          <a href="{% url "users:detail" request.user.username %}" class="btn btn-default btn-flat">Profile</a>
+                        </div>
+                        <div class="pull-right">
+                          <a href="{% url 'account_logout' %}" class="btn btn-default btn-flat">Sign out</a>
+                        </div>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
-              </li>
-            </ul>
-          </div>
+            </div>
           </div>
         </div>
         <div class="container sub-navbar">
@@ -315,9 +315,6 @@
                          <a class="sub-navbar-menu" href="{% url "fileattachments:files-list" %}"  aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-file-word-o "></i>
                             <span>Files</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-down pull-right"></i>
-                            </span>
                          </a>
                     </li>
                 </ul>
@@ -385,15 +382,13 @@
 <!-- ./wrapper -->
 {% if not request.user.is_authenticated %}
     {% if messages %}
-            {% for message in messages %}
-                <div class="callout {% if message.tags %}callout-{{ message.tags }}{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
+        {% for message in messages %}
+            <div class="callout {% if message.tags %}callout-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     <div class="container-fluid" style="margin-top: 50px">
-
             {% block inner %}
             {% endblock %}
         </div>

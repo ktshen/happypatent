@@ -373,7 +373,7 @@ class ProposalUpdateView(LoginRequiredMixin, FileAttachmentViewMixin, UpdateView
 @transaction.non_atomic_requests
 class ProposalListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Proposal
-    table_fields = ['proposal_id', 'chinese_title', 'english_title']
+    table_fields = ['proposal_id', 'chinese_title', 'english_title', 'department']
     ordering = ['-update', '-created']
 
 
@@ -408,7 +408,7 @@ class InventorUpdateView(LoginRequiredMixin, UpdateView):
 @transaction.non_atomic_requests
 class InventorListView(LoginRequiredMixin, BaseDataTableAjaxMixin, ListView):
     model = Inventor
-    table_fields = ['chinese_name', 'english_name', 'country']
+    table_fields = ['chinese_name', 'english_name', 'department', 'country']
     ordering = ['-update', '-created']
 
 
