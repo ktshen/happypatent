@@ -1,4 +1,4 @@
-{% load static staticfiles i18n %}
+ {% load static staticfiles i18n %}
 {% load compress %}
 {% load user_agents %}
 
@@ -152,6 +152,10 @@
 <!-- Jquery Datatable -->
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+<!-- jQuery-File-Upload -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.2/jquery.fileupload.min.js"></script>
+<!-- Bootbox.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 <!-- FastClick -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 {% compress js %}
@@ -165,10 +169,6 @@
 <script src="{% static "plugins/slimScroll/jquery.slimscroll.min.js" %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static "dist/js/app.js" %}"></script>
-<!-- jQuery-File-Upload -->
-<script src="{% static "js/jquery.fileupload.js" %}"></script>
-<script src="{% static "js/jquery.ui.widget.js" %}"></script>
-<script src="{% static "js/jquery.iframe-transport.js" %}"></script>
 <!-- Happypatent Project Specific -->
 <script src="{% static "js/happypatent.js" %}"></script>
 {% endcompress %}
