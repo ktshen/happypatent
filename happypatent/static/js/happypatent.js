@@ -41,47 +41,129 @@
 
     $(".has-danger").addClass("has-error");
 
+    // Listener for models which use ajax to submit deletion
     $("#remove-object").on("click", triggerRemove);
     $(".remove-objects").on("click", triggerRemove);
-
     function triggerRemove(){
         let form_id = $(this).attr("form_id") || "form#remove-form";
-        $('<div></div>').appendTo('section.content')
-        .html('<div><p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>This item will be permanently deleted and cannot be recovered. Are you sure?</p></div>')
-        .dialog({
-            resizable: false,
-            height: "auto",
-            title: 'Warning',
-            width: 400,
-            zIndex: 10000,
-            autoOpen: true,
-            modal: true,
+        bootbox.confirm({
+            message: 'This item will be permanently deleted and cannot be recovered. Are you sure?',
+            callback: function(result){
+                if (result === true){
+                    $(form_id).submit();
+                }
+            },
             buttons: {
-                "Delete": {
-                    click: function() {
-                        let ajax = $(form_id).attr("ajax")
-                        if(typeof ajax !== typeof undefined && ajax !== false){
-                            $(form_id).ajaxSubmit({
-                                success: function(){
-                                    $(".ui-dialog").remove();
-                                    location.reload();
-                                }
-                            });
+                cancel: {
+                    label: 'Cancel',
+                    className: 'btn btn-danger'
+                },
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn btn-primary'
+                },
+            },
+        })
+    }
+
+    //  Listener for file remove button
+    function remove_file(){
+        var $this = $(this);
+        bootbox.confirm({
+            message: "Are you sure?",
+            callback: function(result) {
+                if (result === true) {
+                    $.ajax({
+                        url: $this.attr("delete_url"),
+                        data: {"pk": $this.attr("pk")},
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': jQuery("[name=csrfmiddlewaretoken]").val()
+                        },
+                        success: function () {
+                            $this.closest('li').remove();
                         }
-                        else
-                            $(form_id).submit();
-                    },
-                    class: "btn btn-danger",
-                    text: "Delete"
+                    })
+                }
+            },
+            size: "small",
+            buttons: {
+                cancel: {
+                    label: 'Cancel',
+                    className: 'btn btn-danger'
                 },
-                Cancel: {
-                    click: function() { $(this).remove();},
-                    class: "btn btn-default",
-                    text: "Cancel"
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn btn-primary'
                 },
+            },
+        })
+    }
+    $('.file-remove').on('click', remove_file);
+
+    //file uploading
+    var progressBar = $('<div/>').addClass('progress progress-xs active')
+        .append($('<div/>').addClass('progress-bar progress-bar-primary progress-bar-striped')
+            .css({"width": '0%'}));
+    var uploadButton = $('<button/>').addClass('btn btn-xs btn-primary')
+        .text('Upload')
+        .on('click', function () {
+            var $this = $(this);
+            var data = $(this).data();
+            $this.parent().remove();
+            $('<td/>').append(progressBar.clone(true)).appendTo(data.context);
+            data.submit();
+        });
+    var deleteButton = $('<button/>').addClass('btn btn-xs btn-warning')
+        .text('Cancel')
+        .on('click', function () {
+            var $this = $(this);
+            var data = $(this).data();
+            data.context.remove();
+        });
+
+    $('#fileupload').fileupload({
+        url: $('#fileupload').attr('upload_url'),
+        dataType: 'json',
+        method: 'POST',
+        autoUpload: false,
+        headers: {
+            'X-CSRFToken': jQuery("[name=csrfmiddlewaretoken]").val()
+        },
+        formData: {
+            "object_type": $('#fileupload').attr("object_type"),
+            "pk": $('#fileupload').attr("pk")
+        },
+    }).on('fileuploadadd', function (e, data) {
+        data.context = $('<tr/>').appendTo('#files-queue');
+        $.each(data.files, function (index, file) {
+            $('<td/>').append($('<span/>').text(file.name)).appendTo(data.context);
+            if (!index) {
+                $('<td/>').append(uploadButton.clone(true).data(data))
+                          .append(deleteButton.clone(true).data(data))
+                          .appendTo(data.context);
             }
         });
-    }
+    }).on('fileuploadfail', function (e, data) {
+        var error = $('<span class="text-danger"/>').text(data.jqXHR.responseJSON.message);
+        $(data.context.append($('<br>').append(error)))
+    }).on('fileuploadprogress', function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $(data.context).find('.progress-bar').css('width', progress + '%');
+    }).on('fileuploaddone', function (e, data) {
+            var result = data.result;
+            var newfile = $('<li/>').append(
+                $('<a/>').attr('download', '').attr('href', result.file_url).text(data.files[0].name),
+                $('<button/>').addClass('btn btn-xs btn-danger pull-right file-remove')
+                    .attr('pk', result.file_pk).attr('delete_url', result.delete_url)
+                    .append(
+                        $('<span/>').addClass('fa fa-trash-o'),
+                        "Remove"
+                    ).on('click', remove_file)
+            );
+            newfile.appendTo($('#files-list'));
+            data.context.remove();
+    });
 
     $(".ajax-select2").each(function(index) {
         $(this).select2({

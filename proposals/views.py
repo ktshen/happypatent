@@ -18,7 +18,7 @@ from django.db import transaction
 from dateutil.relativedelta import relativedelta
 import geocoder
 from happypatent.base.views import BaseDeleteView, BaseDataTableAjaxMixin
-from fileattachments.views import FileAttachmentViewMixin
+from fileattachments.views import FileAttachmentViewMixin, FileUploadView
 from .models import Patent, Agent, User, Proposal, Inventor, ControlEvent
 from .forms import PatentModelForm, AgentModelForm, InventorModelForm, ControlEventModelForm, \
     ProposalModelForm
@@ -486,3 +486,7 @@ class ChineseAddressToEnglishView(View):
                 break
             index += no
         return s
+
+
+class ProposalFileUploadView(FileUploadView):
+    model_list = [Patent, Proposal]

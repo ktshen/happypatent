@@ -406,22 +406,32 @@ color: #777;
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Files</strong></div>
                   <div class="panel-body">
-                    <ul>
+                    <ul id="files-list">
+                        {% csrf_token %}
                         {% for file in object.files.all %}
                         <li>
-                            <h5>
-                                <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
-                                <span class="pull-right-container">
-                                    <a class="fa fa-trash-o pull-right remove-objects" form_id="#remove-files-{{ forloop.counter }}"></a>
-                                    <form action="{% url "files:files-delete" %}" id="remove-files-{{ forloop.counter }}" ajax method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="slug_field" value="{{ file.pk }}">
-                                    </form>
-                                </span>
-                            </h5>
+                            <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                            <button class="btn btn-xs btn-danger pull-right file-remove" pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">
+                                <span class="fa fa-trash-o"></span>
+                                Remove
+                            </button>
                         </li>
                         {% endfor %}
                     </ul>
+                    <br>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                              <th>
+                                  <input id="fileupload" type="file" name="files" upload_url="{% url "proposals:file_upload" %}" object_type="patent" pk="{{ object.pk }}" multiple>
+                              </th>
+                              <th></th>
+                              <th style="width: 40px"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="files-queue">
+                        </tbody>
+                    </table>
                   </div>
                 </div>
             </div>

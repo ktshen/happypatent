@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Agent{% endblock %}
-{% block content_title %}Agent{% endblock %}
+{% block title %}Proposal{% endblock %}
+{% block content_title %}Proposal{% endblock %}
 
 {% block css %}
 <style>
@@ -223,19 +223,15 @@
                 <div class="panel panel-default">
                   <div class="panel-heading"><strong>Files</strong></div>
                   <div class="panel-body">
-                    <ul>
+                    <ul id="files-list">
+                        {% csrf_token %}
                         {% for file in object.files.all %}
                         <li>
-                            <h5>
-                                <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
-                                <span class="pull-right-container">
-                                    <a class="fa fa-trash-o pull-right remove-objects" form_id="#remove-files-{{ forloop.counter }}"></a>
-                                    <form action="{% url "files:files-delete" %}" id="remove-files-{{ forloop.counter }}" ajax method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="slug_field" value="{{ file.pk }}">
-                                    </form>
-                                </span>
-                            </h5>
+                            <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                            <button class="btn btn-xs btn-danger pull-right file-remove" pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">
+                                <span class="fa fa-trash-o"></span>
+                                Remove
+                            </button>
                         </li>
                         {% endfor %}
                     </ul>

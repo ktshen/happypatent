@@ -442,3 +442,11 @@ class ControlEventModelForm(forms.ModelForm):
         widgets = {
             'control_item': MySelect2Widget(),
         }
+
+
+class TestForm(forms.Form):
+    file = forms.FileField(label="Files",
+                           widget=forms.ClearableFileInput(attrs={'multiple': True}),
+                           validators=[file_validate],
+                           required=False)
+

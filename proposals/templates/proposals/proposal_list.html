@@ -2,8 +2,8 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load user_agents %}
-{% block title %}Agent{% endblock %}
-{% block content_title %}Agent{% endblock %}
+{% block title %}Proposal{% endblock %}
+{% block content_title %}Proposal{% endblock %}
 
 {% block css %}
  <style>
@@ -103,21 +103,22 @@ input.form-control{
         <div class="col-sm-12 ">
             <div class="box-header with-border">
                 <h3 class="box-title">All Proposals</h3>
-            <div class="box-body ">
-                <div class="table-responsive">
-                    <table id="list_table" class="table table-bordered table-striped">
-                        {% csrf_token %}
-                        <thead>
-                            <tr>
-                                <th>Proposal Number</th>
-                                <th>Chinese Title</th>
-                                <th>English Title</th>
-                                <th>Department</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-             </div>
+                <div class="box-body ">
+                    <div class="table-responsive">
+                        <table id="list_table" class="table table-bordered table-striped">
+                            {% csrf_token %}
+                            <thead>
+                                <tr>
+                                    <th>Proposal Number</th>
+                                    <th>Chinese Title</th>
+                                    <th>English Title</th>
+                                    <th>Department</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                 </div>
+            </div>
         </div>
     </div>
 </div>

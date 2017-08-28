@@ -52,4 +52,6 @@ urlpatterns = [
 
     url(r'^chinese_to_english/$', views.ChineseAddressToEnglishView.as_view(), name='chinese-english-address'),
 
+    url(r'^file_upload/$', views.ProposalFileUploadView.as_view(), name='file_upload'),
+
 ]
