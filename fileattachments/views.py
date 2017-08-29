@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from happypatent.base.views import BaseDeleteView, BaseDataTableAjaxMixin
 from .models import FileAttachment
+from .utils import file_validate
 
 
 class FileAttachmentViewMixin(object):
@@ -31,14 +32,21 @@ class FileUploadView(LoginRequiredMixin, View):
         if "object_type" not in POST or "pk" not in POST:
             return HttpResponseBadRequest("No object_type or pk in request!")
         self.object = self.get_object(POST["object_type"], POST["pk"])
-        file = self.request.FILES.getlist('files')[0]
+        file = self.request.FILES.getlist('files')
+        if len(file) == 0:
+            return HttpResponse(status=200, content="No files uploaded.")
+        file = file[0]
         try:
+            file_validate(file)
             attachment = FileAttachment(file=file, content_object=self.object)
             attachment.filename = file.name
             attachment.created_by = self.request.user
             attachment.save()
         except Exception as e:
-            return JsonResponse(status=400, data={"message": str(e)})
+            s = ''
+            for i in e:
+                s += i
+            return JsonResponse(status=400, data={"message": s})
         data = {
             "file_url": attachment.file_url,
             "file_pk": attachment.pk,

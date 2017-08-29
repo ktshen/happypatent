@@ -3,7 +3,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset, ButtonHolder
 from .models import Patent, Agent, Proposal, Inventor, ControlEvent
 from .widgets import AjaxSelect2Widget, AjaxSelect2MultipleWidget, MySelect2Widget
-from fileattachments.utils import file_validate
 
 
 class InventorModelForm(forms.ModelForm):
@@ -139,11 +138,6 @@ class AgentModelForm(forms.ModelForm):
 
 
 class ProposalModelForm(forms.ModelForm):
-    file = forms.FileField(label="Files",
-                           widget=forms.ClearableFileInput(attrs={'multiple': True}),
-                           validators=[file_validate],
-                           required=False)
-
     def __init__(self, *args, **kwargs):
         super(ProposalModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -196,15 +190,6 @@ class ProposalModelForm(forms.ModelForm):
                     ),
                     css_class="row green-border"
                 ),
-                Div(
-                    Div(
-                        'file',
-                        ButtonHolder(Submit('save', 'save', css_class='btn btn-primary')),
-                        css_class="col-md-4"
-                    ),
-                    css_class="row "
-                )
-
             )
         )
 
@@ -212,7 +197,7 @@ class ProposalModelForm(forms.ModelForm):
         model = Proposal
         fields = ('chinese_title', 'english_title', 'inventors', 'department', 'category',
                   'proposal_date', 'country', 'abstract', 'performance', 'appraisal_date', 'appraisal_result',
-                  'remarks', 'file')
+                  'remarks')
         widgets = {
             'inventors': AjaxSelect2MultipleWidget("proposals:inventor-select2"),
             'appraisal_result': MySelect2Widget(),
@@ -220,11 +205,6 @@ class ProposalModelForm(forms.ModelForm):
 
 
 class PatentModelForm(forms.ModelForm):
-    file = forms.FileField(label="Files",
-                           widget=forms.ClearableFileInput(attrs={'multiple': True}),
-                           validators=[file_validate],
-                           required=False)
-
     def __init__(self, *args, **kwargs):
         super(PatentModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -337,7 +317,6 @@ class PatentModelForm(forms.ModelForm):
                 Div(
                     Div(
                        'file_holder_position',
-
                         css_class="col-md-4 col-sm-6 "
                     ),
                     css_class="row green-border"
@@ -354,16 +333,7 @@ class PatentModelForm(forms.ModelForm):
 
                             css_class="row grey-border"
                 ),
-
-                    Div(
-                        Div(
-                          'file',
-                          ButtonHolder(Submit('save', 'save',css_class='btn btn-primary')),
-                            css_class="col-md-4"
-                         ),
-                          css_class="row "
-                      ),
-                 )
+            )
         )
 
     class Meta:
@@ -375,7 +345,7 @@ class PatentModelForm(forms.ModelForm):
                   'agent', 'agent_ref_no', 'pre_decision_date', 'pre_decision_no',
                   're_examine_date', 'description_pages', 'drawing_pages', 'figures_number', 'priority',
                   'prio_country', 'prio_application_no', 'prio_filing_date', 'file_holder_position',
-                  'IDS_information', 'remarks', 'file')
+                  'IDS_information', 'remarks')
 
         widgets = {
             'agent': AjaxSelect2Widget("proposals:agent-select2",
@@ -442,11 +412,3 @@ class ControlEventModelForm(forms.ModelForm):
         widgets = {
             'control_item': MySelect2Widget(),
         }
-
-
-class TestForm(forms.Form):
-    file = forms.FileField(label="Files",
-                           widget=forms.ClearableFileInput(attrs={'multiple': True}),
-                           validators=[file_validate],
-                           required=False)
-

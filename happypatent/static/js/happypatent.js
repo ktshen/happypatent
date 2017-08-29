@@ -117,9 +117,12 @@
     var deleteButton = $('<button/>').addClass('btn btn-xs btn-warning')
         .text('Cancel')
         .on('click', function () {
-            var $this = $(this);
-            var data = $(this).data();
-            data.context.remove();
+            $(this).data().context.remove();
+        });
+    var quitButton = $('<button/>').addClass('btn btn-xs btn-warning')
+        .text('OK')
+        .on('click', function () {
+            $(this).data().context.remove();
         });
 
     $('#fileupload').fileupload({
@@ -145,8 +148,16 @@
             }
         });
     }).on('fileuploadfail', function (e, data) {
-        var error = $('<span class="text-danger"/>').text(data.jqXHR.responseJSON.message);
-        $(data.context.append($('<br>').append(error)))
+        var error = $('<td/>').append(
+            $('<div/>').addClass('form-group has-error').append(
+                $("<label/>").addClass('control-label').append(
+                    $('<i/>').addClass('fa fa-times-circle-o')
+                ).text(data.jqXHR.responseJSON.message),
+                quitButton.clone(true).data(data)
+            )
+        );
+        data.context.empty();
+        data.context.append(error);
     }).on('fileuploadprogress', function (e, data) {
         var progress = parseInt(data.loaded / data.total * 100, 10);
         $(data.context).find('.progress-bar').css('width', progress + '%');

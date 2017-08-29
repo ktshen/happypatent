@@ -221,6 +221,14 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Remarks</strong></div>
+                  <div class="panel-body">
+                    {{ object.remarks }}
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
                   <div class="panel-heading"><strong>Files</strong></div>
                   <div class="panel-body">
                     <ul id="files-list">
@@ -235,14 +243,23 @@
                         </li>
                         {% endfor %}
                     </ul>
-                  </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                  <div class="panel-heading"><strong>Remarks</strong></div>
-                  <div class="panel-body">
-                    {{ object.remarks }}
+                    <br>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                              <th>
+                                  <label class="btn btn-success btn-xs" for="fileupload">
+                                      <input style="display:none;" id="fileupload" type="file" name="files" upload_url="{% url "proposals:file_upload" %}" object_type="proposal" pk="{{ object.pk }}" multiple>
+                                      <span class="fa fa-upload"></span>
+                                      Upload files
+                                  </label>
+                              </th>
+                              <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="files-queue">
+                        </tbody>
+                    </table>
                   </div>
                 </div>
             </div>
