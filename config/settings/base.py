@@ -315,7 +315,7 @@ IMAGE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png']
 # Upload File Limitation
 FILE_SIZE_LIMITATION = 10485760
 FILE_ALLOWED_EXTENSION = ['jpeg', 'jpg', 'png', "doc", "docx", "pdf", "ppt", "txt", "wps", "tar", "zip",
-                           "xml", "xlsx", "xltx", "rar", "gzip"]
+                           "xml", "xlsx", "xltx", "rar", "gzip", "dwg", "odf", "rtf"]
 
 # django-user_agents settings
 USER_AGENTS_CACHE = 'default'

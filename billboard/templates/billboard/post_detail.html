@@ -142,11 +142,44 @@ textarea{
                     <div>
                     {{ object.text | safe }}
                     </div>
-                    <ul>
+                </div>
+                <div class="panel panel-default">
+                  <div class="panel-heading"><strong>Files</strong></div>
+                  <div class="panel-body">
+                    <ul id="files-list">
+                        {% csrf_token %}
                         {% for file in object.files.all %}
-                        <li><h5><small><a href="{{ file.file.url }}" download>{{ file.filename }}</a></small></h5></li>
+                        <li>
+                            <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                            {% if request.user == object.created_by  %}
+                            <button class="btn btn-xs btn-danger pull-right file-remove" pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">
+                                <span class="fa fa-trash-o"></span>
+                                Remove
+                            </button>
+                            {% endif %}
+                        </li>
                         {% endfor %}
                     </ul>
+                    {% if request.user == object.created_by  %}
+                    <br>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                              <th>
+                                  <label class="btn btn-success btn-xs" for="fileupload">
+                                      <input style="display:none;" id="fileupload" type="file" name="files" upload_url="{% url "billboard:file_upload" %}" object_type="post" pk="{{ object.pk }}" multiple>
+                                      <span class="fa fa-upload"></span>
+                                      Upload files
+                                  </label>
+                              </th>
+                              <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="files-queue">
+                        </tbody>
+                    </table>
+                    {% endif %}
+                  </div>
                 </div>
             </div>
         </div>

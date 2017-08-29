@@ -39,6 +39,10 @@ class Post(models.Model):
         self.slug = slugify(s, allow_unicode=True)
         super(Post, self).save(*args, **kwargs)
 
+    @property
+    def created_by(self):
+        return self.author
+
 
 @python_2_unicode_compatible
 class Comment(models.Model):

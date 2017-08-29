@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from fileattachments.views import FileAttachmentViewMixin
+from fileattachments.views import FileUploadView
 
 from .models import Post, User, Comment
 from .forms import PostModelForm, CommentModelForm
@@ -27,7 +27,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         return kwargs
 
 
-class PostCreateView(LoginRequiredMixin, FileAttachmentViewMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = "billboard/post_create.html"
     form_class = PostModelForm
@@ -42,7 +42,7 @@ class PostCreateView(LoginRequiredMixin, FileAttachmentViewMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class PostUpdateView(LoginRequiredMixin, FileAttachmentViewMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     template_name = "billboard/post_update.html"
     form_class = PostModelForm
@@ -55,6 +55,10 @@ class PostListView(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 6
     ordering = ['-update', '-created']
+
+
+class BillBoardFileUploadView(FileUploadView):
+    model_list = [Post,]
 
 
 @login_required
@@ -72,6 +76,8 @@ def post_remove(request):
             return HttpResponseBadRequest("No privilege to do this action.")
         messages.add_message(request, messages.SUCCESS, 'You have successfully removed the post "%s".' % title)
         return HttpResponseRedirect(reverse("billboard:list"))
+
+
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):

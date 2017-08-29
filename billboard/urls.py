@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^list/$', views.PostListView.as_view(), name='list'),
     url(r'^(?P<slug>[-\w]+)/update/$', views.PostUpdateView.as_view(), name='update'),
     url(r'^remove/$', views.post_remove, name='remove'),
-    url(r'^detail/(?P<slug>[-\w]+)/comment/$', views.CommentCreateView.as_view(), name='comment')
+    url(r'^detail/(?P<slug>[-\w]+)/comment/$', views.CommentCreateView.as_view(), name='comment'),
+    url(r'^file_upload/$', views.BillBoardFileUploadView.as_view(), name='file_upload'),
 ]

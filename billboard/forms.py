@@ -9,11 +9,6 @@ class PostModelForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Title"}),
                             max_length=100)
 
-    file = forms.FileField(label="Files",
-                           widget=forms.ClearableFileInput(attrs={'multiple': True}),
-                           validators=[file_validate],
-                           required=False)
-
     def __init__(self, *args, **kwargs):
         super(PostModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -23,7 +18,6 @@ class PostModelForm(forms.ModelForm):
                Div(
                    "title",
                    "text",
-                   "file",
                     css_class='box-body'
                 ),
                 Div(
@@ -37,7 +31,7 @@ class PostModelForm(forms.ModelForm):
         )
     class Meta:
         model = Post
-        fields = ["title", "text", "file"]
+        fields = ["title", "text"]
 
 
 class CommentModelForm(forms.ModelForm):

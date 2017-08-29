@@ -43,10 +43,7 @@ class FileUploadView(LoginRequiredMixin, View):
             attachment.created_by = self.request.user
             attachment.save()
         except Exception as e:
-            s = ''
-            for i in e:
-                s += i
-            return JsonResponse(status=400, data={"message": s})
+            return JsonResponse(status=400, data={"message": str(e)})
         data = {
             "file_url": attachment.file_url,
             "file_pk": attachment.pk,

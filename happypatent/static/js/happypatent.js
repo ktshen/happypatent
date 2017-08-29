@@ -115,16 +115,34 @@
             data.submit();
         });
     var deleteButton = $('<button/>').addClass('btn btn-xs btn-warning')
-        .text('Cancel')
-        .on('click', function () {
-            $(this).data().context.remove();
-        });
-    var quitButton = $('<button/>').addClass('btn btn-xs btn-warning')
-        .text('OK')
-        .on('click', function () {
-            $(this).data().context.remove();
-        });
+                            .text('Cancel')
+                            .on('click', function () {
+                                $(this).data().context.remove();
+                            });
 
+    var quitButton = $('<button/>').addClass('btn btn-xs btn-warning')
+                                .text('OK')
+                                .on('click', function () {
+                                    $(this).data().context.remove();
+                                });
+
+    // Set maximum file size to 10Mb
+    var maxFileSize = 10485760;
+
+    function create_error_tag(text){
+        var error = $('<td/>').append(
+                        $('<div/>').addClass('form-group has-error').append(
+                            $("<label/>").addClass('control-label').append(
+                                $('<i/>').addClass('fa fa-times-circle-o')
+                            ).text(text),
+                        )
+                    );
+        return error
+    }
+
+    function get_file_size_string(size){
+        return Math.floor((size / (10**6))).toString()
+    }
     $('#fileupload').fileupload({
         url: $('#fileupload').attr('upload_url'),
         dataType: 'json',
@@ -140,24 +158,26 @@
     }).on('fileuploadadd', function (e, data) {
         data.context = $('<tr/>').appendTo('#files-queue');
         $.each(data.files, function (index, file) {
-            $('<td/>').append($('<span/>').text(file.name)).appendTo(data.context);
-            if (!index) {
+            if(file.size > maxFileSize){
+                let message = "File size: " + get_file_size_string(file.size) +
+                              "MB. It should not exceed " + get_file_size_string(maxFileSize) + "MB.";
+                var error = create_error_tag(message, data);
+                data.context.empty();
+                data.context.append(error, $('<td/>').append(quitButton.clone(true).data(data)));
+            }
+            else{
+                $('<td/>').append($('<span/>').text(file.name)).appendTo(data.context);
+                if (!index) {
                 $('<td/>').append(uploadButton.clone(true).data(data))
                           .append(deleteButton.clone(true).data(data))
                           .appendTo(data.context);
+                }
             }
         });
     }).on('fileuploadfail', function (e, data) {
-        var error = $('<td/>').append(
-            $('<div/>').addClass('form-group has-error').append(
-                $("<label/>").addClass('control-label').append(
-                    $('<i/>').addClass('fa fa-times-circle-o')
-                ).text(data.jqXHR.responseJSON.message),
-                quitButton.clone(true).data(data)
-            )
-        );
+        var error = create_error_tag(data.jqXHR.responseJSON.message);
         data.context.empty();
-        data.context.append(error);
+        data.context.append(error, $('<td/>').append(quitButton.clone(true).data(data)));
     }).on('fileuploadprogress', function (e, data) {
         var progress = parseInt(data.loaded / data.total * 100, 10);
         $(data.context).find('.progress-bar').css('width', progress + '%');
