@@ -6,15 +6,6 @@
 
 {% block css %}
 <style>
-.post-row {
-    overflow:hidden;
-}
-
-.post-box{
-    padding:10px;
-    width:50%;
-    float:left;
-}
 .box{
    border-top:none;
    margin: 0 auto 20px auto;
@@ -23,14 +14,16 @@
 .box-body{
   padding: 10px 15px 10px 15px;
 }
+.query-box{
+    min-height:400px;
+}
 .blog-post-title {
   font-size: 30px;
   overflow-wrap:break-word;
   color:#2BB4B4;
  }
-.box-header.with-border{
-  padding: 15px 10px 10px 10px;
-  border:1px solid #f4f4f4;
+.query-box > .box-header.with-border {
+    border-bottom: 1px solid #f4f4f4;
 }
 .box-header.with-border h5{
   margin-top:0;
@@ -59,6 +52,10 @@
     width:74px;
     height:32px;
 }
+em {
+    font-style: italic;
+    font-weight: bold;
+}
 @media screen and (max-width: 767px) {
     .box,
     .pager{
@@ -69,19 +66,19 @@
     }
 }
 
-em {
-    font-style: italic;
-    font-weight: bold;
-}
 </style>
 {% endblock %}
 
 
 {% block content %}
 <div class="box">
-<div class="post-row">
+<div class="box-body query-box">
 {% if query %}
-    <h2>Search for {{ query }}. Total results: {{ total_num }}</h2>
+    <div class="box-header with-border">
+    <h2 class="blog-post-title"> Results for <i>{{ query }}</i> </h2>
+    <h5 class="subtitle">Found {{ total_num }} entries</h5>
+    </div>
+
     {% for result in page_obj.object_list %}
         <h3><a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a></h3>
         {% for item in result.highlighted %}
@@ -93,7 +90,6 @@ em {
 {% else %}
     {# Show some example queries to run, maybe query syntax, something else? #}
 {% endif %}
-</div>
 </div>
 <!-- Pager -->
 <div class="row">
@@ -115,6 +111,7 @@ em {
             {% endif %}
         </ul>
     </div>
+</div>
 </div>
 {% endblock %}
 

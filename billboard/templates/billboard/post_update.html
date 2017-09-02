@@ -8,38 +8,62 @@
 {% block css %}
 <style>
 .blog-post-title {
-  font-size: 36px;
+  font-size: 30px;
   overflow-wrap:break-word;
+  margin-top:0;
+  margin-bottom:0;
   color:#2BB4B4;
- }
-.box{
-  border-top-color:#2DA4A4;;
+}
+.post-detail-box{
+    padding:10px;
+    float:left;
+    width:75%;
+    border-right:1px solid #f4f4f4;
+}
+.post-detail-row{
+    overflow:hidden;
+}
+fieldset > .box-footer{
+    border-top:none;
 }
 .box-header.with-border{
- padding: 5px 10px 5px 10px;
+ border:none;
+ padding: 15px 10px 10px 10px;
+}
+.box{
+    border:none;
+    margin: 0 auto 20px auto;
+    width: 83.333333%;
+}
+.form-group  input{
+    border:none;
+     border-bottom:1px solid #d2d6de;
+}
+ input#id_file{
+  border-bottom:none;
+ }
+@media screen and (max-width: 767px){
+      .box {
+        width: 91.666667%;
+    }
+    .post-detail-box{
+        width:100%;
+    }
 }
 </style>
 {% endblock %}
 
 {% block content %}
 <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
-        <div class="box ">
+<div class="box ">
+    <div class="post-detail-row">
+        <div class="post-detail-box">
             <div class="box-header with-border">
-                <div class="row">
-                    <div class="col-sm-10 col-sm-offset-1">
-                        <h5 class="blog-post-title">
-                            Update Your Post
-                        </h5>
-                    </div>
-                </div>
+                <h5 class="blog-post-title">Create New Post</h5>
             </div>
-                <div class="row">
-                    <div class="col-sm-10 col-sm-offset-1">
-                        {% crispy form %}
-                    </div>
-                </div>
+            <div class="box-body">
+                {% crispy form %}
+            </div>
         </div>
     </div>
 </div>

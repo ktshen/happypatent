@@ -306,7 +306,7 @@
     });
 
     // Use for translating chinese post address to english address
-    $("#div_id_post_address").find("label").append('<a class="btn btn-xs btn-primary" id="translate_address">Try to translate</a>')
+    $("#div_id_english_address").find("label").append('<a class="btn btn-xs btn-primary btn-translate" id="translate_address">Translate for me</a>')
     $("#translate_address").on("click", function(){
         $.ajax({
             url: "/proposals/chinese_to_english/",

@@ -7,34 +7,60 @@
 {% block css %}
 <style>
 .post-row {
-    overflow:hidden;
+    padding:10px;
 }
-
 .post-box{
     padding:10px;
-    width:50%;
-    float:left;
 }
 .box{
    border-top:none;
    margin: 0 auto 20px auto;
    width: 83.333333%;
+    min-height:450px;
 }
 .box-body{
   padding: 10px 15px 10px 15px;
 }
 .blog-post-title {
-  font-size: 30px;
+  font-size: 26px;
   overflow-wrap:break-word;
   color:#2BB4B4;
+  margin-bottom: 0;
+     margin-top:0;
  }
-.box-header.with-border{
-  padding: 15px 10px 10px 10px;
-  border:1px solid #f4f4f4;
+.month-bar > .row{
+    padding:10px;
 }
-.box-header.with-border h5{
-  margin-top:0;
-  margin-bottom:0;
+.month-bar > h3
+{
+   color:#ddd8d8;
+   font-size:33px;
+   border-bottom:1px solid #f4f4f4;
+   margin-top:0;
+}
+.month-bar > h3 >i{
+    position:relative;
+    top:15px;
+    left:25px;
+    background:white;
+}
+.month-bar >h3 >i>small{
+    color:#ddd8d8;
+}
+.post-list-content{
+    color:#444;
+    margin:0 auto;
+    border:1px solid #f4f4f4;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+.post-list-content:hover{
+   border-color:#39CCCC;
+}
+.post-box>a:hover{
+    position:relative;
+    bottom:5px;
 }
 .credit-line{
   display:flex;
@@ -84,24 +110,40 @@
 {% else %}
 <div class="box">
 <div class="post-row">
-{% for post in object_list %}
- <div class="post-box">
-    <div class="box-header with-border">
-        <h5>
-            <a class="blog-post-title" href="{% url "billboard:detail" post.slug %}">{{ post.title }}</a>
-        </h5>
-        <div class="credit-line">
-            <h5>
-                <small>{{ post.update }} by <a href="{% url "users:detail" post.author.username %}"> {{ post.author.first_name }} {{ post.author.last_name }}</a></small>
-            </h5>
-        </div>
-    </div>
-    <div class="box-body">
-        {{ post.text|truncatechars_html:200|safe }}
-
-    </div>
- </div>
-{% endfor %}
+    {% for year_iterator in archive %}
+            {% for month_iterator in year_iterator.values %}
+                {% for month,posts in month_iterator.items %}
+                    {% if posts %}
+                        <div class="month-bar ">
+                        {% for post in posts%}
+                            {% if forloop.first %}
+                                <h3><i>{{ post.update|date:"M"}} <small>{{ post.update|date:"Y"}}   </small></i></h3>
+                                <div class="row">
+                            {% endif %}
+                            <div class="post-box col-md-4 col-sm-6">
+                            <a href="{% url "billboard:detail" post.slug %}">
+                                <section class="post-list-content">
+                                    <div class="box-header">
+                                        <h5 class="blog-post-title">{{ post.title }}</h5>
+                                        <div class="credit-line">
+                                        <h5>
+                                        <small>{{ post.update }} by {{ post.author.first_name }} {{ post.author.last_name }}</small>
+                                        </h5>
+                                        </div>
+                                    </div>
+                                    <div class="box-body">
+                                        {{ post.text|truncatewords:15|safe }}
+                                    </div>
+                                </section>
+                            </a>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+    {% endfor %}
 </div>
 </div>
 <!-- Pager -->
