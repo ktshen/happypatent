@@ -102,10 +102,10 @@
     $('.file-remove').on('click', remove_file);
 
     //file uploading
-    var progressBar = $('<div/>').addClass('progress progress-xs active')
-        .append($('<div/>').addClass('progress-bar progress-bar-primary progress-bar-striped')
-            .css({"width": '0%'}));
-    var uploadButton = $('<button/>').addClass('btn btn-xs btn-primary')
+    var progressBar = $('<div/>').addClass('progress progress-xs active pull-right').append($('<div/>'))
+        .addClass('progress-bar progress-bar-primary progress-bar-striped')
+        ;
+    var uploadButton = $('<button/>').addClass('btn btn-xs btn-primary pull-right')
         .text('Upload')
         .on('click', function () {
             var $this = $(this);
@@ -114,7 +114,7 @@
             $('<td/>').append(progressBar.clone(true)).appendTo(data.context);
             data.submit();
         });
-    var deleteButton = $('<button/>').addClass('btn btn-xs btn-warning')
+    var deleteButton = $('<button/>').addClass('btn btn-xs btn-warning pull-right')
                             .text('Cancel')
                             .on('click', function () {
                                 $(this).data().context.remove();
@@ -168,8 +168,8 @@
             else{
                 $('<td/>').append($('<span/>').text(file.name)).appendTo(data.context);
                 if (!index) {
-                $('<td/>').append(uploadButton.clone(true).data(data))
-                          .append(deleteButton.clone(true).data(data))
+                $('<td/>').append(deleteButton.clone(true).data(data))
+                          .append(uploadButton.clone(true).data(data))
                           .appendTo(data.context);
                 }
             }
@@ -180,7 +180,12 @@
         data.context.append(error, $('<td/>').append(quitButton.clone(true).data(data)));
     }).on('fileuploadprogress', function (e, data) {
         var progress = parseInt(data.loaded / data.total * 100, 10);
-        $(data.context).find('.progress-bar').css('width', progress + '%');
+        if($(window).width()> 490){
+            $(data.context).find('.progress-bar').css('width', (progress*2)+ 'px');
+        }
+        else {
+            $(data.context).find('.progress-bar').css('width', progress + 'px');
+        }
     }).on('fileuploaddone', function (e, data) {
             var result = data.result;
             var newfile = $('<li/>').append(

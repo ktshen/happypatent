@@ -32,12 +32,6 @@
     float:left;
     color: #777;
 }
-.box-footer > h5 >a{
-    color: #2BB4B4;
-}
-.box-footer > h5 >a:hover{
-    color: #2DA4A4;
-}
 .box-footer > .create-time{
     float:right;
     display:flex;
@@ -45,11 +39,67 @@
 .box-footer > .create-time >  h5 {
 color: #777;
 }
-
 .box-footer > .create-time > h5:first-child {
     margin-right: 10px;
 }
-
+.box-footer > h5 >a,
+#files-list> li >a{
+    color: #2DA4A4;
+}
+.box-footer > h5 >a:hover,
+#files-list> li >a:hover{
+    color: #39CCCC;
+}
+#file-table.table-condensed {
+    table-layout:auto;
+}
+#file-table label.btn-success{
+    background-color:#2BB4B4;
+    border-color:transparent;
+}
+#file-table label.btn-success:hover{
+    background-color:#39CCCC;
+}
+#files-list{
+    padding-left:0;
+}
+#files-list>li{
+    margin-bottom:5px;
+    border-bottom:1px solid #f4f4f4;
+    list-style: none;
+    padding: 3px;
+}
+#files-list >li >div:first-child{
+{#    min-width:200px;#}
+{#    text-overflow:ellipsis;#}
+    display:inline;
+}
+#files-list >li >div:nth-child(2){
+    float:right;
+}
+#files-list .btn-danger{
+    background-color:transparent;
+    color:#ed5d25e6;
+    border-color:transparent;
+}
+#files-list .btn-danger:hover{
+    background-color:transparent;
+    color:#ed5d2580;
+    border-color:transparent;
+}
+#files-queue  button:nth-child(2){
+    border-right:1px solid #f4f4f4;
+}
+#files-queue  button{
+    background-color:transparent;
+    border-color:transparent;
+    color:#3c8dbc
+}
+#files-queue  button:hover{
+    background-color:transparent;
+    border-color:transparent;
+    color:#72afd2;
+}
 .panel-default{
     border: 2px solid #f9f9f9;
     border-radius: 0;
@@ -63,7 +113,7 @@ color: #777;
     min-height: 36px;
 }
 .panel-default .panel-body >ul{
-    margin-bottom:0px;
+    margin-bottom:15px;
 }
 .panel-default > .panel-heading {
     background-color: #f9f9f9;
@@ -119,6 +169,15 @@ color: #777;
         justify-content:center;
         text-align:center
     }
+    #files-list >li >div:first-child{
+{#    min-width:200px;#}
+{#    text-overflow:ellipsis;#}
+    display:inline;
+}
+#files-list >li >div:nth-child(2){
+    float:none;
+    text-align:right;
+}
 }
 </style>
 {% endblock css %}
@@ -131,7 +190,7 @@ color: #777;
           <a href="{% url "proposals:patent-create" %}?other_country=true&case_id={{ object.case_id }}" role="button">Apply for other countries</a>
           {% if object.created_by == request.user %}
           <a  href="{% url "proposals:patent-update" object.case_id %}" role="button">Update</a>
-          <a  id="remove-object">Remove</a>
+          <a  id="remove-object" role="button">Remove</a>
           <form action="{% url "proposals:patent-delete" %}" id="remove-form" method="post">
               {% csrf_token %}
               <input type="hidden" name="slug_field" value="{{ object.case_id }}">
@@ -410,19 +469,27 @@ color: #777;
                         {% csrf_token %}
                         {% for file in object.files.all %}
                         <li>
-                            <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                        <div >
+                             <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                        </div>
+
                             {% if request.user == object.created_by  %}
-                            <button class="btn btn-xs btn-danger pull-right file-remove" pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">
-                                <span class="fa fa-trash-o"></span>
-                                Remove
+                                <div >
+                                 <button class="btn btn-xs btn-danger  file-remove" pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">
+                            <span class="fa fa-trash-o"></span>
+                            Remove
                             </button>
+                                </div>
+{#                            <button class="btn btn-xs btn-danger  file-remove"style="position:absolute;right:5px; top:2px pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">#}
+{#                            <span class="fa fa-trash-o"></span>#}
+{#                            Remove#}
+{#                            </button>#}
                             {% endif %}
                         </li>
                         {% endfor %}
                     </ul>
                     {% if request.user == object.created_by  %}
-                    <br>
-                    <table class="table table-condensed">
+                    <table class="table table-condensed" id="file-table">
                         <thead>
                             <tr>
                               <th>

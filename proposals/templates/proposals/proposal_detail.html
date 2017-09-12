@@ -29,11 +29,55 @@
     float:left;
     color: #777;
 }
-.box-footer > h5 >a{
-    color: #2BB4B4;
-}
-.box-footer > h5 >a:hover{
+.box-footer > h5 >a,
+#files-list> li >a{
     color: #2DA4A4;
+}
+.box-footer > h5 >a:hover,
+#files-list> li >a:hover{
+    color: #39CCCC;
+}
+#file-table.table-condensed {
+    table-layout:auto;
+}
+#file-table label.btn-success{
+    background-color:#2BB4B4;
+    border-color:transparent;
+}
+#file-table label.btn-success:hover{
+    background-color:#39CCCC;
+}
+#files-list{
+    padding-left:0;
+}
+#files-list>li{
+    margin-bottom:5px;
+    border-bottom:1px solid #f4f4f4;
+    list-style: none;
+    padding: 3px;
+}
+#files-list .btn-danger{
+    background-color:transparent;
+    color:#ed5d25e6;
+    border-color:transparent;
+}
+#files-list .btn-danger:hover{
+    background-color:transparent;
+    color:#ed5d2580;
+    border-color:transparent;
+}
+#files-queue  button:nth-child(2){
+    border-right:1px solid #f4f4f4;
+}
+#files-queue  button{
+    background-color:transparent;
+    border-color:transparent;
+    color:#3c8dbc
+}
+#files-queue  button:hover {
+    background-color: transparent;
+    border-color: transparent;
+    color: #72afd2;
 }
 .box-footer > .create-time{
     float:right;
@@ -247,8 +291,8 @@
                         {% endfor %}
                     </ul>
                     {% if request.user == object.created_by  %}
-                    <br>
-                    <table class="table table-condensed">
+
+                    <table class="table table-condensed" id="file-table">
                         <thead>
                             <tr>
                               <th>
