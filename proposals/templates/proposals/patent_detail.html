@@ -499,7 +499,7 @@ color: #777;
                     {% if request.user == object.created_by  %}
                     <div id="file-table">
                             <label class="btn btn-success btn-xs" for="fileupload">
-                                      <input style="display:none;" id="fileupload" type="file" name="files" upload_url="{% url "proposals:file_upload" %}" object_type="proposal" pk="{{ object.pk }}" multiple>
+                                      <input style="display:none;" id="fileupload" type="file" name="files" upload_url="{% url "proposals:file_upload" %}" object_type="patent" pk="{{ object.pk }}" multiple>
                                       <span class="fa fa-upload"></span>
                                       Upload files
                                   </label>
