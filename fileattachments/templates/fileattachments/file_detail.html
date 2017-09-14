@@ -14,6 +14,9 @@
     display:inline-block;
     margin-left: 15px;
 }
+.file-image-box .box-header > a{
+    cursor:pointer;
+}
 .file-detail-box{
     width:95%;
     margin:0 auto;
@@ -23,10 +26,6 @@
     display:inline-block;
     margin-right:20px;
 }
-{#.option-line > a {#}
-{#    font-size:16px;#}
-{#    cursor:pointer;#}
-
 .download{
  padding: 5px 15px;
     border: 1px solid #2DA4A4;
@@ -34,6 +33,11 @@
     color:white;
     border-radius:3px;
     margin-right:10px;
+}
+.download:hover,
+.download:active,
+.download:focus{
+    color:white;
 }
 .option-line > a:first-child:hover{
    position:relative;
@@ -53,7 +57,6 @@
     width:70%;
     margin:0 auto;
     padding:10px 10px 15px 40px;
-    border-bottom: 1px solid #f4f4f4;
     background-color:white
 }
 .file-info-box{
@@ -124,21 +127,15 @@
 
 
 {% block content %}
-{#<div class="box">#}
-{#    <div class="file-detail-row">#}
         <div class="file-detail-box">
 
             <section class="file-image-box">
-{#                <img src="/static/img/{{ object.filename| get_extension }}.svg">#}
-
-{#                <h3 >{{ object.filename }}</h3>#}
                 <div class="image-box">
                     <img src="/static/img/{{ object.filename| get_extension }}.svg">
                 </div>
-
-              <div class="box-header">
+                <div class="box-header">
                    <h3 >{{ object.filename }}</h3>
-                   <a class="download" href="{{ object.file_url }}">Download <span class="fa fa-download "></span></a>
+                   <a class="download" href="{{ object.file_url }}" download>Download <span class="fa fa-download "></span></a>
                    {% if request.user == object.created_by  %}
                     <a id="remove-object">Remove</a>
                         <form action="{% url "files:files-delete" %}" id="remove-form" method="post">
@@ -148,43 +145,11 @@
                   {% endif %}
                </div>
             </section>
-{#           <section class="file-info-box">#}
-{#               <div class="box-header with-border">#}
-{#                   <img src="/static/img/{{ object.filename| get_extension }}.svg">#}
-{#                   <h3 >{{ object.filename }}</h3>#}
-{#                   <a href="{{ object.file_url }}">Download <span class="fa fa-download "></span></a>#}
-{#                   <h4><small>File Size: {{ object.file.size|get_filesize}}</small></h4>#}
-{#               </div>#}
-{#           </section>#}
             <section class="file-info-box">
-{#                <div class="option-line">#}
-{#                   <a href="{{ object.file_url }}">Download <span class="fa fa-download "></span></a>#}
-{#                    {% if request.user == object.created_by  %}#}
-{#                    <a id="remove-object">Remove</a>#}
-{#                        <form action="{% url "files:files-delete" %}" id="remove-form" method="post">#}
-{#                            {% csrf_token %}#}
-{#                            <input type="hidden" name="slug_field" value="{{ object.pk }}">#}
-{#                        </form>#}
-{#                 {% endif %}#}
-{#               </div>#}
-{#                <div class="one">#}
-{#                    <h4>File Size {{ object.file.size|get_filesize}}</h4>#}
-{#                </div>#}
-{#                <div class="one">#}
-{#                    <h4>Attached to <a href="{{ object.content_object.get_absolute_url }}">{{ object.related_object_name }}</a></h4>#}
-{#                </div>#}
-{#                <div class="one">#}
-{#                    <h4 >Shared by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h4>#}
-{#                </div>#}
-{#                <div class="one">#}
-{#                     <h4 >Shared on {{ object.created|date:"Y/n/j" }}</h4>#}
-{#                </div>#}
-               <h4>File Size {{ object.file.size|get_filesize}}</h4>
+              <h4>File Size {{ object.file.size|get_filesize}}</h4>
                <h4>Attached to <a href="{{ object.content_object.get_absolute_url }}">{{ object.related_object_name }}</a></h4>
                <h4 >Shared by <a href="{{ object.created_by.get_absolute_url }}">{{ object.created_by.username }}</a></h4>
                <h4 >Shared on {{ object.created|date:"Y/n/j" }}</h4>
             </section>
         </div>
-{#    </div>#}
-{#</div>#}
 {% endblock content %}

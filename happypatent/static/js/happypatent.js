@@ -105,7 +105,7 @@
     var progressBar = $('<div/>').addClass('progress progress-xs active pull-right').append($('<div/>'))
         .addClass('progress-bar progress-bar-primary progress-bar-striped')
         ;
-    var uploadButton = $('<button/>').addClass('btn btn-xs btn-primary pull-right')
+    var uploadButton = $('<a/>').addClass('btn btn-xs  ')
         .text('Upload')
         .on('click', function () {
             var $this = $(this);
@@ -114,13 +114,13 @@
             $('<td/>').append(progressBar.clone(true)).appendTo(data.context);
             data.submit();
         });
-    var deleteButton = $('<button/>').addClass('btn btn-xs btn-warning pull-right')
+    var deleteButton = $('<a/>').addClass('btn btn-xs')
                             .text('Cancel')
                             .on('click', function () {
                                 $(this).data().context.remove();
                             });
 
-    var quitButton = $('<button/>').addClass('btn btn-xs btn-warning')
+    var quitButton = $('<a/>').addClass('btn btn-xs ')
                                 .text('OK')
                                 .on('click', function () {
                                     $(this).data().context.remove();
@@ -156,20 +156,20 @@
             "pk": $('#fileupload').attr("pk")
         },
     }).on('fileuploadadd', function (e, data) {
-        data.context = $('<tr/>').appendTo('#files-queue');
+        data.context = $('<li/>').appendTo('#files-queue');
         $.each(data.files, function (index, file) {
             if(file.size > maxFileSize){
                 let message = "File size: " + get_file_size_string(file.size) +
                               "MB. It should not exceed " + get_file_size_string(maxFileSize) + "MB.";
                 var error = create_error_tag(message, data);
                 data.context.empty();
-                data.context.append(error, $('<td/>').append(quitButton.clone(true).data(data)));
+                data.context.append(error, $('<div/>').append(quitButton.clone(true).data(data)));
             }
             else{
-                $('<td/>').append($('<span/>').text(file.name)).appendTo(data.context);
+                $('<div/>').text(file.name).appendTo(data.context);
                 if (!index) {
-                $('<td/>').append(deleteButton.clone(true).data(data))
-                          .append(uploadButton.clone(true).data(data))
+                $('<div/>').append(uploadButton.clone(true).data(data))
+                          .append(deleteButton.clone(true).data(data))
                           .appendTo(data.context);
                 }
             }
@@ -188,14 +188,14 @@
         }
     }).on('fileuploaddone', function (e, data) {
             var result = data.result;
-            var newfile = $('<li/>').append(
-                $('<a/>').attr('download', '').attr('href', result.file_url).text(data.files[0].name),
-                $('<button/>').addClass('btn btn-xs btn-danger pull-right file-remove')
+            var newfile = $('<li/>').append($('<div/>').append(
+                $('<a/>').attr('download', '').attr('href', result.file_url).text(data.files[0].name)),$('<div/>').append(
+                $('<button/>').addClass('btn btn-xs btn-danger  file-remove')
                     .attr('pk', result.file_pk).attr('delete_url', result.delete_url)
                     .append(
                         $('<span/>').addClass('fa fa-trash-o'),
                         "Remove"
-                    ).on('click', remove_file)
+                    ).on('click', remove_file))
             );
             newfile.appendTo($('#files-list'));
             data.context.remove();
