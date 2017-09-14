@@ -132,7 +132,7 @@
                                         </div>
                                     </div>
                                     <div class="box-body">
-                                        {{ post.text|truncatewords:15|safe }}
+                                        {{ post.text|truncatewords:15|striptags }}
                                     </div>
                                 </section>
                             </a>
