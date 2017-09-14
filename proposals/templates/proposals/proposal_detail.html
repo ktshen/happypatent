@@ -37,9 +37,6 @@
 #files-list> li >a:hover{
     color: #39CCCC;
 }
-#file-table.table-condensed {
-    table-layout:auto;
-}
 #file-table label.btn-success{
     background-color:#2BB4B4;
     border-color:transparent;
@@ -66,8 +63,35 @@
     color:#ed5d2580;
     border-color:transparent;
 }
+#files-list >li >div:first-child{
+    display:inline;
+    word-wrap:break-word;
+    width:70%;
+
+}
+#files-list >li >div:nth-child(2){
+    text-align:right;
+}
+#files-queue{
+    padding:3px;
+}
+#files-queue >li >div:first-child{
+    display:inline;
+    word-wrap:break-word;
+    width:70%;
+
+}
+#files-queue >li  >div:nth-child(2){
+    text-align:right;
+}
 #files-queue  button:nth-child(2){
     border-right:1px solid #f4f4f4;
+}
+#files-queue > li{
+    margin-bottom:5px;
+    border-bottom:1px solid #f4f4f4;
+    list-style: none;
+    padding: 3px;
 }
 #files-queue  button{
     background-color:transparent;
@@ -280,34 +304,31 @@
                         {% csrf_token %}
                         {% for file in object.files.all %}
                         <li>
-                            <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                            <div >
+                                <a href="{{ file.file_url }}" download > {{ file.filename }}</a>
+                            </div>
                             {% if request.user == object.created_by  %}
-                            <button class="btn btn-xs btn-danger pull-right file-remove" pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">
+                            <div >
+                                <button class="btn btn-xs btn-danger  file-remove" pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">
                                 <span class="fa fa-trash-o"></span>
                                 Remove
-                            </button>
+                                </button>
+                            </div>
                             {% endif %}
                         </li>
                         {% endfor %}
                     </ul>
                     {% if request.user == object.created_by  %}
 
-                    <table class="table table-condensed" id="file-table">
-                        <thead>
-                            <tr>
-                              <th>
-                                  <label class="btn btn-success btn-xs" for="fileupload">
+                    <div id="file-table">
+                            <label class="btn btn-success btn-xs" for="fileupload">
                                       <input style="display:none;" id="fileupload" type="file" name="files" upload_url="{% url "proposals:file_upload" %}" object_type="proposal" pk="{{ object.pk }}" multiple>
                                       <span class="fa fa-upload"></span>
                                       Upload files
                                   </label>
-                              </th>
-                              <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="files-queue">
-                        </tbody>
-                    </table>
+                    </div>
+                        <ul id="files-queue">
+                        </ul>
                     {% endif %}
                   </div>
                 </div>

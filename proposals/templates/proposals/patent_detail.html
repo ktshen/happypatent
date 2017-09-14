@@ -50,9 +50,6 @@ color: #777;
 #files-list> li >a:hover{
     color: #39CCCC;
 }
-#file-table.table-condensed {
-    table-layout:auto;
-}
 #file-table label.btn-success{
     background-color:#2BB4B4;
     border-color:transparent;
@@ -70,12 +67,12 @@ color: #777;
     padding: 3px;
 }
 #files-list >li >div:first-child{
-{#    min-width:200px;#}
-{#    text-overflow:ellipsis;#}
     display:inline;
+    word-wrap:break-word;
+    width:70%;
 }
 #files-list >li >div:nth-child(2){
-    float:right;
+    text-align:right;
 }
 #files-list .btn-danger{
     background-color:transparent;
@@ -87,18 +84,35 @@ color: #777;
     color:#ed5d2580;
     border-color:transparent;
 }
-#files-queue  button:nth-child(2){
-    border-right:1px solid #f4f4f4;
+#files-queue{
+    padding:3px;
 }
 #files-queue  button{
     background-color:transparent;
     border-color:transparent;
     color:#3c8dbc
 }
-#files-queue  button:hover{
-    background-color:transparent;
-    border-color:transparent;
-    color:#72afd2;
+#files-queue  button:hover {
+    background-color: transparent;
+    border-color: transparent;
+    color: #72afd2;
+}
+#files-queue  button:nth-child(2){
+    border-right:1px solid #f4f4f4;
+}
+#files-queue >li >div:first-child{
+    display:inline;
+    word-wrap:break-word;
+    width:70%;
+}
+#files-queue >li  >div:nth-child(2){
+    text-align:right;
+}
+#files-queue > li{
+    margin-bottom:5px;
+    border-bottom:1px solid #f4f4f4;
+    list-style: none;
+    padding: 3px;
 }
 .panel-default{
     border: 2px solid #f9f9f9;
@@ -170,8 +184,6 @@ color: #777;
         text-align:center
     }
     #files-list >li >div:first-child{
-{#    min-width:200px;#}
-{#    text-overflow:ellipsis;#}
     display:inline;
 }
 #files-list >li >div:nth-child(2){
@@ -480,31 +492,20 @@ color: #777;
                             Remove
                             </button>
                                 </div>
-{#                            <button class="btn btn-xs btn-danger  file-remove"style="position:absolute;right:5px; top:2px pk="{{ file.pk }}" delete_url="{% url "files:files-delete" %}">#}
-{#                            <span class="fa fa-trash-o"></span>#}
-{#                            Remove#}
-{#                            </button>#}
                             {% endif %}
                         </li>
                         {% endfor %}
                     </ul>
                     {% if request.user == object.created_by  %}
-                    <table class="table table-condensed" id="file-table">
-                        <thead>
-                            <tr>
-                              <th>
-                                  <label class="btn btn-success btn-xs" for="fileupload">
-                                      <input style="display:none;" id="fileupload" type="file" name="files" upload_url="{% url "proposals:file_upload" %}" object_type="patent" pk="{{ object.pk }}" multiple>
+                    <div id="file-table">
+                            <label class="btn btn-success btn-xs" for="fileupload">
+                                      <input style="display:none;" id="fileupload" type="file" name="files" upload_url="{% url "proposals:file_upload" %}" object_type="proposal" pk="{{ object.pk }}" multiple>
                                       <span class="fa fa-upload"></span>
                                       Upload files
                                   </label>
-                              </th>
-                              <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="files-queue">
-                        </tbody>
-                    </table>
+                    </div>
+                     <ul id="files-queue">
+                     </ul>
                     {% endif %}
                   </div>
                 </div>
