@@ -24,16 +24,21 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable):
                                          'content': extracted_data["content"]}))
         return data
 
-    @staticmethod
-    def extract_file_contents(file_path):
+    def extract_file_contents(self, file_path):
         # tika-python has a bug when the file name is not english, so we need to rename the file before
         # extracting. After that, we can change it back to its original filename
+        data = None
         dir, basename = os.path.split(file_path)
         filename, ext = basename.rsplit(".", 1)
-        temp_path = os.path.join(dir, "temp." + ext)
-        os.rename(file_path, temp_path)
-        data = unpack.from_file(temp_path)
-        os.rename(temp_path, file_path)
+        if ext in self.extractable_extension_list():
+            temp_path = os.path.join(dir, "temp." + ext)
+            os.rename(file_path, temp_path)
+            data = unpack.from_file(temp_path)
+            os.rename(temp_path, file_path)
+        else:
+            data = {
+                "content": ""
+            }
         return data
 
     def prepare_related_object(self, obj):
@@ -44,3 +49,6 @@ class FileIndex(indexes.SearchIndex, indexes.Indexable):
             return "%s %s" % (obj.created_by.get_username(), obj.created_by.get_full_name())
         else:
             return ""
+
+    def extractable_extension_list(self):
+        return ["doc", "docx", "pdf", "ppt", "txt", "xml", "xlsx", "xltx", "dwg", "odf", "rtf"]
