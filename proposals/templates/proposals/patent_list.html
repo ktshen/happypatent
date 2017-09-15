@@ -115,7 +115,7 @@ input.form-control{
             </div>
             <div class="box-body ">
                 <div class="table-responsive">
-                    <table id="list_table" class="table table-bordered table-striped" url="{% url "proposals:patent-list" %}">
+                    <table id="list_table" class="table table-bordered table-striped" url="{% url "proposals:patent-list" %}" style="width:100%;">
                         {% csrf_token %}
                         <thead>
                             <tr>
