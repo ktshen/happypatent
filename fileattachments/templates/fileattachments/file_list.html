@@ -68,23 +68,18 @@ input.form-control{
         font-weight: 600;
     }
     table.table-bordered.dataTable tbody td:nth-of-type(1):before {
-        content: "Case ID:";
+        content: "File Name:";
     }
     table.table-bordered.dataTable tbody td:nth-of-type(2):before {
-        content: "Chinese Title:";
+        content: "Attached to:";
     }
     table.table-bordered.dataTable tbody td:nth-of-type(3):before {
-        content: "English Title:";
+        content: "Shared on:";
     }
     table.table-bordered.dataTable tbody td:nth-of-type(4):before {
-        content: "Case Status:";
+        content: "Shared by:";
     }
-    table.table-bordered.dataTable tbody td:nth-of-type(5):before {
-        content: "Agent:";
-    }
-    table.table-bordered.dataTable tbody td:nth-of-type(6):before {
-        content: "Country:";
-    }
+
 }
 @media screen and (max-width: 500px) {
     div.dataTables_wrapper div.dataTables_length,
@@ -114,14 +109,14 @@ input.form-control{
             </div>
             <div class="box-body ">
                 <div class="table-responsive">
-                    <table id="list_table" class="table table-bordered table-striped" url="{% url "files:files-list" %}">
+                    <table id="list_table" class="table table-bordered table-striped" url="{% url "files:files-list" %}" style="width:100%;">
                         {% csrf_token %}
                         <thead>
                             <tr>
                                 <th>File's Name</th>
                                 <th>Attached to</th>
-                                <th>Created Date</th>
-                                <th>Created By</th>
+                                <th>Shared on </th>
+                                <th>Shared by</th>
                             </tr>
                         </thead>
                     </table>
