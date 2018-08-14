@@ -190,6 +190,10 @@ class ProposalModelForm(forms.ModelForm):
                     ),
                     css_class="row green-border"
                 ),
+                Div(
+                    ButtonHolder(Submit('save', 'save', css_class='btn btn-primary')),
+                    css_class="col-md-1 pull-right"
+                ),
             )
         )
 
@@ -333,6 +337,10 @@ class PatentModelForm(forms.ModelForm):
 
                             css_class="row grey-border"
                 ),
+                Div(
+                    ButtonHolder(Submit('save', 'save', css_class='btn btn-primary')),
+                    css_class="col-md-1 pull-right"
+                ),
             )
         )
 
@@ -402,6 +410,10 @@ class ControlEventModelForm(forms.ModelForm):
                             css_class="row"
                     ),
                     css_class="row"
+                ),
+                Div(
+                    ButtonHolder(Submit('save', 'save', css_class='btn btn-primary')),
+                    css_class="col-md-1 pull-right"
                 ),
             )
         )

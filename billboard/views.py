@@ -64,10 +64,11 @@ class PostListView(LoginRequiredMixin, ListView):
     def get_archive(self, object_list):
         arch = object_list
         archives = {}
-        for i in range(arch[0].update.year,arch[len(arch)-1].update.year-1,-1):
-            archives[i]={}
-            for month in range(1,13,1):
-                archives[i][month]=[]
+        if arch:
+            for i in range(arch[0].update.year,arch[len(arch)-1].update.year-1,-1):
+                archives[i]={}
+                for month in range(1,13,1):
+                    archives[i][month]=[]
         for a in arch:
             archives[a.update.year][13-a.update.month].append(a)
         arch_year = list(reversed(sorted(archives.keys())))
